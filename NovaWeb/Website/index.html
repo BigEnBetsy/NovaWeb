@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaWeb - Home</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <!-- Parallax sterrenlagen -->
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
+
+  <header>
+    <div class="logo">
+      <img src="/Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+    </div>
+    
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="projecten.html">Portfolio</a>
+      <a href="diensten.html">Diensten</a>
+    </nav>
+
+    <a href="diensten.html" class="contact-btn">Contact us</a>
+  </header>
+
+  <main>
+    <!-- Hero Sectie -->
+    <section id="hero" class="hero">
+      <div class="hero-content">
+        <h1>NovaWeb <span class="highlight">Studenten</span> Webdesign</h1>
+        <p class="hero-subtitle">Twee gepassioneerde studenten die betaalbare, professionele websites creëren voor starters en kleine bedrijven</p>
+        <div class="hero-buttons">
+          <a href="projecten.html" class="btn-primary">Bekijk Ons Werk</a>
+          <a href="diensten.html" class="btn-secondary">Gratis Consultatie</a>
+        </div>
+      </div>
+      <div class="student-showcase">
+        <div class="student-card">
+          <img src="/Fotos/Stef.jpg" alt="Foto van Stef Galler" class="student-photo">
+          <h3>Stef Galler</h3>
+          <p>Informatica student (HoGent) • Data & AI Engineer </br>- Back-end Webdevelopment enthousiast -</p>
+          <span class="student-badge">Student Informatica</span>
+        </div>
+
+        <div class="student-card">
+          <img src="/Fotos/Robin.jpg" alt="Foto van Robin Baeyens" class="student-photo">
+          <h3>Robin Baeyens</h3>
+          <p>Mechanica student (Artvelde) • Zelflerend webdeveloper </br>- Front-end Webdevelopment enthousiast -</p>
+          <span class="student-badge">Student Mechanica</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="shootingStarCanvas"></canvas>
+
+
+
+  <script src="home.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>
