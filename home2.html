@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaWeb - Home</title>
+  <link rel="stylesheet" href="home2.css">
+</head>
+<body>
+  <!-- Parallax sterrenlagen -->
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
+
+  <header>
+    <div class="logo">
+      <img src="/Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+    </div>
+
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="projecten.html">Projecten</a>
+      <a href="diensten.html">Diensten</a>
+    </nav>
+
+    <a href="diensten.html" class="contact-btn">Contact us</a>
+  </header>
+
+  <main>
+    <!-- Hero Sectie -->
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-content">
+          <h1>
+            Creatieve<br>
+            <span class="highlight">Digital Experts</span>
+          </h1>
+          <p class="hero-subtitle">
+            Wij transformeren ideeën in buitengewone digitale ervaringen. 
+            Samen creëren we innovatieve oplossingen die impact maken.
+          </p>
+          <div class="hero-buttons">
+            <a href="projecten.html" class="btn-primary">Ons Werk Bekijken</a>
+            <a href="diensten.html" class="btn-secondary">Neem Contact Op</a>
+          </div>
+        </div>
+        
+        <div class="hero-image">
+          <div class="glow-effect"></div>
+          <div class="depth-layer depth-layer-3"></div>
+          <div class="depth-layer depth-layer-2"></div>
+          <div class="depth-layer depth-layer-1"></div>
+          <img src="/Fotos/frontfoto.svg" alt="Cartoon portrait van ons team" class="cartoon-portrait">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="shootingStarCanvas"></canvas>
+
+  <script src="home.js"></script>
+</body>
+</html>
