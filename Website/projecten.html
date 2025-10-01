@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaWeb - Onze Projecten</title>
+  <link rel="stylesheet" href="projecten.css">
+</head>
+<body>
+  <!-- Parallax sterrenlagen -->
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
+
+  <header>
+    <div class="logo">
+      <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+    </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="projecten.html">Portfolio</a>
+      <a href="diensten.html">Diensten</a>
+    </nav>
+
+    <a href="diensten.html" class="contact-btn">Contact ons</a>
+  </header>
+
+  <main>
+    <!-- Portfolio Sectie -->
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+        <h2>Onze Creaties In De Spotlight</h2>
+        <p class="portfolio-subtitle">Ontdek onze meest recente projecten - van elegante one-pagers tot complexe webapplicaties die resultaten leveren</p>
+        
+        <div class="portfolio-stats">
+          <div class="stat-item">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Projecten Voltooid</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Klanttevredenheid</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2-4</span>
+            <span class="stat-label">Weken Levertijd</span>
+          </div>
+        </div>
+
+        <div class="portfolio-filters">
+          <button class="filter-btn active" data-filter="all">Alle Projecten</button>
+          <button class="filter-btn" data-filter="website">Websites</button>
+          <button class="filter-btn" data-filter="student">Student Projecten</button>
+          <button class="filter-btn" data-filter="business">Zakelijke Projecten</button>
+          <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
+        </div>
+
+        <div class="portfolio-grid">
+          <!-- OnlineLaptopGids -->
+          <div class="portfolio-item" data-category="website business">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/AchtergrondWS1.png');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://bigenbetsy.github.io/LaptopAdviseur/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Simple project</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>OnlineLaptopGids</h3>
+              <p class="project-description">Een uitgebreide vergelijkingsplatform voor laptops met intelligente adviesfunctie. Gebruikers kunnen op basis van hun behoeften en budget de perfecte laptop vinden via een interactieve vragenlijst.</p>
+              <div class="project-features">
+                <span class="feature">📱 Responsive Design</span>
+                <span class="feature">🎯 Persoonlijk Advies</span>
+                <span class="feature">⚡ Snel Presterend</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Multi-page</span>
+                <span class="project-tag">Vergelijkingssite</span>
+                <span class="project-tag">Interactief</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 3 weken</span>
+                <span class="meta-item">💼 Zakelijk</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MuziekAcademie -->
+          <div class="portfolio-item" data-category="website business">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/cafewp');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://bigenbetsy.github." target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Bestseller</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>Harmonie Muziek Academie</h3>
+              <p class="project-description">Compleet inschrijvingssysteem voor muziekschool met docentenprofielen, lesroosters en online betaling. Studenten kunnen zich inschrijven voor lessen en docenten kunnen hun agenda beheren.</p>
+              <div class="project-features">
+                <span class="feature">📝 Inschrijvingssysteem</span>
+                <span class="feature">👨‍🏫 Docenten Portal</span>
+                <span class="feature">💳 Online Betaling</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Database</span>
+                <span class="project-tag">Forms</span>
+                <span class="project-tag">Multi-user</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 4 weken</span>
+                <span class="meta-item">💼 Zakelijk</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FotoStudio -->
+          <div class="portfolio-item" data-category="website business">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/FotoCollage.png');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://bigenbetsy.github.io/FotoCollage/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Design Award</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>Lumina FotoStudio</h3>
+              <p class="project-description">Elegant portfolio website voor een professionele fotograaf met geavanceerde gallery, klantportal en online afspraaksysteem. Perfect om werk te showcasen en nieuwe klanten aan te trekken.</p>
+              <div class="project-features">
+                <span class="feature">🖼️ Geavanceerde Gallery</span>
+                <span class="feature">📅 Afspraaksysteem</span>
+                <span class="feature">🎨 Modern Design</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Portfolio</span>
+                <span class="project-tag">Gallery</span>
+                <span class="project-tag">Booking</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 2.5 weken</span>
+                <span class="meta-item">💼 Zakelijk</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- StudentenClub -->
+          <div class="portfolio-item" data-category="student website">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/cafew.png');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://voorbeeld.com/studentenclub" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Student Project</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>Campus Connect Studentenclub</h3>
+              <p class="project-description">Dynamische community website voor studentenvereniging met events kalender, lidmaatschapsysteem en forum. Helpt studenten verbinden en activiteiten organiseren.</p>
+              <div class="project-features">
+                <span class="feature">📅 Events Kalender</span>
+                <span class="feature">👥 Lidmaatschap</span>
+                <span class="feature">💬 Link to socials</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">socials</span>
+                <span class="project-tag">Events</span>
+                <span class="project-tag">Studenten</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 3 weken</span>
+                <span class="meta-item">🎓 Student</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bistro Modern -->
+          <div class="portfolio-item" data-category="business website ecommerce">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/cafewp.png');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://bigenbetsy.github.io/StamCafe/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Horeca</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>Bistro Modern</h3>
+              <p class="project-description">Uitgebreide Café website met online menu's, bestelsysteem en bezorgopties. Verhoogt de conversie en verbetert de klantenservice aanzienlijk.</p>
+              <div class="project-features">
+                <span class="feature">🖼️ Foto collage</span>
+                <span class="feature">🍽️ Menu Overzicht</span>
+                <span class="feature">📞 contact formulier</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Restaurant</span>
+                <span class="project-tag">E-commerce</span>
+                <span class="project-tag">Reservations</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 4 weken</span>
+                <span class="meta-item">💼 Zakelijk</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student Portfolio -->
+          <div class="portfolio-item" data-category="student website">
+            <div class="portfolio-image">
+              <div class="website-screenshot" style="background-image: url('/Fotos/portfolioWP.png');"></div>
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="https://bigenbetsy.github.io/Portfolio/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="#" class="project-details-btn">Meer Details</a>
+                </div>
+              </div>
+              <div class="project-badge">Portfolio</div>
+            </div>
+            <div class="portfolio-content">
+              <h3>Academisch Portfolio</h3>
+              <p class="project-description">Professioneel portfolio website voor student met project showcase, CV, skills matrix en contactformulier. Ideaal voor stage- en jobapplicaties.</p>
+              <div class="project-features">
+                <span class="feature">📊 Skills Matrix</span>
+                <span class="feature">📁 Project Showcase</span>
+                <span class="feature">📞 Contact Direct</span>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Portfolio</span>
+                <span class="project-tag">CV</span>
+                <span class="project-tag">Student</span>
+              </div>
+              <div class="project-meta">
+                <span class="meta-item">⏱️ 2 weken</span>
+                <span class="meta-item">🎓 Student</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Process Section -->
+    <section class="project-process">
+      <div class="container">
+        <h2>Hoe We Werken</h2>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-icon">🎯</div>
+            <h3>1. Consultatie</h3>
+            <p>Gratis intakegesprek om uw doelen en vereisten te begrijpen</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">🎨</div>
+            <h3>2. Design</h3>
+            <p>Creatie van wireframes en design concepten voor goedkeuring</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">⚡</div>
+            <h3>3. Development</h3>
+            <p>Agile ontwikkeling met regelmatige updates en feedback</p>
+          </div>
+          <div class="process-step">
+            <div class="step-icon">🚀</div>
+            <h3>4. Lancering</h3>
+            <p>Professionele lancering en doorlopende ondersteuning</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+      <div class="container">
+        <h2>Klaar om Jouw Digitale Project te Lanceren?</h2>
+        <p class="cta-description">Laat ons je idee tot leven brengen met een professionele website die resultaten levert. Samen creëren we iets buitengewoons.</p>
+        <div class="cta-buttons">
+          <a href="diensten.html" class="btn-primary">Start Jouw Project</a>
+          <a href="over-ons.html" class="btn-secondary">Ons Team Ontmoeten</a>
+          <a href="diensten.html" class="btn-tertiary">Gratis Consultatie</a>
+        </div>
+        <div class="cta-guarantee">
+          <span class="guarantee-badge">✅ 100% Tevredenheidsgarantie</span>
+          <span class="guarantee-badge">💸 Geld-terug Garantie</span>
+          <span class="guarantee-badge">⚡ 2-4 Weken Levertijd</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="shootingStarCanvas"></canvas>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden. | Gemaakt met ❤️ door student-ondernemers</p>
+    </div>
+  </footer>
+
+  <!-- Load scripts in correct order -->
+  <script src="shootingStars.js"></script>
+  <script src="projecten.js"></script>
+</body>
+</html>

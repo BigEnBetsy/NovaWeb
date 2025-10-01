@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaWeb - Diensten</title>
+  <link rel="stylesheet" href="diensten.css">
+</head>
+<body>
+  <!-- Parallax sterrenlagen -->
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
+
+  <header>
+    <div class="logo">
+      <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+    </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="projecten.html">Portfolio</a>
+      <a href="diensten.html">Diensten</a>
+    </nav>
+
+    <a href="#contact-form" class="contact-btn">Contact ons</a>
+  </header>
+
+  <main>
+    <!-- Diensten Sectie -->
+    <section id="services" class="services">
+      <div class="container">
+        <h2>Onze Professionele Diensten</h2>
+        <p class="services-subtitle">Hoogwaardige webdevelopment oplossingen tegen studentvriendelijke tarieven - kwaliteit zonder compromis</p>
+        
+        <div class="services-stats">
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Tevredenheidsgarantie</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2-4</span>
+            <span class="stat-label">Weken Levertijd</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Support</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">-20%</span>
+            <span class="stat-label">Studentenkorting</span>
+          </div>
+        </div>
+
+        <div class="services-grid">
+          <!-- Premium Website Package -->
+          <div class="service-card featured">
+            <div class="service-badge">Meest Populair</div>
+            <div class="service-icon">🚀</div>
+            <h3>Premium Website Package</h3>
+            <p class="service-description">All-in-one oplossing voor een professionele online aanwezigheid met maximale impact</p>
+            <div class="service-features">
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Volledig responsive design voor alle apparaten</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Geoptimaliseerd voor snelle laadtijden (90+ Google Pagespeed)</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">SEO-vriendelijke structuur voor betere vindbaarheid</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Contactformulier en sociale media integraties</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Mobile-first approach voor optimale gebruikerservaring</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">1 jaar gratis onderhoud en updates</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Gratis SSL certificaat en basis hosting (1 jaar)</span>
+              </div>
+            </div>
+            <div class="service-price">
+              <span class="price-amount">€499</span>
+              <span class="price-original">€599</span>
+              <span class="price-note">Eenmalig - 3 weken levering</span>
+            </div>
+            <div class="service-cta">
+              <button class="service-btn primary" data-service="premium">Start Jouw Project</button>
+              <a href="#contact-form" class="service-link">Gratis Consultatie →</a>
+            </div>
+          </div>
+
+          <!-- E-commerce Solution -->
+          <div class="service-card">
+            <div class="service-badge">E-commerce</div>
+            <div class="service-icon">🛒</div>
+            <h3>Webshop Solution</h3>
+            <p class="service-description">Complete online winkel met veilige betalingen en inventarisbeheer</p>
+            <div class="service-features">
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Productcatalogus met geavanceerde filters</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Veilige betalingsintegratie (Mollie/Stripe)</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Winkelwagen en checkout proces</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Klantenaccount en orderbeheer</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Inventaris en voorraadbeheer</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Beveiligde hosting en SSL certificaat</span>
+              </div>
+            </div>
+            <div class="service-price">
+              <span class="price-amount">€899</span>
+              <span class="price-note">Eenmalig - 4 weken levering</span>
+            </div>
+            <div class="service-cta">
+              <button class="service-btn" data-service="ecommerce">Start Webshop</button>
+              <a href="#contact-form" class="service-link">Meer Info →</a>
+            </div>
+          </div>
+
+          <!-- Onderhoud & Support -->
+          <div class="service-card">
+            <div class="service-badge">Onderhoud</div>
+            <div class="service-icon">🛠️</div>
+            <h3>Onderhoud & Support</h3>
+            <p class="service-description">Compleet onderhoudspakket voor zorgeloze website performance</p>
+            <div class="service-features">
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Maandelijkse updates en security patches</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">24/7 monitoring en technische support</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Dagelijkse backups en disaster recovery</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Performance optimalisatie en speed tests</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Content updates (max 3 uur/maand)</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text">Hosting beheer en domeinnaam renewals</span>
+              </div>
+            </div>
+            <div class="service-price">
+              <span class="price-amount">€79/maand</span>
+              <span class="price-note">Maandelijks opzegbaar</span>
+            </div>
+            <div class="service-cta">
+              <button class="service-btn" data-service="onderhoud">Start Onderhoud</button>
+              <a href="#contact-form" class="service-link">Gratis Audit →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Special -->
+        <div class="student-special">
+          <div class="special-content">
+            <div class="special-icon">🎓</div>
+            <div class="special-text">
+              <h3>Speciale Studentenvoordelen</h3>
+              <p>Als medestudenten begrijpen we je budget. Geniet van exclusieve voordelen:</p>
+              <ul class="special-features">
+                <li>✅ <strong>20% studentenkorting</strong> op alle diensten</li>
+                <li>✅ <strong>Flexibele betalingsplannen</strong> - betaal in termijnen</li>
+                <li>✅ <strong>Gratis portfolio review</strong> en carrière advies</li>
+                <li>✅ <strong>Extra begeleiding</strong> en technische uitleg</li>
+                <li>✅ <strong>Gratis domeinnaam</strong> voor 1 jaar</li>
+                <li>✅ <strong>Hosting korting</strong> van 25%</li>
+              </ul>
+            </div>
+            <div class="special-cta">
+              <a href="#contact-form" class="btn-secondary">Studentenkorting Aanvragen</a>
+              <span class="cta-note">Geldig op vertoon studentenkaart</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proces Sectie -->
+    <section class="process">
+      <div class="container">
+        <h2>Onze Gestroomlijnde Werkwijze</h2>
+        <p class="process-subtitle">Van idee tot lancering in 4 eenvoudige stappen</p>
+        
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-icon">🎯</div>
+            <div class="step-content">
+              <div class="step-number">01</div>
+              <h3>Gratis Consultatie & Analyse</h3>
+              <p>We starten met een uitgebreid gesprek om jouw doelen, target audience en specifieke wensen te begrijpen. Samen bepalen we de scope en het budget.</p>
+              <ul class="step-features">
+                <li>Vrijblijvende intake</li>
+                <li>Doelstellingen bepalen</li>
+                <li>Project planning</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="step-icon">🎨</div>
+            <div class="step-content">
+              <div class="step-number">02</div>
+              <h3>Design & Prototyping</h3>
+              <p>We creëren wireframes en design concepten die perfect aansluiten bij jouw visie. Je krijgt volledige inzage en kunt feedback geven in elke fase.</p>
+              <ul class="step-features">
+                <li>Wireframe creatie</li>
+                <li>Design concepten</li>
+                <li>Feedback loops</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="step-icon">⚡</div>
+            <div class="step-content">
+              <div class="step-number">03</div>
+              <h3>Development & Testing</h3>
+              <p>Ons team bouwt je website met de nieuwste technologieën. We testen uitgebreid op verschillende apparaten en browsers voor een perfecte gebruikerservaring.</p>
+              <ul class="step-features">
+                <li>Agile ontwikkeling</li>
+                <li>Cross-browser testing</li>
+                <li>Performance optimalisatie</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="step-icon">🚀</div>
+            <div class="step-content">
+              <div class="step-number">04</div>
+              <h3>Lancering & Nazorg</h3>
+              <p>Je website gaat live en we zorgen voor een vlotte overgang. Daarna blijven we beschikbaar voor ondersteuning, updates en verdere optimalisaties.</p>
+              <ul class="step-features">
+                <li>Professionele lancering</li>
+                <li>Training en documentatie</li>
+                <li>Doorlopende support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Garantie Sectie -->
+    <section class="guarantee">
+      <div class="container">
+        <h2>Onze Rock-Solid Garanties</h2>
+        <div class="guarantee-grid">
+          <div class="guarantee-item">
+            <div class="guarantee-icon">💸</div>
+            <h3>14-Dagen Geld-Terug</h3>
+            <p>Niet tevreden? Binnen 14 dagen krijg je 100% van je geld terug - geen vragen gesteld.</p>
+          </div>
+          <div class="guarantee-item">
+            <div class="guarantee-icon">🛡️</div>
+            <h3>Beveiligingsgarantie</h3>
+            <p>Je website wordt geleverd met de hoogste security standaarden en regelmatige updates.</p>
+          </div>
+          <div class="guarantee-item">
+            <div class="guarantee-icon">⚡</div>
+            <h3>Performance Garantie</h3>
+            <p>We garanderen een Google Pagespeed score van 90+ voor optimale gebruikerservaring.</p>
+          </div>
+          <div class="guarantee-item">
+            <div class="guarantee-icon">📱</div>
+            <h3>Mobile-First Garantie</h3>
+            <p>Perfecte werking op alle apparaten - van smartphone tot desktop.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form Sectie -->
+    <section id="contact-form" class="contact-form-section">
+      <div class="container">
+        <h2>Start Jouw Digitale Reis</h2>
+        <p class="contact-subtitle">Laat ons je helpen om je online doelen te bereiken - vrijblijvende consultatie binnen 24 uur</p>
+        
+        <div class="contact-content">
+          <div class="contact-info">
+            <h3>Direct Contact Met Ons Team</h3>
+            <p class="contact-description">Geen sales team, geen tussenpersonen - gewoon twee gepassioneerde developers die klaarstaan om je project tot leven te brengen.</p>
+
+            <div class="contact-details">
+              <div class="contact-item">
+                <span class="contact-icon">📧</span>
+                <div class="contact-text">
+                  <strong>Email Ons</strong>
+                  <span>NovaWeb.devteam@gmail.com</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">📱</span>
+                <div class="contact-text">
+                  <strong>Bel Ons</strong>
+                  <span>+32 123 45 67 89</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">⚡</span>
+                <div class="contact-text">
+                  <strong>Snelle Reactie</strong>
+                  <span>Binnen 24 uur antwoord</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">🎓</span>
+                <div class="contact-text">
+                  <strong>Studentenvoordeel</strong>
+                  <span>20% korting beschikbaar</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="success-stats">
+              <div class="success-item">
+                <span class="success-number">15+</span>
+                <span class="success-label">Projecten Voltooid</span>
+              </div>
+              <div class="success-item">
+                <span class="success-number">100%</span>
+                <span class="success-label">Tevreden Klanten</span>
+              </div>
+              <div class="success-item">
+                <span class="success-number">24/7</span>
+                <span class="success-label">Support</span>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form" id="serviceContactForm">
+            <div class="form-group">
+              <input type="text" name="naam" placeholder="Volledige naam" required>
+            </div>
+            <div class="form-group">
+              <input type="email" name="email" placeholder="Emailadres" required>
+            </div>
+            <div class="form-group">
+              <input type="tel" name="telefoon" placeholder="Telefoonnummer (optioneel)">
+            </div>
+            <div class="form-group">
+              <select name="service" id="serviceSelect" required>
+                <option value="">Selecteer een service</option>
+                <option value="Premium Website Package">Premium Website Package - €499</option>
+                <option value="Webshop Solution">Webshop Solution - €899</option>
+                <option value="Onderhoud & Support">Onderhoud & Support - €79/maand</option>
+                <option value="Studentenkorting">Studentenkorting Aanvragen</option>
+                <option value="Andere">Andere Vraag</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6"></textarea>
+            </div>
+            <div class="form-footer">
+              <button type="submit" class="btn-primary">
+                <span class="btn-text">Verstuur Aanvraag</span>
+                <span class="btn-icon">🚀</span>
+              </button>
+              <p class="privacy-note">Je gegevens zijn veilig bij ons. We sturen geen spam.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Sectie -->
+    <section class="faq">
+      <div class="container">
+        <h2>Veelgestelde Vragen</h2>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3>📅 Hoe lang duurt een gemiddeld project?</h3>
+            <p>Een standaard website duurt 2-3 weken, complexere projecten zoals webshops 3-4 weken. We houden je op de hoogte met wekelijkse updates.</p>
+          </div>
+          <div class="faq-item">
+            <h3>🌐 Regelen jullie ook hosting en domeinnamen?</h3>
+            <p>Ja, we kunnen alles regelen! We bieden hosting aan tegen studentvriendelijke tarieven en helpen bij het kiezen van de perfecte domeinnaam.</p>
+          </div>
+          <div class="faq-item">
+            <h3>💸 Wat als ik niet tevreden ben met het resultaat?</h3>
+            <p>We bieden een 14-dagen niet-tevreden-geld-terug garantie. Daarnaast werken we met feedback loops zodat je het proces altijd kunt bijsturen.</p>
+          </div>
+          <div class="faq-item">
+            <h3>🔧 Kunnen jullie bestaande websites verbeteren?</h3>
+            <p>Absoluut! We specialiseren ons in het optimaliseren van bestaande websites voor betere performance, SEO en gebruikerservaring.</p>
+          </div>
+          <div class="faq-item">
+            <h3>🎓 Hoe werkt de studentenkorting precies?</h3>
+            <p>Toon je studentenkaart en ontvang 20% korting op alle diensten. Ook bieden we flexibele betalingsopties aan voor studenten.</p>
+          </div>
+          <div class="faq-item">
+            <h3>🚀 Wat maakt jullie anders dan andere agencies?</h3>
+            <p>Geen tussenpersonen, direct contact met de developers, scherpe studententarief en persoonlijke betrokkenheid bij elk project.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="shootingStarCanvas"></canvas>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden. | Gemaakt met ❤️ door student-ondernemers</p>
+    </div>
+  </footer>
+
+  <!-- Load scripts in correct order -->
+  <script src="shootingStars.js"></script>
+  <script src="diensten.js"></script>
+</body>
+</html>
