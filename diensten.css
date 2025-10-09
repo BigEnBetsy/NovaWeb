@@ -849,3 +849,85 @@ header.scrolled {
   backdrop-filter: blur(20px) !important;
   border-bottom: 1px solid rgba(255, 214, 10, 0.2) !important;
 }
+
+@media (max-width: 480px) {
+  .header-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .login-btn,
+  .contact-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Login knop styling */
+.login-btn {
+  background: transparent;
+  border: 2px solid rgba(255, 214, 10, 0.7);
+  border-radius: 50px;
+  padding: 10px 25px;
+  color: #ffd60a;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.login-btn:hover::before {
+  left: 100%;
+}
+
+.login-btn:hover {
+  background: rgba(255, 214, 10, 0.1);
+  border-color: #ffd60a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
+}
+
+/* Header layout aanpassing voor extra knop */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Responsive aanpassingen */
+@media (max-width: 768px) {
+  .header-buttons {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .login-btn {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    order: -1; /* Zet login knop bovenaan op mobiel */
+  }
+  
+  .contact-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

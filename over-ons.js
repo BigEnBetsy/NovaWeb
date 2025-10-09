@@ -112,3 +112,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   
 });
+
+// --- SUPABASE LOGIN CHECK TOEVOEGEN ---
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'JE_ANON_PUBLIC_KEY_HIER' // vervang door jouw anon public key
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.querySelector('.login-btn');
+  if (!loginBtn) return;
+
+  (async () => {
+    // Check huidige sessie
+    const { data: { session } } = await supabase.auth.getSession();
+    updateHeader(session, loginBtn);
+
+    // Luister naar realtime auth changes
+    supabase.auth.onAuthStateChange((_event, session) => {
+      updateHeader(session, loginBtn);
+    });
+  })();
+});
+
+function updateHeader(session, loginBtn) {
+  if (!loginBtn) return;
+  if (session) {
+    loginBtn.innerText = 'Account';
+    loginBtn.href = 'account.html';
+  } else {
+    loginBtn.innerText = 'Login';
+    loginBtn.href = 'login.html';
+  }
+}

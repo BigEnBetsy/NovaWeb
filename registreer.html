@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Registreer</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+    <style>
+        /* Import basis stijlen */
+        @import url('home.css');
+
+        /* ===== SUPER MODERNE REGISTRATIE PAGINA ===== */
+/* ===== NACHTHEMEL / STERREN ACHTERGROND ===== */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+  z-index: -3;
+}
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/stars.png') repeat top center;
+  z-index: -2;
+  animation: moveStars 200s linear infinite;
+  pointer-events: none;
+}
+
+.twinkling {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/twinkling.png') repeat top center;
+  z-index: -1;
+  animation: moveTwinkling 100s linear infinite;
+  pointer-events: none;
+}
+
+/* Animaties voor subtiele beweging */
+@keyframes moveStars {
+  from { background-position: 0 0; }
+  to { background-position: -10000px 5000px; }
+}
+
+@keyframes moveTwinkling {
+  from { background-position: 0 0; }
+  to { background-position: 10000px -5000px; }
+}
+
+
+
+        .register-section {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 120px 20px 50px;
+          position: relative;
+        }
+
+        .register-container {
+          display: grid;
+          grid-template-columns: 1fr 400px;
+          max-width: 1200px;
+          width: 100%;
+          gap: 50px;
+          align-items: center;
+          position: relative;
+          z-index: 2;
+        }
+
+        /* Main register card */
+        .register-card {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(30px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 30px;
+          padding: 60px 50px;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+          position: relative;
+          overflow: hidden;
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .register-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
+          transition: left 0.6s ease;
+        }
+
+        .register-card:hover::before {
+          left: 100%;
+        }
+
+        .register-card:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 214, 10, 0.3);
+          transform: translateY(-10px);
+          box-shadow: 0 35px 70px rgba(255, 214, 10, 0.2);
+        }
+
+        /* Register header */
+        .register-header {
+          text-align: center;
+          margin-bottom: 50px;
+        }
+
+        .register-header h1 {
+          font-size: 3.5rem;
+          font-weight: 800;
+          margin-bottom: 15px;
+          background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .register-subtitle {
+          font-size: 1.3rem;
+          opacity: 0.8;
+          font-weight: 300;
+        }
+
+        /* Form styling */
+        .register-form {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .form-group {
+          position: relative;
+        }
+
+        .input-container {
+          position: relative;
+        }
+
+        .input-container input {
+          width: 100%;
+          padding: 20px 60px 20px 25px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-radius: 15px;
+          font-size: 1.1rem;
+          color: white;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+        }
+
+        .input-container input:focus {
+          outline: none;
+          border-color: #ffd60a;
+          background: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+        }
+
+        .input-container label {
+          position: absolute;
+          left: 25px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 1.1rem;
+          pointer-events: none;
+          transition: all 0.3s ease;
+        }
+
+        .input-container input:focus + label,
+        .input-container input:valid + label {
+          top: 0;
+          left: 20px;
+          font-size: 0.9rem;
+          background: linear-gradient(45deg, #ffd60a, #ffed4e);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          padding: 0 10px;
+        }
+
+        .input-icon {
+          position: absolute;
+          right: 25px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(255, 255, 255, 0.6);
+          transition: color 0.3s ease;
+        }
+
+        .input-container input:focus ~ .input-icon {
+          color: #ffd60a;
+        }
+
+        /* Form options */
+        .form-options {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 10px 0;
+        }
+
+        .checkbox-container {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          font-size: 0.95rem;
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .checkbox-container input {
+          display: none;
+        }
+
+        .checkmark {
+          width: 20px;
+          height: 20px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-radius: 5px;
+          margin-right: 10px;
+          position: relative;
+          transition: all 0.3s ease;
+        }
+
+        .checkbox-container input:checked + .checkmark {
+          background: #ffd60a;
+          border-color: #ffd60a;
+        }
+
+        .checkbox-container input:checked + .checkmark::after {
+          content: '✓';
+          position: absolute;
+          color: #0d3b66;
+          font-weight: bold;
+          font-size: 14px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        /* Register button */
+        .register-submit-btn {
+          background: linear-gradient(45deg, #ffd60a, #ffed4e);
+          border: none;
+          border-radius: 15px;
+          padding: 20px;
+          color: #0d3b66;
+          font-weight: 700;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          margin-top: 10px;
+        }
+
+        .register-submit-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .register-submit-btn:hover::before {
+          left: 100%;
+        }
+
+        .register-submit-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 35px rgba(255, 214, 10, 0.4);
+        }
+
+        .btn-loader {
+          display: none;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .loader {
+          width: 20px;
+          height: 20px;
+          border: 2px solid transparent;
+          border-top: 2px solid #0d3b66;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Divider */
+        .register-divider {
+          display: flex;
+          align-items: center;
+          margin: 20px 0;
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .register-divider::before,
+        .register-divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .register-divider span {
+          padding: 0 20px;
+          font-size: 0.9rem;
+        }
+
+        /* Social register */
+        .social-register {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .social-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          padding: 18px;
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-radius: 15px;
+          background: rgba(255, 255, 255, 0.05);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 1rem;
+        }
+
+        .social-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.2);
+          transform: translateY(-2px);
+        }
+
+        .google-btn:hover {
+          border-color: #4285F4;
+        }
+
+        .github-btn:hover {
+          border-color: #6cc644;
+        }
+
+        /* Login link */
+        .login-link {
+          text-align: center;
+          margin-top: 30px;
+        }
+
+        .login-link p {
+          opacity: 0.8;
+        }
+
+        .login-link a {
+          color: #ffd60a;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+          color: #ffed4e;
+          text-decoration: underline;
+        }
+
+        /* Side panel */
+        .register-side-panel {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(30px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 25px;
+          padding: 50px 35px;
+          height: fit-content;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .register-side-panel::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
+          transition: left 0.6s ease;
+        }
+
+        .register-side-panel:hover::before {
+          left: 100%;
+        }
+
+        .side-content h2 {
+          color: #ffd60a;
+          font-size: 2.2rem;
+          margin-bottom: 20px;
+          font-weight: 700;
+          text-align: center;
+        }
+
+        .side-content p {
+          text-align: center;
+          margin-bottom: 40px;
+          opacity: 0.9;
+          line-height: 1.6;
+          font-size: 1.1rem;
+        }
+
+        .features-list {
+          display: flex;
+          flex-direction: column;
+          gap: 25px;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 15px;
+          padding: 20px;
+          background: rgba(255, 255, 255, 0.03);
+          border-radius: 15px;
+          transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+          background: rgba(255, 255, 255, 0.08);
+          transform: translateX(10px);
+        }
+
+        .feature-icon {
+          font-size: 2rem;
+          flex-shrink: 0;
+          margin-top: 5px;
+          filter: drop-shadow(0 5px 15px rgba(255, 214, 10, 0.3));
+        }
+
+        .feature-text strong {
+          color: #ffd60a;
+          display: block;
+          margin-bottom: 5px;
+          font-size: 1.1rem;
+        }
+
+        .feature-text p {
+          margin: 0;
+          font-size: 0.95rem;
+          opacity: 0.8;
+          text-align: left;
+        }
+
+        /* Floating elements */
+        .floating-element {
+          position: absolute;
+          background: rgba(255, 214, 10, 0.1);
+          border-radius: 50%;
+          animation: float 8s ease-in-out infinite;
+          z-index: 1;
+        }
+
+        .floating-element:nth-child(1) {
+          width: 100px;
+          height: 100px;
+          top: 10%;
+          left: 5%;
+          animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+          width: 150px;
+          height: 150px;
+          bottom: 20%;
+          right: 10%;
+          animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+          width: 80px;
+          height: 80px;
+          top: 60%;
+          left: 15%;
+          animation-delay: 4s;
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-25px) rotate(180deg);
+          }
+        }
+
+        @keyframes gradientShift {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+          .register-container {
+            grid-template-columns: 1fr;
+            max-width: 500px;
+          }
+          
+          .register-side-panel {
+            display: none;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .register-section {
+            padding: 100px 15px 30px;
+          }
+          
+          .register-card {
+            padding: 40px 30px;
+          }
+          
+          .register-header h1 {
+            font-size: 2.8rem;
+          }
+          
+          .form-options {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .register-section {
+            padding: 80px 10px 20px;
+          }
+          
+          .register-card {
+            padding: 30px 20px;
+            border-radius: 20px;
+          }
+          
+          .register-header h1 {
+            font-size: 2.2rem;
+          }
+          
+          .input-container input {
+            padding: 15px 50px 15px 20px;
+          }
+          
+          .social-btn {
+            padding: 15px;
+            font-size: 0.9rem;
+          }
+        }
+
+        /* GROOT SCHERM AANPASSINGEN */
+        @media (min-width: 2001px) {
+          .register-container {
+            max-width: 1400px;
+          }
+          
+          .register-card {
+            padding: 70px 60px;
+          }
+          
+          .register-header h1 {
+            font-size: 4rem;
+          }
+          
+          .input-container input {
+            padding: 25px 70px 25px 30px;
+            font-size: 1.2rem;
+          }
+          
+          .register-submit-btn {
+            padding: 25px;
+            font-size: 1.3rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <section class="register-section">
+        <!-- Floating background elements -->
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        
+        <div class="register-container">
+            <!-- Main registration card -->
+            <div class="register-card">
+                <div class="register-header">
+                    <h1>Registreer</h1>
+                    <p class="register-subtitle">Maak een nieuw account aan</p>
+                </div>
+                
+                <form class="register-form">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input type="email" id="reg-email" required>
+                            <label for="reg-email">E-mailadres</label>
+                            <div class="input-icon">✉️</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input type="password" id="reg-password" required>
+                            <label for="reg-password">Wachtwoord</label>
+                            <div class="input-icon">🔒</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input type="password" id="reg-confirm-password" required>
+                            <label for="reg-confirm-password">Bevestig Wachtwoord</label>
+                            <div class="input-icon">🔒</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="terms-agreement">
+                            <span class="checkmark"></span>
+                            Ik ga akkoord met de voorwaarden
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="register-submit-btn">
+                        <span>Registreer</span>
+                        <div class="btn-loader">
+                            <div class="loader"></div>
+                        </div>
+                    </button>
+                    
+                    <div class="register-divider">
+                        <span>Of registreer met</span>
+                    </div>
+                    
+                    <div class="social-register">
+                        <button type="button" class="social-btn google-btn">
+                            <span>Google</span>
+                        </button>
+                        <button type="button" class="social-btn github-btn">
+                            <span>GitHub</span>
+                        </button>
+                    </div>
+                    
+                    <div class="login-link">
+                        <p>Heb je al een account? <a href="#">Inloggen</a></p>
+                    </div>
+                </form>
+                
+                <div id="reg-status" style="margin-top:20px;"></div>
+            </div>
+            
+            <!-- Side panel -->
+            <div class="register-side-panel">
+                <div class="side-content">
+                    <h2>Voordelen</h2>
+                    <p>Word lid van onze community en ontdek alle voordelen</p>
+                    
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">🚀</div>
+                            <div class="feature-text">
+                                <strong>Snel registreren</strong>
+                                <p>Binnen enkele seconden een account aanmaken</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">💾</div>
+                            <div class="feature-text">
+                                <strong>Persoonlijke opslag</strong>
+                                <p>Bewaar je voortgang en voorkeuren</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🔔</div>
+                            <div class="feature-text">
+                                <strong>Meldingen</strong>
+                                <p>Blijf op de hoogte van nieuwe updates</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="registreer.js"></script>
+</body>
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accountbeheer</title>
+    <style>
+        /* Import basis stijlen */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+
+
+        /* ===== NACHTHEMEL / STERREN ACHTERGROND ===== */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+  z-index: -3;
+}
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/stars.png') repeat top center;
+  z-index: -2;
+  animation: moveStars 200s linear infinite;
+  pointer-events: none;
+}
+
+.twinkling {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/twinkling.png') repeat top center;
+  z-index: -1;
+  animation: moveTwinkling 100s linear infinite;
+  pointer-events: none;
+}
+
+/* Animaties voor subtiele beweging */
+@keyframes moveStars {
+  from { background-position: 0 0; }
+  to { background-position: -10000px 5000px; }
+}
+
+@keyframes moveTwinkling {
+  from { background-position: 0 0; }
+  to { background-position: 10000px -5000px; }
+}
+
+        
+        /* Verberg scrollbar maar behoud scroll functionaliteit */
+        html {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          scroll-behavior: smooth;
+        }
+
+        html::-webkit-scrollbar {
+          display: none;
+        }
+
+        body {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          overflow-x: hidden;
+          font-family: 'Inter', sans-serif;
+          background: linear-gradient(135deg, #0d3b66 0%, #1e5a9c 50%, #0d3b66 100%);
+          color: white;
+          min-height: 100vh;
+          position: relative;
+          overflow-x: hidden;
+          margin: 0;
+          padding: 0;
+        }
+
+        body::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* ===== PROFESSIONELE ACCOUNTBEHEER PAGINA ===== */
+
+        .account {
+          padding: 120px 20px 50px;
+          min-height: 100vh;
+          position: relative;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
+
+        /* Hero Title met moderne gradient */
+        .account h2 {
+          text-align: center;
+          font-size: 3rem;
+          margin-bottom: 50px;
+          background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease-in-out infinite;
+          font-weight: 700;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        /* Main Account Layout */
+        .account-layout {
+          display: grid;
+          grid-template-columns: 300px 1fr;
+          gap: 40px;
+          align-items: start;
+        }
+
+        /* Sidebar Navigation */
+        .account-sidebar {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 30px;
+          position: sticky;
+          top: 140px;
+        }
+
+        .sidebar-nav {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 10px;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 15px 20px;
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          font-weight: 500;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+          background: rgba(255, 214, 10, 0.1);
+          color: #ffd60a;
+        }
+
+        .nav-icon {
+          font-size: 1.2rem;
+          width: 20px;
+          text-align: center;
+        }
+
+        /* Main Content Area */
+        .account-main {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 40px;
+        }
+
+        .section-title {
+          color: #ffd60a;
+          font-size: 1.5rem;
+          margin-bottom: 30px;
+          font-weight: 600;
+          border-bottom: 2px solid rgba(255, 214, 10, 0.3);
+          padding-bottom: 10px;
+        }
+
+        /* Form Styles */
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 25px;
+          margin-bottom: 30px;
+        }
+
+        .form-group {
+          margin-bottom: 20px;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 8px;
+          color: #ffd60a;
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 12px 16px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 10px;
+          color: white;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: #ffd60a;
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-control:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        /* Checkbox Styles */
+        .checkbox-group {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+          width: 18px;
+          height: 18px;
+          accent-color: #ffd60a;
+        }
+
+        .checkbox-group label {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.9);
+          font-weight: 400;
+        }
+
+        /* Button Styles */
+        .btn {
+          padding: 12px 24px;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          font-size: 0.95rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .btn-primary {
+          background: linear-gradient(45deg, #ffd60a, #ffed4e);
+          color: #0d3b66;
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
+        }
+
+        .btn-secondary {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-danger {
+          background: rgba(231, 76, 60, 0.2);
+          color: #e74c3c;
+          border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-danger:hover {
+          background: rgba(231, 76, 60, 0.3);
+        }
+
+        /* File Upload */
+        .file-upload {
+          border: 2px dashed rgba(255, 255, 255, 0.3);
+          border-radius: 10px;
+          padding: 30px;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        .file-upload:hover {
+          border-color: #ffd60a;
+        }
+
+        .upload-icon {
+          font-size: 2rem;
+          margin-bottom: 10px;
+          opacity: 0.7;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-bottom: 30px;
+        }
+
+        .stat-card {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 15px;
+          padding: 25px;
+          text-align: center;
+        }
+
+        .stat-number {
+          display: block;
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #ffd60a;
+          margin-bottom: 5px;
+        }
+
+        .stat-label {
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+          display: flex;
+          gap: 15px;
+          margin-top: 40px;
+          padding-top: 30px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .modal-content {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px;
+          padding: 40px;
+          max-width: 500px;
+          width: 90%;
+          text-align: center;
+        }
+
+        .modal-buttons {
+          display: flex;
+          gap: 15px;
+          margin-top: 30px;
+          justify-content: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+          .account-layout {
+            grid-template-columns: 1fr;
+            gap: 30px;
+          }
+          
+          .account-sidebar {
+            position: static;
+          }
+          
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .account {
+            padding: 100px 15px 30px;
+          }
+
+          .account h2 {
+            font-size: 2.2rem;
+          }
+
+          .account-main {
+            padding: 30px;
+          }
+
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .action-buttons {
+            flex-direction: column;
+          }
+
+          .modal-buttons {
+            flex-direction: column;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .account {
+            padding: 80px 10px 20px;
+          }
+
+          .account h2 {
+            font-size: 1.8rem;
+          }
+
+          .account-main {
+            padding: 20px;
+          }
+
+          .account-sidebar {
+            padding: 20px;
+          }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <section class="account">
+        <div class="container">
+            <h2>Accountbeheer</h2>
+            
+            <div class="account-layout">
+                <!-- Sidebar Navigation -->
+                <nav class="account-sidebar">
+                    <ul class="sidebar-nav">
+                        <li><a href="#" class="active"><span class="nav-icon">👤</span>Profiel</a></li>
+                        <li><a href="#"><span class="nav-icon">🔒</span>Beveiliging</a></li>
+                        <li><a href="#"><span class="nav-icon">🔔</span>Notificaties</a></li>
+                        <li><a href="#"><span class="nav-icon">📁</span>Bestanden</a></li>
+                        <li><a href="#"><span class="nav-icon">💳</span>Abonnement</a></li>
+                        <li><a href="#"><span class="nav-icon">⚙️</span>Instellingen</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Main Content -->
+                <main class="account-main">
+                    <!-- Profile Section -->
+                    <h3 class="section-title">Profielgegevens</h3>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="email">E-mailadres</label>
+                            <input type="email" id="email" class="form-control" value="gebruiker@voorbeeld.nl" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="user-type">Gebruikerstype</label>
+                            <select id="user-type" class="form-control">
+                                <option value="student">Student</option>
+                                <option value="professional">Professional</option>
+                                <option value="enterprise">Enterprise</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-secondary" id="change-email">
+                            <span>✏️</span>E-mail wijzigen
+                        </button>
+                        <button class="btn btn-secondary" id="student-discount">
+                            <span>🎓</span>Studentenkorting aanvragen
+                        </button>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <h3 class="section-title" style="margin-top: 40px;">Notificatie-instellingen</h3>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="email-notifications" checked>
+                            <label for="email-notifications">E-mail notificaties ontvangen</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="project-updates">
+                            <label for="project-updates">Project updates</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter" checked>
+                            <label for="newsletter">Nieuwsbrief ontvangen</label>
+                        </div>
+                    </div>
+
+                    <!-- File Management -->
+                    <h3 class="section-title" style="margin-top: 40px;">Bestandsbeheer</h3>
+                    
+                    <div class="file-upload">
+                        <div class="upload-icon">📁</div>
+                        <p>Sleep bestanden hier of klik om te uploaden</p>
+                        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Max. bestandsgrootte: 50MB</p>
+                        <input type="file" id="file-input" style="display: none;">
+                    </div>
+
+                    <!-- Account Stats -->
+                    <h3 class="section-title">Account Statistieken</h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">Projecten</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Uploads</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">28</span>
+                            <span class="stat-label">Actieve dagen</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="save-settings">
+                            <span>💾</span>Instellingen Opslaan
+                        </button>
+                        <button class="btn btn-secondary" id="logout">
+                            <span>🚪</span>Uitloggen
+                        </button>
+                        <button class="btn btn-danger" id="delete-account">
+                            <span>🗑️</span>Account Verwijderen
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <h3 style="color: #e74c3c; margin-bottom: 20px;">Account Verwijderen</h3>
+            <p>Weet je zeker dat je je account wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt en alle gegevens zullen permanent verloren gaan.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="confirm-delete">Ja, account verwijderen</button>
+                <button class="btn btn-secondary" id="cancel-delete">Annuleren</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// ===============================
+// ✅ Supabase Configuratie
+// ===============================
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// ===============================
+// DOM ELEMENTEN
+// ===============================
+const deleteAccountBtn = document.getElementById('delete-account');
+const deleteModal = document.getElementById('delete-modal');
+const confirmDelete = document.getElementById('confirm-delete');
+const cancelDelete = document.getElementById('cancel-delete');
+const changeEmailBtn = document.getElementById('change-email');
+const studentDiscountBtn = document.getElementById('student-discount');
+const saveSettingsBtn = document.getElementById('save-settings');
+const logoutBtn = document.getElementById('logout');
+const fileUpload = document.querySelector('.file-upload');
+const fileInput = document.getElementById('file-input');
+const emailField = document.getElementById('email');
+const userTypeSelect = document.getElementById('user-type');
+
+// ===============================
+// ✅ Accountdata laden
+// ===============================
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    alert('Je bent niet ingelogd. Je wordt doorgestuurd naar de loginpagina.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const user = session.user;
+  console.log('Ingelogde gebruiker:', user);
+
+  // E-mailadres tonen
+  emailField.value = user.email;
+
+  // Optioneel: user metadata laden (uit "profiles" tabel bijvoorbeeld)
+  // Hier kun je later Supabase-rowdata ophalen met:
+  // const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+});
+
+// ===============================
+// 📁 Bestand uploaden (client-side voorbeeld)
+// ===============================
+fileUpload.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', async () => {
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    alert(`Bestand "${file.name}" wordt geüpload...`);
+
+    const { data, error } = await supabase.storage
+      .from('uploads') // Maak bucket 'uploads' aan in Supabase
+      .upload(`user-files/${Date.now()}-${file.name}`, file);
+
+    if (error) {
+      alert(`Upload mislukt: ${error.message}`);
+    } else {
+      alert(`Bestand succesvol geüpload: ${file.name}`);
+      console.log('Upload info:', data);
+    }
+  }
+});
+
+// ===============================
+// 🗑️ Account verwijderen
+// ===============================
+deleteAccountBtn.addEventListener('click', () => {
+  deleteModal.style.display = 'flex';
+});
+
+confirmDelete.addEventListener('click', async () => {
+  const { error } = await supabase.auth.signOut();
+  deleteModal.style.display = 'none';
+  if (!error) {
+    alert('Je account is verwijderd (of afgemeld).');
+    window.location.href = 'login.html';
+  }
+});
+
+cancelDelete.addEventListener('click', () => {
+  deleteModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === deleteModal) deleteModal.style.display = 'none';
+});
+
+// ===============================
+// ✉️ E-mail wijzigen
+// ===============================
+changeEmailBtn.addEventListener('click', async () => {
+  const newEmail = prompt('Voer je nieuwe e-mailadres in:');
+  if (!newEmail) return;
+
+  const { error } = await supabase.auth.updateUser({ email: newEmail });
+
+  if (error) {
+    alert('Fout bij e-mail wijzigen: ' + error.message);
+  } else {
+    emailField.value = newEmail;
+    alert('E-mailadres bijgewerkt! Controleer je inbox voor verificatie.');
+  }
+});
+
+// ===============================
+// 🎓 Studentenkorting
+// ===============================
+studentDiscountBtn.addEventListener('click', async () => {
+  alert('Studentenkorting aangevraagd! We nemen contact met je op.');
+
+  // Optioneel: sla aanvraag op in Supabase
+  // await supabase.from('student_requests').insert([{ user_id: user.id, requested_at: new Date() }]);
+});
+
+// ===============================
+// 💾 Instellingen opslaan
+// ===============================
+saveSettingsBtn.addEventListener('click', async () => {
+  const userType = userTypeSelect.value;
+  alert(`Instellingen opgeslagen (${userType}).`);
+
+  // Voorbeeld: opslaan in "profiles" tabel
+  // await supabase.from('profiles').upsert({ id: user.id, user_type: userType });
+});
+
+// ===============================
+// 🚪 Uitloggen
+// ===============================
+logoutBtn.addEventListener('click', async () => {
+  if (confirm('Weet je zeker dat je wilt uitloggen?')) {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      alert('Uitloggen mislukt: ' + error.message);
+    } else {
+      alert('Je bent uitgelogd.');
+      window.location.href = 'login.html';
+    }
+  }
+});
+
+    </script>
+</body>
+</html>

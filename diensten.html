@@ -11,22 +11,25 @@
   <div class="stars-deep" id="starsDeep"></div>
   <div class="stars-background" id="starsBackground"></div>
 
-  <header>
-    <div class="logo">
-      <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
-    </div>
+<header>
+  <div class="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+  
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="projecten.html">Portfolio</a>
+    <a href="diensten.html">Diensten</a>
+  </nav>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="over-ons.html">Over ons</a>
-      <a href="projecten.html">Portfolio</a>
-      <a href="diensten.html">Diensten</a>
-    </nav>
-
-    <a href="#contact-form" class="contact-btn">Contact ons</a>
-  </header>
+  <div class="header-buttons">
+    <a href="login.html" class="login-btn">Login</a>
+    <a href="diensten.html" class="contact-btn">Contact us</a>
+  </div>
+</header>
 
   <main>
     <!-- Diensten Sectie -->
@@ -444,6 +447,6 @@
 
   <!-- Load scripts in correct order -->
   <script src="shootingStars.js"></script>
-  <script src="diensten.js"></script>
+  <script type="module" src="diensten.js"></script>
 </body>
 </html>
