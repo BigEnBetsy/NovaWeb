@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Mijn Projecten</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        /* Import basis stijlen */
+        @import url('home.css');
+
+        /* Verberg scrollbar maar behoud scroll functionaliteit */
+        html {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          scroll-behavior: smooth;
+        }
+
+        html::-webkit-scrollbar {
+          display: none;
+        }
+
+        body {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          overflow-x: hidden;
+          background: linear-gradient(135deg, #0d3b66 0%, #1a5a9a 100%);
+          color: white;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+        }
+
+        body::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* HEADER FIX */
+        body header {
+          transition: transform 0.3s ease !important;
+        }
+
+        body header.hide {
+          transform: translateY(-100%) !important;
+        }
+
+        /* PROJECTEN SECTIE STYLING */
+        .mijn-projecten {
+          padding: 120px 20px 50px;
+          min-height: 100vh;
+          position: relative;
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+
+        .mijn-projecten h2 {
+          text-align: center;
+          font-size: 3.5rem;
+          margin-bottom: 60px;
+          background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease-in-out infinite;
+          font-weight: 800;
+          position: relative;
+        }
+
+        .mijn-projecten h2::after {
+          content: '';
+          position: absolute;
+          bottom: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+          height: 3px;
+          background: linear-gradient(45deg, #ffd60a, #ffed4e);
+          border-radius: 2px;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        /* PROJECT CARDS GRID */
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+          gap: 30px;
+          margin-top: 30px;
+        }
+
+        .project-card {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(20px);
+          padding: 30px;
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .project-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
+          transition: left 0.6s ease;
+        }
+
+        .project-card:hover::before {
+          left: 100%;
+        }
+
+        .project-card:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 214, 10, 0.3);
+          transform: translateY(-10px);
+          box-shadow: 0 20px 40px rgba(255, 214, 10, 0.15);
+        }
+
+        .project-card h3 {
+          color: #ffd60a;
+          margin-bottom: 15px;
+          font-size: 1.6rem;
+          font-weight: 700;
+          line-height: 1.3;
+        }
+
+        .project-card p {
+          margin-bottom: 20px;
+          opacity: 0.9;
+          line-height: 1.6;
+          flex-grow: 1;
+        }
+
+        .project-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #ffd60a;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 10px 0;
+          transition: all 0.3s ease;
+          border-bottom: 1px solid transparent;
+          margin-bottom: 15px;
+          align-self: flex-start;
+        }
+
+        .project-link:hover {
+          color: #ffed4e;
+          border-bottom: 1px solid #ffed4e;
+          transform: translateX(5px);
+        }
+
+        .project-link::after {
+          content: '↗';
+          font-size: 1.2rem;
+          transition: transform 0.3s ease;
+        }
+
+        .project-link:hover::after {
+          transform: translate(3px, -3px);
+        }
+
+        .project-date {
+          font-size: 0.9rem;
+          opacity: 0.7;
+          margin-top: auto;
+          padding-top: 15px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+          text-align: center;
+          padding: 60px 20px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(20px);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .empty-state h3 {
+          color: #ffd60a;
+          margin-bottom: 15px;
+          font-size: 1.8rem;
+        }
+
+        .empty-state p {
+          opacity: 0.9;
+          font-size: 1.1rem;
+          margin-bottom: 25px;
+        }
+
+        .add-project-btn {
+          background: linear-gradient(45deg, #ffd60a, #ffed4e);
+          color: #0d3b66;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 50px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: inline-block;
+        }
+
+        .add-project-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px rgba(255, 214, 10, 0.3);
+        }
+
+        /* LOADING STATE */
+        .loading-state {
+          text-align: center;
+          padding: 40px;
+        }
+
+        .loading-spinner {
+          display: inline-block;
+          width: 50px;
+          height: 50px;
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          border-top-color: #ffd60a;
+          animation: spin 1s ease-in-out infinite;
+          margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        /* ERROR STATE */
+        .error-state {
+          text-align: center;
+          padding: 40px;
+          background: rgba(255, 0, 0, 0.1);
+          border-radius: 15px;
+          border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .error-state h3 {
+          color: #ff6b6b;
+          margin-bottom: 15px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+          .mijn-projecten h2 {
+            font-size: 3rem;
+          }
+          
+          .projects-grid {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          }
+        }
+
+        @media (max-width: 768px) {
+          .mijn-projecten {
+            padding: 100px 15px 30px;
+          }
+
+          .mijn-projecten h2 {
+            font-size: 2.5rem;
+          }
+
+          .projects-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .project-card {
+            padding: 25px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .mijn-projecten {
+            padding: 80px 10px 20px;
+          }
+
+          .mijn-projecten h2 {
+            font-size: 2rem;
+          }
+
+          .project-card {
+            padding: 20px;
+          }
+        }
+
+        /* DEBUG: Forceer header hide */
+        html body header.hide {
+          transform: translateY(-100%) !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+    </style>
+</head>
+<body>
+
+
+    <header>
+  <div class="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+  
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="projecten.html">Portfolio</a>
+    <a href="diensten.html">Diensten</a>
+    <a href="klantenProject.html">Mijn projecten</a>
+  </nav>
+
+  <div class="header-buttons">
+    <a href="login.html" class="login-btn">Login</a>
+    <a href="diensten.html" class="contact-btn">Contact us</a>
+  </div>
+</header>
+    <section class="mijn-projecten">
+        <h2>Mijn Projecten</h2>
+        <div id="project-list">
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Projecten worden geladen...</p>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        // 🔧 Supabase config
+        const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // 📦 Elementen uit de HTML
+        const projectList = document.getElementById('project-list')
+
+        // 🧩 Controleer loginstatus en laad projecten
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session }, error } = await supabase.auth.getSession()
+
+            if (!session) {
+                alert('Je bent niet ingelogd. Je wordt doorgestuurd naar de loginpagina.')
+                window.location.href = 'login.html'
+                return
+            }
+
+            const user = session.user
+            console.log('Ingelogde gebruiker:', user.email)
+
+            // Haal projecten van deze gebruiker op
+            const { data: projects, error: projectError } = await supabase
+                .from('projects')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+
+            if (projectError) {
+                console.error('Fout bij ophalen projecten:', projectError)
+                projectList.innerHTML = `
+                    <div class="error-state">
+                        <h3>Er is een fout opgetreden</h3>
+                        <p>Fout bij ophalen projecten: ${projectError.message}</p>
+                    </div>
+                `
+                return
+            }
+
+            if (projects.length === 0) {
+                projectList.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Nog geen projecten</h3>
+                        <p>Je hebt nog geen projecten toegevoegd. Begin met het toevoegen van je eerste project!</p>
+                        <a href="add-project.html" class="add-project-btn">Project Toevoegen</a>
+                    </div>
+                `
+                return
+            }
+
+            // Toon projecten in een mooie grid
+            projectList.innerHTML = `
+                <div class="projects-grid">
+                    ${projects.map(p => `
+                        <div class="project-card">
+                            <h3>${p.title}</h3>
+                            <p>${p.description || 'Geen beschrijving opgegeven.'}</p>
+                            ${p.link ? `<a href="${p.link}" class="project-link" target="_blank" rel="noopener noreferrer">Bekijk Project</a>` : ''}
+                            <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        })
+
+
+        // --- SUPABASE LOGIN CHECK TOEVOEGEN ---
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.querySelector('.login-btn');
+  if (!loginBtn) return;
+
+  (async () => {
+    // Check huidige sessie
+    const { data: { session } } = await supabase.auth.getSession();
+    updateHeader(session, loginBtn);
+
+    // Luister naar realtime auth changes
+    supabase.auth.onAuthStateChange((_event, session) => {
+      updateHeader(session, loginBtn);
+    });
+  })();
+});
+
+function updateHeader(session, loginBtn) {
+  if (!loginBtn) return;
+  if (session) {
+    loginBtn.innerText = 'Account';
+    loginBtn.href = 'account.html';
+  } else {
+    loginBtn.innerText = 'Login';
+    loginBtn.href = 'login.html';
+  }
+}
+    </script>
+
+</body>
+</html>
