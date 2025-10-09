@@ -306,11 +306,41 @@
           opacity: 1 !important;
           visibility: visible !important;
         }
+
+        .stars-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('Fotos/achtergrondWS2.jpg');
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  z-index: -2;
+  pointer-events: none;
+  animation: moveStars 150s linear infinite;
+}
+
+.stars-deep {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('Fotos/achtergrondWS2.jpg');
+  background-repeat: repeat;
+  background-size: 600px 600px;
+  z-index: -3;
+  pointer-events: none;
+  animation: moveStarsSlow 200s linear infinite;
+  opacity: 0.8;
+}
     </style>
 </head>
 <body>
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
 
-<canvas id="shootingStarCanvas"></canvas>
 
     <header>
   <div class="logo">
