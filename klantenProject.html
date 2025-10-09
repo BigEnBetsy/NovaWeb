@@ -409,6 +409,24 @@
                 opacity: 1;
             }
         }
+
+        .go-back-btn {
+  margin-top: 25px;
+  background: linear-gradient(45deg, #ffd60a, #ffed4e);
+  color: #0d3b66;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.go-back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(255, 214, 10, 0.3);
+}
+
     </style>
 </head>
 
@@ -478,9 +496,20 @@
                 document.body.appendChild(overlay)
 
                 // Redirect na 3 seconden
-                setTimeout(() => {
+                overlay.innerHTML = `
+  <div class="glass-popup">
+    <h3>Toegang geweigerd</h3>
+    <p>Je kunt deze projecten alleen bekijken als je bent ingelogd.</p>
+    <button id="goBackBtn" class="go-back-btn">Terug naar login</button>
+  </div>
+`
+
+                document.body.appendChild(overlay)
+
+                // Klikknop functionaliteit
+                document.getElementById('goBackBtn').addEventListener('click', () => {
                     window.location.href = 'login.html'
-                }, 3000)
+                })
 
                 return
             }
