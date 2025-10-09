@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         statusDiv.style.color = 'green'
         statusDiv.innerText = `Ingelogd! Welkom ${data.user.email}`
-        // Optioneel: redirect naar dashboard
-        // window.location.href = 'dashboard.html'
+       
+         window.location.href = 'klantenProject.html'
       }
     })
   }
