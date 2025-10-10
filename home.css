@@ -26,7 +26,7 @@ body::-webkit-scrollbar {
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background: url('/Fotos/wp3.jpg') no-repeat center center fixed;
+  background: url('Fotos/wp3.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #fff;
   min-height: 100vh;

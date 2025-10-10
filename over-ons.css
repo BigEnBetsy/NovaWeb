@@ -16,7 +16,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
-  background: url('/Fotos/wp4.jpg') no-repeat center center fixed !important;
+  background: url('Fotos/wp4.jpg') no-repeat center center fixed !important;
   background-size: cover !important;
 }
 
