@@ -3,62 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovaWeb - Wachtwoord reset</title>
+  <title>NovaWeb - Wachtwoord vergeten</title>
   <link rel="stylesheet" href="resetww.css">
 </head>
 <body>
-  <div class="stars-deep" id="starsDeep"></div>
-  <div class="stars-background" id="starsBackground"></div>
-
-  <main>
-    <section class="login-section">
-      <div class="login-container">
-        <!-- Card links -->
-        <div class="login-card">
-          <div class="login-header">
-            <h1>Wachtwoord reset</h1>
-            <p class="login-subtitle">Voer je nieuwe wachtwoord in</p>
-          </div>
-
-          <form class="login-form reset-password-form">
-            <div class="form-group">
-              <div class="input-container">
-                <input type="password" id="newPassword" required>
-                <label for="newPassword">Nieuw wachtwoord</label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div class="input-container">
-                <input type="password" id="confirmPassword" required>
-                <label for="confirmPassword">Bevestig wachtwoord</label>
-              </div>
-            </div>
-
-            <button type="submit" class="login-submit-btn">
-              <span class="btn-text">Reset Wachtwoord</span>
-              <div class="btn-loader">
-                <div class="loader"></div>
-              </div>
-            </button>
-
-            <div id="status" style="margin-top:10px; color:red;"></div>
-
-            <p class="register-link">Terug naar <a href="login.html">Login</a></p>
-          </form>
+  <section class="login-section">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Wachtwoord vergeten</h1>
+          <p class="login-subtitle">Voer je e-mailadres in om een resetlink te ontvangen</p>
         </div>
 
-        <!-- Afbeelding rechts -->
+        <form class="login-form reset-password-form">
+          <div class="form-group">
+            <div class="input-container">
+              <input type="email" id="resetEmail" required>
+              <label for="resetEmail">E-mailadres</label>
+            </div>
+          </div>
 
-          <img src="/Fotos/wachtwoord.png" alt="Wachtwoord afbeelding" class="side-image">
+          <button type="submit" class="login-submit-btn">
+            <span class="btn-text">Verstuur resetlink</span>
+            <div class="btn-loader">
+              <div class="loader"></div>
+            </div>
+          </button>
 
+          <div id="status" style="margin-top:10px; color:red;"></div>
+        </form>
+
+        <div class="register-link">
+          <p>Terug naar <a href="login.html">Login</a></p>
+        </div>
       </div>
-    </section>
-  </main>
 
-  <canvas id="shootingStarCanvas"></canvas>
+      <div class="login-side-panel">
+        <img src="Fotos/wachtwoord.png" alt="Wachtwoord afbeelding" class="side-image">
+      </div>
+    </div>
+  </section>
 
-  <script type="module" src="resetww.js"></script>
-  <script src="common.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const form = document.querySelector('.reset-password-form')
+    const statusDiv = document.getElementById('status')
+    const btnText = form.querySelector('.btn-text')
+    const btnLoader = form.querySelector('.btn-loader')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const email = document.getElementById('resetEmail').value
+
+      // Toon loader
+      btnText.style.opacity = '0'
+      btnLoader.style.display = 'block'
+
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://bigenbetsy.github.io/NovaWeb/resetww.html' // of je eigen reset pagina
+      })
+
+      btnText.style.opacity = '1'
+      btnLoader.style.display = 'none'
+
+      if (error) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = `Fout: ${error.message}`
+      } else {
+        statusDiv.style.color = 'green'
+        statusDiv.innerText = `Resetlink verzonden naar ${email}`
+      }
+    })
+  </script>
 </body>
 </html>

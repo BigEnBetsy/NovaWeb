@@ -69,7 +69,7 @@ if (forgotPasswordLink) {
 
     // Stuur reset email via Supabase
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://jouwapp.com/reset-password' // Pas aan naar je eigen reset-pagina
+      redirectTo: 'https://bigenbetsy.github.io/NovaWeb/resetww.html' // Pas aan naar je eigen reset-pagina
     });
 
     if (error) {
