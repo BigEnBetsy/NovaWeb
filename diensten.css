@@ -12,6 +12,11 @@
   margin: 0 auto;
   padding: 0 20px;
 }
+body {
+  background: url('/Fotos/wp4.jpg') no-repeat center center fixed !important;
+  background-size: cover !important;
+}
+
 
 .services h2 {
   text-align: center;

@@ -1,447 +1,428 @@
-        /* Import basis stijlen */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-
-
-
-        /* ===== NACHTHEMEL / STERREN ACHTERGROND ===== */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
-  z-index: -3;
+/* ===============================
+   ✅ CSS Reset en Basisstijlen
+   =============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.stars {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/stars.png') repeat top center;
-  z-index: -2;
-  animation: moveStars 200s linear infinite;
-  pointer-events: none;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+      background: linear-gradient(135deg, #e0f7ff 0%, #c0eaff 50%, #f0fcff 100%);
+  background-attachment: fixed; /* houdt de gradient vast bij scrollen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.twinkling {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/twinkling.png') repeat top center;
-  z-index: -1;
-  animation: moveTwinkling 100s linear infinite;
-  pointer-events: none;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-/* Animaties voor subtiele beweging */
-@keyframes moveStars {
-  from { background-position: 0 0; }
-  to { background-position: -10000px 5000px; }
+/* ===============================
+   ✅ Account Sectie
+   =============================== */
+.account {
+    padding: 40px 0;
+    min-height: 100vh;
 }
 
-@keyframes moveTwinkling {
-  from { background-position: 0 0; }
-  to { background-position: 10000px -5000px; }
+.account h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-        
-        /* Verberg scrollbar maar behoud scroll functionaliteit */
-        html {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          scroll-behavior: smooth;
-        }
+/* ===============================
+   ✅ Account Layout
+   =============================== */
+.account-layout {
+    display: flex;
+    gap: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
 
-        html::-webkit-scrollbar {
-          display: none;
-        }
+/* ===============================
+   ✅ Sidebar Navigatie
+   =============================== */
+.account-sidebar {
+    width: 280px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    padding: 30px 0;
+}
 
-        body {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-          overflow-x: hidden;
-          font-family: 'Inter', sans-serif;
-          background: linear-gradient(135deg, #0d3b66 0%, #1e5a9c 50%, #0d3b66 100%);
-          color: white;
-          min-height: 100vh;
-          position: relative;
-          overflow-x: hidden;
-          margin: 0;
-          padding: 0;
-        }
+.sidebar-nav {
+    list-style: none;
+}
 
-        body::-webkit-scrollbar {
-          display: none;
-        }
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
 
-        /* ===== PROFESSIONELE ACCOUNTBEHEER PAGINA ===== */
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
 
-        .account {
-          padding: 120px 20px 50px;
-          min-height: 100vh;
-          position: relative;
-        }
+.sidebar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left-color: rgba(255, 255, 255, 0.5);
+}
 
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
+.sidebar-nav a.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-left-color: white;
+}
 
-        /* Hero Title met moderne gradient */
-        .account h2 {
-          text-align: center;
-          font-size: 3rem;
-          margin-bottom: 50px;
-          background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease-in-out infinite;
-          font-weight: 700;
-        }
+.nav-icon {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
 
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
+/* ===============================
+   ✅ Hoofdinhoud
+   =============================== */
+.account-main {
+    flex: 1;
+    padding: 40px;
+}
 
-        /* Main Account Layout */
-        .account-layout {
-          display: grid;
-          grid-template-columns: 300px 1fr;
-          gap: 40px;
-          align-items: start;
-        }
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
 
-        /* Sidebar Navigation */
-        .account-sidebar {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: 30px;
-          position: sticky;
-          top: 140px;
-        }
+/* ===============================
+   ✅ Formulier Stijlen
+   =============================== */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
 
-        .sidebar-nav {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
+.form-group {
+    margin-bottom: 25px;
+}
 
-        .sidebar-nav li {
-          margin-bottom: 10px;
-        }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+}
 
-        .sidebar-nav a {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 15px 20px;
-          color: rgba(255, 255, 255, 0.8);
-          text-decoration: none;
-          border-radius: 12px;
-          transition: all 0.3s ease;
-          font-weight: 500;
-        }
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
 
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
-          background: rgba(255, 214, 10, 0.1);
-          color: #ffd60a;
-        }
+.form-control:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
 
-        .nav-icon {
-          font-size: 1.2rem;
-          width: 20px;
-          text-align: center;
-        }
+.form-control:disabled {
+    background-color: #f7fafc;
+    color: #718096;
+    cursor: not-allowed;
+}
 
-        /* Main Content Area */
-        .account-main {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: 40px;
-        }
+/* ===============================
+   ✅ Knoppen
+   =============================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
 
-        .section-title {
-          color: #ffd60a;
-          font-size: 1.5rem;
-          margin-bottom: 30px;
-          font-weight: 600;
-          border-bottom: 2px solid rgba(255, 214, 10, 0.3);
-          padding-bottom: 10px;
-        }
+.btn span {
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
 
-        /* Form Styles */
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 25px;
-          margin-bottom: 30px;
-        }
+.btn-primary {
+    background-color: #4f46e5;
+    color: white;
+}
 
-        .form-group {
-          margin-bottom: 20px;
-        }
+.btn-primary:hover {
+    background-color: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
 
-        .form-group label {
-          display: block;
-          margin-bottom: 8px;
-          color: #ffd60a;
-          font-weight: 500;
-          font-size: 0.95rem;
-        }
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e0;
+}
 
-        .form-control {
-          width: 100%;
-          padding: 12px 16px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 10px;
-          color: white;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-        }
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+    transform: translateY(-2px);
+}
 
-        .form-control:focus {
-          outline: none;
-          border-color: #ffd60a;
-          background: rgba(255, 255, 255, 0.08);
-        }
+.btn-danger {
+    background-color: #dc2626;
+    color: white;
+}
 
-        .form-control:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
+.btn-danger:hover {
+    background-color: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
 
-        /* Checkbox Styles */
-        .checkbox-group {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 15px;
-        }
+/* ===============================
+   ✅ Checkbox Groep
+   =============================== */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
-        .checkbox-group input[type="checkbox"] {
-          width: 18px;
-          height: 18px;
-          accent-color: #ffd60a;
-        }
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    accent-color: #4f46e5;
+}
 
-        .checkbox-group label {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.9);
-          font-weight: 400;
-        }
+.checkbox-group label {
+    margin-bottom: 0;
+    cursor: pointer;
+}
 
-        /* Button Styles */
-        .btn {
-          padding: 12px 24px;
-          border: none;
-          border-radius: 10px;
-          font-weight: 600;
-          font-size: 0.95rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
+/* ===============================
+   ✅ Bestand Upload
+   =============================== */
+.file-upload {
+    border: 2px dashed #cbd5e0;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f8fafc;
+}
 
-        .btn-primary {
-          background: linear-gradient(45deg, #ffd60a, #ffed4e);
-          color: #0d3b66;
-        }
+.file-upload:hover {
+    border-color: #4f46e5;
+    background-color: #f0f4ff;
+}
 
-        .btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
-        }
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
 
-        .btn-secondary {
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+/* ===============================
+   ✅ Statistieken
+   =============================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
 
-        .btn-secondary:hover {
-          background: rgba(255, 255, 255, 0.15);
-        }
+.stat-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 10px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
 
-        .btn-danger {
-          background: rgba(231, 76, 60, 0.2);
-          color: #e74c3c;
-          border: 1px solid rgba(231, 76, 60, 0.3);
-        }
+.stat-card:hover {
+    transform: translateY(-5px);
+}
 
-        .btn-danger:hover {
-          background: rgba(231, 76, 60, 0.3);
-        }
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 5px;
+}
 
-        /* File Upload */
-        .file-upload {
-          border: 2px dashed rgba(255, 255, 255, 0.3);
-          border-radius: 10px;
-          padding: 30px;
-          text-align: center;
-          margin-bottom: 20px;
-        }
+.stat-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+}
 
-        .file-upload:hover {
-          border-color: #ffd60a;
-        }
+/* ===============================
+   ✅ Actieknoppen
+   =============================== */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e2e8f0;
+}
 
-        .upload-icon {
-          font-size: 2rem;
-          margin-bottom: 10px;
-          opacity: 0.7;
-        }
+/* ===============================
+   ✅ Modal
+   =============================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
 
-        /* Stats Grid */
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          margin-bottom: 30px;
-        }
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.3s ease;
+}
 
-        .stat-card {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 15px;
-          padding: 25px;
-          text-align: center;
-        }
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .stat-number {
-          display: block;
-          font-size: 2.5rem;
-          font-weight: 700;
-          color: #ffd60a;
-          margin-bottom: 5px;
-        }
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
 
-        .stat-label {
-          font-size: 0.9rem;
-          opacity: 0.8;
-        }
+/* ===============================
+   ✅ Responsive Design
+   =============================== */
+@media (max-width: 992px) {
+    .account-layout {
+        flex-direction: column;
+    }
+    
+    .account-sidebar {
+        width: 100%;
+        padding: 20px 0;
+    }
+    
+    .sidebar-nav {
+        display: flex;
+        overflow-x: auto;
+        padding: 0 20px;
+    }
+    
+    .sidebar-nav li {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    
+    .sidebar-nav a {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 15px;
+    }
+    
+    .sidebar-nav a.active {
+        border-left: none;
+        border-bottom-color: white;
+    }
+    
+    .account-main {
+        padding: 30px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+    }
+}
 
-        /* Action Buttons */
-        .action-buttons {
-          display: flex;
-          gap: 15px;
-          margin-top: 40px;
-          padding-top: 30px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Modal */
-        .modal {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.8);
-          z-index: 1000;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .modal-content {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 20px;
-          padding: 40px;
-          max-width: 500px;
-          width: 90%;
-          text-align: center;
-        }
-
-        .modal-buttons {
-          display: flex;
-          gap: 15px;
-          margin-top: 30px;
-          justify-content: center;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-          .account-layout {
-            grid-template-columns: 1fr;
-            gap: 30px;
-          }
-          
-          .account-sidebar {
-            position: static;
-          }
-          
-          .form-grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .account {
-            padding: 100px 15px 30px;
-          }
-
-          .account h2 {
-            font-size: 2.2rem;
-          }
-
-          .account-main {
-            padding: 30px;
-          }
-
-          .stats-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .action-buttons {
-            flex-direction: column;
-          }
-
-          .modal-buttons {
-            flex-direction: column;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .account {
-            padding: 80px 10px 20px;
-          }
-
-          .account h2 {
-            font-size: 1.8rem;
-          }
-
-          .account-main {
-            padding: 20px;
-          }
-
-          .account-sidebar {
-            padding: 20px;
-          }
-        }
-
-        
+@media (max-width: 576px) {
+    .account {
+        padding: 20px 0;
+    }
+    
+    .account-main {
+        padding: 20px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+}

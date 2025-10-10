@@ -7,18 +7,20 @@
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <!-- Parallax sterrenlagen -->
-  <div class="stars-deep" id="starsDeep"></div>
-  <div class="stars-background" id="starsBackground"></div>
+
+
+
 
 <header>
   <div class="logo">
+    <!-- SVG logo met tekstuele fallback voor toegankelijkheid en foutafhandeling -->
     <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
       onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
     <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
   </div>
   
   <nav>
+    <!-- Primaire navigatie -->
     <a href="index.html">Home</a>
     <a href="over-ons.html">Over ons</a>
     <a href="projecten.html">Portfolio</a>
@@ -27,6 +29,7 @@
   </nav>
 
   <div class="header-buttons">
+    <!-- Snelle acties: authenticatie en contact -->
     <a href="login.html" class="login-btn">Login</a>
     <a href="diensten.html" class="contact-btn">Contact us</a>
   </div>
@@ -43,6 +46,7 @@
           <a href="diensten.html" class="btn-secondary">Gratis Consultatie</a>
         </div>
       </div>
+      <!-- Studentenprofielen: benadrukt rollen en studieachtergrond -->
       <div class="student-showcase">
         <div class="student-card">
           <img src="Fotos/Stef.jpg" alt="Foto van Stef Galler" class="student-photo">
@@ -61,10 +65,10 @@
     </section>
   </main>
 
+  <!-- Canvas voor schietende sterren; aangestuurd door home.js -->
   <canvas id="shootingStarCanvas"></canvas>
 
-
-
+  <!-- ES module met animatie- en parallaxlogica -->
   <script  type="module" src="home.js"></script>
 
 </body>

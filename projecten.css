@@ -66,20 +66,27 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
+ background: url('/Fotos/wp4.jpg') no-repeat center center fixed !important;
+ background-size: cover !important;
 }
 
 body::-webkit-scrollbar {
   display: none;
 }
 
-/* HEADER FIX - Glas effect */
-body header {
-  transition: transform 0.3s ease !important;
-  background: rgba(0, 0, 0, 0.9) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-bottom: 1px solid rgba(255, 214, 10, 0.2) !important;
+/* tijdelijk uitzetten */
+body::before,
+.stars,
+.twinkling {
+  display: none;
 }
+
+
+/* HEADER FIX - Glas effect */
+
+
+
+
 
 body header.hide {
   transform: translateY(-100%) !important;

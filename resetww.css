@@ -1,0 +1,99 @@
+@import url('login.css');
+
+/* Fullscreen zonder scroll */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.login-section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* card links, afbeelding rechts */
+  gap: 40px;
+  align-items: center;
+  max-width: 1000px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.login-card {
+  padding: 30px 35px;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.login-header h1 {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.input-container input {
+  padding: 15px 50px 15px 20px;
+  font-size: 1rem;
+}
+
+.login-submit-btn {
+  padding: 16px;
+  font-size: 1.05rem;
+  margin-top: 10px;
+}
+
+.reset-password-form #status {
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+.reset-password-form .register-link {
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+.reset-password-form .register-link a {
+  color: #ffd60a;
+}
+
+.reset-password-form .register-link a:hover {
+  color: #ffed4e;
+  text-decoration: underline;
+}
+
+/* Afbeelding rechts */
+.login-side-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.side-image {
+  max-width: 100%;
+  max-height: 80vh; /* past altijd binnen schermhoogte */
+  object-fit: contain;
+}
+
+/* Responsive voor kleinere schermen */
+@media (max-width: 1024px) {
+  .login-container {
+    grid-template-columns: 1fr; /* afbeelding onder card op tablets/mobiel */
+    gap: 20px;
+  }
+
+  .login-side-panel {
+    margin-top: 20px;
+  }
+}

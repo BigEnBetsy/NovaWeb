@@ -16,6 +16,8 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
+  background: url('/Fotos/wp4.jpg') no-repeat center center fixed !important;
+  background-size: cover !important;
 }
 
 body::-webkit-scrollbar {
@@ -33,17 +35,17 @@ body header.hide {
 
 /* ===== SUPER MODERNE OVER ONS PAGINA ===== */
 
+
 .about {
-  padding: 120px 20px 50px;
-  min-height: 100vh;
-  position: relative;
+  padding: 80px 20px 40px; /* vroeger: 120px 20px 50px */
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1200px; /* kleiner dan 1400px */
   margin: 0 auto;
   padding: 0 20px;
 }
+
 
 /* Hero Title met moderne gradient */
 .about h2 {
@@ -124,6 +126,16 @@ body header.hide {
 
 .student-story:hover::before {
   left: 100%;
+}
+
+
+.student-story,
+.team-member,
+.value-line,
+.reason-card,
+.cta-section {
+  padding: 25px 30px; /* overal iets compacter maken */
+  border-radius: 15px; /* iets kleiner en minder imposant */
 }
 
 .student-story:hover {
@@ -302,6 +314,22 @@ body header.hide {
   opacity: 0.9;
   font-size: 1.1rem;
   line-height: 1.6;
+}
+.about h2 {
+  font-size: 3rem; /* vroeger 4rem */
+}
+
+.core-values h3,
+.development-process h3,
+.values h3,
+.cta-section h3 {
+  font-size: 2rem; /* iets kleiner dan 2.5-2.5rem */
+}
+
+.about-text p,
+.values-text p,
+.member-bio {
+  font-size: 1.2rem; /* iets compacter */
 }
 
 /* Stats - Modern counter design */
@@ -486,6 +514,29 @@ body header.hide {
   left: 15%;
   animation-delay: 4s;
 }
+
+.team-showcase {
+  gap: 25px; /* vroeger 40px-50px */
+}
+
+.about-stats {
+  gap: 20px; /* vroeger 30px */
+}
+
+.reasons-grid {
+  gap: 25px; /* vroeger 40px */
+}
+
+.values-list {
+  gap: 20px; /* vroeger 35px */
+}
+.member-photo {
+  width: 140px;
+  height: 140px; /* vroeger 180px */
+}
+
+
+
 
 @keyframes float {
   0%, 100% {

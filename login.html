@@ -36,18 +36,19 @@
     <!-- Login Sectie -->
     <section class="login-section">
       <div class="login-container">
-        <!-- Floating elements voor achtergrond -->
+        <!-- Floating elements -->
         <div class="floating-element"></div>
         <div class="floating-element"></div>
         <div class="floating-element"></div>
-        
-        <!-- Main login card -->
+
+        <!-- Login card -->
         <div class="login-card">
           <div class="login-header">
             <h1>Welkom Terug</h1>
             <p class="login-subtitle">Log in op je NovaWeb account</p>
           </div>
 
+          <!-- Formulier -->
           <form class="login-form">
             <div class="form-group">
               <div class="input-container">
@@ -63,15 +64,6 @@
               </div>
             </div>
 
-            <div class="form-options">
-              <label class="checkbox-container">
-                <input type="checkbox">
-                <span class="checkmark"></span>
-                Onthoud mij
-              </label>
-              <a href="#" class="forgot-password">Wachtwoord vergeten?</a>
-            </div>
-
             <button type="submit" class="login-submit-btn">
               <span class="btn-text">Inloggen</span>
               <div class="btn-loader" style="display:none;">
@@ -81,23 +73,28 @@
 
             <!-- Statusdiv voor Supabase login -->
             <div id="status" style="margin-top:10px; color:red;"></div>
-
-            <div class="login-divider">
-              <span>of</span>
-            </div>
-
-            <div class="social-login">
-              <button type="button" class="social-btn google-btn">Doorgaan met Google</button>
-              <button type="button" class="social-btn github-btn">Doorgaan met GitHub</button>
-            </div>
-
-            <div class="register-link">
-              <p>Nog geen account? <a href="registreer.html">Registreer hier</a></p>
-            </div>
           </form>
+
+          <!-- Wachtwoord vergeten link buiten form -->
+          <div class="form-options">
+            <a href="resetww.html" class="forgot-password">Wachtwoord vergeten?</a>
+          </div>
+
+          <div class="login-divider">
+            <span>of</span>
+          </div>
+
+          <div class="social-login">
+            <button type="button" class="social-btn google-btn">Doorgaan met Google</button>
+            <button type="button" class="social-btn github-btn">Doorgaan met GitHub</button>
+          </div>
+
+          <div class="register-link">
+            <p>Nog geen account? <a href="registreer.html">Registreer hier</a></p>
+          </div>
         </div>
 
-        <!-- Side panel voor extra informatie -->
+        <!-- Side panel -->
         <div class="login-side-panel">
           <div class="side-content">
             <h2>NovaWeb Platform</h2>
@@ -130,11 +127,12 @@
             </div>
           </div>
         </div>
+
       </div>
     </section>
   </main>
 
-  <canvas id="shootingStarCanvas"></canvas>
+
 
   <!-- Supabase login script -->
   <script type="module" src="login.js"></script>

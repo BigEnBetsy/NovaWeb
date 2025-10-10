@@ -26,21 +26,23 @@ body::-webkit-scrollbar {
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background: #000;
+  background: url('/Fotos/wp3.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: #fff;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Extra sterrenlagen voor diepte-effect */
+
+/* Extra sterrenlagen voor diepte-effect
 .stars-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* background-image: url('Fotos/achtergrondWS2.jpg'); */
+  background-image: url('Fotos/achtergrondWS2.jpg');
   background-repeat: repeat;
   background-size: 400px 400px;
   z-index: -2;
@@ -54,14 +56,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* background-image: url('Fotos/achtergrondWS2.jpg'); */
+  background-image: url('Fotos/achtergrondWS2.jpg');
   background-repeat: repeat;
   background-size: 600px 600px;
   z-index: -3;
   pointer-events: none;
   animation: moveStarsSlow 200s linear infinite;
   opacity: 0.8;
-}
+} */
 
 @keyframes moveStars {
   from { background-position: 0 0; }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaWeb - Wachtwoord reset</title>
+  <link rel="stylesheet" href="resetww.css">
+</head>
+<body>
+  <div class="stars-deep" id="starsDeep"></div>
+  <div class="stars-background" id="starsBackground"></div>
+
+  <main>
+    <section class="login-section">
+      <div class="login-container">
+        <!-- Card links -->
+        <div class="login-card">
+          <div class="login-header">
+            <h1>Wachtwoord reset</h1>
+            <p class="login-subtitle">Voer je nieuwe wachtwoord in</p>
+          </div>
+
+          <form class="login-form reset-password-form">
+            <div class="form-group">
+              <div class="input-container">
+                <input type="password" id="newPassword" required>
+                <label for="newPassword">Nieuw wachtwoord</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-container">
+                <input type="password" id="confirmPassword" required>
+                <label for="confirmPassword">Bevestig wachtwoord</label>
+              </div>
+            </div>
+
+            <button type="submit" class="login-submit-btn">
+              <span class="btn-text">Reset Wachtwoord</span>
+              <div class="btn-loader">
+                <div class="loader"></div>
+              </div>
+            </button>
+
+            <div id="status" style="margin-top:10px; color:red;"></div>
+
+            <p class="register-link">Terug naar <a href="login.html">Login</a></p>
+          </form>
+        </div>
+
+        <!-- Afbeelding rechts -->
+
+          <img src="/Fotos/wachtwoord.png" alt="Wachtwoord afbeelding" class="side-image">
+
+      </div>
+    </section>
+  </main>
+
+  <canvas id="shootingStarCanvas"></canvas>
+
+  <script type="module" src="resetww.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>
