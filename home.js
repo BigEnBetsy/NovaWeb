@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   })
 
   // --- Admin check ---
-  const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com']
+  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com']
   if (user && adminEmails.includes(user.email)) {
       chatToggle.addEventListener('click', () => {
           window.location.href = 'admin.html'
@@ -119,3 +119,5 @@ window.addEventListener('scroll', () => {
 
 // --- ShootingStars class (houd je bestaande code) ---
 class ShootingStars { /* ... kopieer je bestaande class ... */ }
+
+

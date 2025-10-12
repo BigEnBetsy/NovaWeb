@@ -5,7 +5,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 let user = null
-const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com'];
+const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log("Projecten DOM geladen");

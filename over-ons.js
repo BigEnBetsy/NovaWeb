@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 // --- GLOBALE VARIABELEN ---
 let user = null
-const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com'];
+const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
 
 // --- DOM CONTENT LOADED ---
 document.addEventListener('DOMContentLoaded', async () => {

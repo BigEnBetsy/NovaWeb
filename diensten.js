@@ -107,7 +107,7 @@ ${data.bericht}
   const sendChat = document.getElementById('sendChat');
   const chatMessages = document.getElementById('chatMessages');
 
-  const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com'];
+  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
   if (user && adminEmails.includes(user.email)) {
     // Admin: redirect naar admin.html bij klik
     chatToggle?.addEventListener('click', () => {
