@@ -716,10 +716,11 @@ async function sendMessage() {
     chatInput.value = ''
     chatMessages.scrollTop = chatMessages.scrollHeight
 
-    const { data: insertData, error: insertError } = await supabase
-        .from('messages')
-        .insert([{ user_id: user.id, email: user.email, message: tekst, role: 'user' }])
-        .select()
+const { data: projects, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('created_at', { ascending: false })
+
 
     if (insertError) {
         console.error('Fout bij opslaan in Supabase:', insertError)
