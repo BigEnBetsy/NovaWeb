@@ -1,77 +1,209 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NovaWeb - Chat Beheer</title>
-  <link rel="stylesheet" href="admin.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Chat - NovaWeb</title>
+<style>
+body {
+  margin: 0;
+  background: #0d1117;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.sidebar {
+  width: 280px;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.user-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.user-item {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.user-item:hover {
+  background: #21262d;
+}
+.user-item.active {
+  background: #30363d;
+}
+.chat-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat-header {
+  background: #161b22;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #30363d;
+}
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+.message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+.message.user {
+  background: #238636;
+  align-self: flex-start;
+}
+.message.bot, .message.admin {
+  background: #444c56;
+  align-self: flex-end;
+}
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid #30363d;
+}
+.chat-input-area input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: #0d1117;
+  color: white;
+}
+.chat-input-area button {
+  padding: 10px 20px;
+  border: none;
+  background: #238636;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+.chat-input-area button:hover {
+  background: #2ea043;
+}
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">
-    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+
+<div class="sidebar">
+  <h2>Gebruikers</h2>
+  <div id="userList" class="user-list"></div>
+</div>
+
+<div class="chat-area">
+  <div id="chatHeader" class="chat-header">Selecteer een gebruiker</div>
+  <div id="chatMessages" class="chat-messages"></div>
+  <div class="chat-input-area">
+    <input id="chatInput" type="text" placeholder="Typ een antwoord..." />
+    <button id="sendBtn">Versturen</button>
   </div>
+</div>
 
-  <!-- Hamburger menu knop -->
-  <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  <nav id="navMenu">
-    <a href="index.html">Home</a>
-    <a href="over-ons.html">Over ons</a>
-    <a href="projecten.html">Portfolio</a>
-    <a href="diensten.html">Diensten</a>
-    <a href="klantenProject.html">Mijn projecten</a>
-  </nav>
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-  <div class="header-buttons">
-    <a href="login.html" class="login-btn">Login</a>
-    <a href="diensten.html" class="contact-btn">Contact us</a>
+let currentEmail = null
 
-    <!-- Chat icoon geïntegreerd in de knopgroep -->
-    <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
-    </div>
-  </div>
+const userList = document.getElementById('userList')
+const chatHeader = document.getElementById('chatHeader')
+const chatMessages = document.getElementById('chatMessages')
+const chatInput = document.getElementById('chatInput')
+const sendBtn = document.getElementById('sendBtn')
 
+async function loadUsers() {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('email')
+  if (error) {
+    console.error(error)
+    return
+  }
 
-  <!-- Chatvenster -->
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span>💬 Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
-    </div>
-  </div>
+  const uniqueEmails = [...new Set(data.map(m => m.email).filter(e => e))]
+  userList.innerHTML = uniqueEmails.map(email =>
+    `<div class="user-item" data-email="${email}">${email}</div>`
+  ).join('')
 
-</header>
+  document.querySelectorAll('.user-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.user-item').forEach(i => i.classList.remove('active'))
+      item.classList.add('active')
+      currentEmail = item.dataset.email
+      chatHeader.textContent = 'Chat met: ' + currentEmail
+      loadMessages(currentEmail)
+    })
+  })
+}
 
-  <main class="admin-layout">
-    <!-- Dynamische zijbalk met gebruikers -->
-    <aside id="userList">
-      <h2>Gebruikers</h2>
-      <ul id="userListItems"></ul>
-    </aside>
+async function loadMessages(email) {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('email', email)
+    .order('created_at', { ascending: true })
+  if (error) {
+    console.error(error)
+    return
+  }
+  chatMessages.innerHTML = ''
+  data.forEach(msg => addMessage(msg))
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
 
-    <!-- Chatvenster -->
-    <section id="chatSection">
-      <div id="chatContainer">
-        <!-- Berichten komen hier -->
-      </div>
-    </section>
-  </main>
+function addMessage(msg) {
+  const div = document.createElement('div')
+  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'admin')
+  div.textContent = msg.message
+  chatMessages.appendChild(div)
+}
 
-  <script type="module" src="admin.js"></script>
+sendBtn.addEventListener('click', async () => {
+  const tekst = chatInput.value.trim()
+  if (!tekst || !currentEmail) return
+
+  chatInput.value = ''
+  const msg = { email: currentEmail, message: tekst, role: 'admin' }
+  addMessage(msg)
+
+  await supabase.from('messages').insert([msg])
+})
+
+supabase
+  .channel('realtime-messages')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+    const msg = payload.new
+    if (msg.email === currentEmail) {
+      addMessage(msg)
+    }
+    // als er een nieuwe gebruiker komt → herlaad lijst
+    if (!document.querySelector(`[data-email="${msg.email}"]`)) {
+      loadUsers()
+    }
+  })
+  .subscribe()
+
+loadUsers()
+</script>
+
 </body>
 </html>
