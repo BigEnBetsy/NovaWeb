@@ -689,10 +689,8 @@ function initChat() {
 
     chatToggle.addEventListener('click', () => {
         if (user && adminEmails.includes(user.email)) {
-            // Admin gaat direct naar admin.html
             window.location.href = 'admin.html'
         } else {
-            // Normale gebruiker opent chat
             chatBox.classList.toggle('active')
         }
     })
@@ -701,7 +699,6 @@ function initChat() {
     sendChat.addEventListener('click', sendMessage)
     chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
 }
-
 
 async function sendMessage() {
     const tekst = chatInput.value.trim()
@@ -712,7 +709,6 @@ async function sendMessage() {
         return
     }
 
-    // User message tonen
     const msgDiv = document.createElement('div')
     msgDiv.className = 'message user'
     msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
@@ -720,7 +716,6 @@ async function sendMessage() {
     chatInput.value = ''
     chatMessages.scrollTop = chatMessages.scrollHeight
 
-    // Verstuur naar Supabase
     const { data: insertData, error: insertError } = await supabase
         .from('messages')
         .insert([{ user_id: user.id, email: user.email, message: tekst, role: 'user' }])
@@ -732,7 +727,6 @@ async function sendMessage() {
         return
     }
 
-    // Bot reply simuleren
     setTimeout(() => {
         const reply = document.createElement('div')
         reply.className = 'message bot'
@@ -772,6 +766,17 @@ function initLogout() {
 
 // --- Projecten functies ---
 async function loadProjects(userId) {
+    if (!userId) {
+        // Niet ingelogd → toon empty state
+        projectList.innerHTML = `
+            <div class="empty-state">
+                <h3>Nog geen projecten</h3>
+                <p>Log in om je projecten te bekijken.</p>
+            </div>
+        `
+        return
+    }
+
     const { data: projects, error } = await supabase
         .from('projects')
         .select('*')
@@ -807,26 +812,9 @@ function showError(message) {
     `
 }
 
-// --- Login overlay bij geen sessie ---
-function showLoginOverlay() {
-    const overlay = document.createElement('div')
-    overlay.className = 'glass-overlay'
-    overlay.innerHTML = `
-        <div class="glass-popup">
-            <h3>Toegang geweigerd</h3>
-            <p>Je kunt deze projecten alleen bekijken als je bent ingelogd.</p>
-            <button id="goBackBtn" class="go-back-btn">Terug naar login</button>
-        </div>
-    `
-    document.body.appendChild(overlay)
-    document.getElementById('goBackBtn').addEventListener('click', () => {
-        window.location.href = 'login.html'
-    })
-}
-
 // --- Initialisatie bij window load ---
 window.addEventListener('load', async () => {
-    initChat() // chat werkt direct
+    initChat()
 
     const session = await checkLogin()
     updateHeader(session)
@@ -834,10 +822,9 @@ window.addEventListener('load', async () => {
 
     if (typeof ShootingStars !== 'undefined') new ShootingStars()
 
-    if (!session) showLoginOverlay()
-    else loadProjects(session.user.id)
+    // Laad projecten, toont empty state als niet ingelogd
+    loadProjects(session?.user?.id)
 
-    // Supabase realtime updates van messages (optioneel)
     supabase
         .channel('realtime-messages')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
