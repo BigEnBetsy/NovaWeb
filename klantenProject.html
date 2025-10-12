@@ -826,18 +826,18 @@ window.addEventListener('load', async () => {
     // Laad projecten, toont empty state als niet ingelogd
     loadProjects(session?.user?.id)
 
-    supabase
-        .channel('realtime-messages')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
-            if (payload.new.role === 'bot') {
-                const reply = document.createElement('div')
-                reply.className = 'message bot'
-                reply.textContent = payload.new.message
-                chatMessages.appendChild(reply)
-                chatMessages.scrollTop = chatMessages.scrollHeight
-            }
-        })
-        .subscribe()
+supabase
+    .channel('realtime-messages')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
+        if (payload.new.role === 'bot') {
+            const reply = document.createElement('div')
+            reply.className = 'message bot'
+            reply.textContent = payload.new.message
+            chatMessages.appendChild(reply)
+        }
+    })
+    .subscribe()
+
 })
 
 
