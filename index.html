@@ -8,19 +8,21 @@
 </head>
 <body>
 
-
-
-
 <header>
   <div class="logo">
-    <!-- SVG logo met tekstuele fallback voor toegankelijkheid en foutafhandeling -->
     <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
       onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
     <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
   </div>
-  
-  <nav>
-    <!-- Primaire navigatie -->
+
+  <!-- Hamburger menu knop -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="navMenu">
     <a href="index.html">Home</a>
     <a href="over-ons.html">Over ons</a>
     <a href="projecten.html">Portfolio</a>
@@ -29,47 +31,54 @@
   </nav>
 
   <div class="header-buttons">
-    <!-- Snelle acties: authenticatie en contact -->
     <a href="login.html" class="login-btn">Login</a>
     <a href="diensten.html" class="contact-btn">Contact us</a>
   </div>
 </header>
 
-  <main>
-    <!-- Hero Sectie -->
-    <section id="hero" class="hero">
-      <div class="hero-content">
-        <h1>NovaWeb <span class="highlight">Studenten</span> Webdesign</h1>
-        <p class="hero-subtitle">Twee gepassioneerde studenten die betaalbare, professionele websites creëren voor starters en kleine bedrijven</p>
-        <div class="hero-buttons">
-          <a href="projecten.html" class="btn-primary">Bekijk Ons Werk</a>
-          <a href="diensten.html" class="btn-secondary">Gratis Consultatie</a>
-        </div>
+<main>
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <h1>NovaWeb <span class="highlight">Studenten</span> Webdesign</h1>
+      <p class="hero-subtitle">
+        Twee gepassioneerde studenten die betaalbare, professionele websites creëren voor starters en kleine bedrijven.
+      </p>
+      <div class="hero-buttons">
+        <a href="projecten.html" class="btn-primary">Bekijk Ons Werk</a>
+        <a href="diensten.html" class="btn-secondary">Gratis Consultatie</a>
       </div>
-      <!-- Studentenprofielen: benadrukt rollen en studieachtergrond -->
-      <div class="student-showcase">
-        <div class="student-card">
-          <img src="Fotos/Stef.jpg" alt="Foto van Stef Galler" class="student-photo">
-          <h3>Stef Galler</h3>
-          <p>Informatica student (HoGent) • Data & AI Engineer </br>- Back-end Webdevelopment enthousiast -</p>
-          <span class="student-badge">Student Informatica</span>
-        </div>
+    </div>
 
-        <div class="student-card">
-          <img src="Fotos/Robin.jpg" alt="Foto van Robin Baeyens" class="student-photo">
-          <h3>Robin Baeyens</h3>
-          <p>Mechanica student (Artvelde) • Zelflerend webdeveloper </br>- Front-end Webdevelopment enthousiast -</p>
-          <span class="student-badge">Student Mechanica</span>
-        </div>
+    <div class="student-showcase">
+      <div class="student-card">
+        <img src="Fotos/Stef.jpg" alt="Stef Galler" class="student-photo">
+        <h3>Stef Galler</h3>
+        <p>Informatica student (HoGent) • Data & AI Engineer</p>
+        <span class="student-badge">Back-end Developer</span>
       </div>
-    </section>
-  </main>
 
-  <!-- Canvas voor schietende sterren; aangestuurd door home.js -->
-  <canvas id="shootingStarCanvas"></canvas>
+      <div class="student-card">
+        <img src="Fotos/Robin.jpg" alt="Robin Baeyens" class="student-photo">
+        <h3>Robin Baeyens</h3>
+        <p>Mechanica student (Artevelde) • Zelflerend webdeveloper</p>
+        <span class="student-badge">Front-end Developer</span>
+      </div>
+    </div>
+  </section>
+</main>
 
-  <!-- ES module met animatie- en parallaxlogica -->
-  <script  type="module" src="home.js"></script>
+<script type="module" src="home.js"></script>
+
+<!-- Hamburger menu script -->
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('navMenu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+</script>
 
 </body>
 </html>
