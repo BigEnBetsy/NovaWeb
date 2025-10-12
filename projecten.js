@@ -1,230 +1,132 @@
-// Portfolio filtering functionality
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("Projecten DOM geladen");
-
-  // HEADER HIDE-ON-SCROLL - FIXED VERSION
-  let lastScroll = 0;
-  const header = document.querySelector("header");
-  const scrollThreshold = 100;
-  let isHidden = false;
-
-  console.log("Header element gevonden:", header);
-
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset;
-    console.log("Scroll:", currentScroll);
-    
-    // Add background when scrolled
-    if (currentScroll > 50) {
-        header.classList.add("scrolled");
-    } else {
-        header.classList.remove("scrolled");
-    }
-    
-    // Hide/show logic
-    if (currentScroll > lastScroll && currentScroll > scrollThreshold && !isHidden) {
-        // Scrolling down - hide header
-        console.log("Hide header");
-        header.classList.add("hide");
-        isHidden = true;
-    } else if (currentScroll < lastScroll && isHidden) {
-        // Scrolling up - show header
-        console.log("Show header");
-        header.classList.remove("hide");
-        isHidden = false;
-    }
-    
-    // Reset if at top of page
-    if (currentScroll <= scrollThreshold) {
-        header.classList.remove("hide");
-        isHidden = false;
-    }
-    
-    lastScroll = currentScroll;
-  });
-
-  // Portfolio filtering functionality
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const portfolioItems = document.querySelectorAll('.portfolio-item');
-  
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      // Remove active class from all buttons
-      filterBtns.forEach(b => b.classList.remove('active'));
-      // Add active class to clicked button
-      this.classList.add('active');
-      
-      const filter = this.getAttribute('data-filter');
-      
-      portfolioItems.forEach(item => {
-        if (filter === 'all') {
-          item.classList.remove('hidden');
-        } else {
-          const categories = item.getAttribute('data-category').split(' ');
-          if (categories.includes(filter)) {
-            item.classList.remove('hidden');
-          } else {
-            item.classList.add('hidden');
-          }
-        }
-      });
-    });
-  });
-
-  // Modal functionality
-  const modal = document.getElementById('projectModal');
-  const closeModal = document.querySelector('.close-modal');
-  const viewProjectBtns = document.querySelectorAll('.view-project-btn');
-  const modalBody = document.getElementById('modalBody');
-
-  // Project data
-  const projects = {
-    koffiehoek: {
-      title: "De Koffiehoek",
-      description: "Een moderne website voor een lokale koffiebar met volledig responsive design, online menu en reserveringssysteem.",
-      features: ["Responsive design", "Online menu", "Reserveringssysteem", "Contactformulier", "SEO geoptimaliseerd"],
-      technologies: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL"],
-      image: "Café Project",
-      client: "Lokale Koffiebar",
-      duration: "3 weken"
-    },
-    muziekacademie: {
-      title: "MuziekAcademie",
-      description: "Compleet inschrijvingssysteem voor een muziekschool met docentenprofielen, lesrooster en online betaling.",
-      features: ["Inschrijvingssysteem", "Docentenprofielen", "Lesrooster", "Online betaling", "Admin dashboard"],
-      technologies: ["React", "Node.js", "MongoDB", "Stripe API"],
-      image: "Muziek School",
-      client: "Muziek Academie",
-      duration: "6 weken"
-    },
-    fotostudio: {
-      title: "FotoStudio",
-      description: "Elegant portfolio website voor een professionele fotograaf met geavanceerde gallery en contactmogelijkheden.",
-      features: ["Portfolio gallery", "Contactformulier", "Blog sectie", "Social media integratie", "Responsive design"],
-      technologies: ["HTML5", "CSS3", "JavaScript", "Lightbox"],
-      image: "Fotograaf",
-      client: "Professionele Fotograaf",
-      duration: "4 weken"
-    },
-    studentenclub: {
-      title: "StudentenClub",
-      description: "Dynamische website voor een studentenvereniging met events, lidmaatschap en community features.",
-      features: ["Events kalender", "Lidmaatschap", "Forum", "Foto gallery", "Nieuws sectie"],
-      technologies: ["WordPress", "PHP", "MySQL", "JavaScript"],
-      image: "Studentenvereniging",
-      client: "Studentenvereniging",
-      duration: "5 weken"
-    },
-    restaurant: {
-      title: "Bistro Modern",
-      description: "Restaurant website met online tafelreservering, menu en bestelsysteem.",
-      features: ["Online reserveringen", "Menu", "Bestelsysteem", "Locatie", "Openingstijden"],
-      technologies: ["React", "Node.js", "MongoDB", "Payment API"],
-      image: "Restaurant",
-      client: "Bistro Modern",
-      duration: "4 weken"
-    },
-    portfolio: {
-      title: "Student Portfolio",
-      description: "Persoonlijk portfolio website voor een student met project showcase en CV.",
-      features: ["Project gallery", "CV download", "Contact form", "Responsive design", "Blog"],
-      technologies: ["HTML5", "CSS3", "JavaScript", "GSAP"],
-      image: "Portfolio",
-      client: "Student",
-      duration: "2 weken"
-    }
-  };
-
-  viewProjectBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const projectId = this.getAttribute('data-project');
-      const project = projects[projectId];
-      
-      if (project) {
-        modalBody.innerHTML = `
-          <h2>${project.title}</h2>
-          <div class="project-details">
-            <div class="project-image-large">
-              ${project.image}
-            </div>
-            <div class="project-info">
-              <p><strong>Beschrijving:</strong> ${project.description}</p>
-              <p><strong>Klant:</strong> ${project.client}</p>
-              <p><strong>Duur:</strong> ${project.duration}</p>
-              
-              <div class="project-features">
-                <h4>Features:</h4>
-                <ul>
-                  ${project.features.map(feature => `<li>${feature}</li>`).join('')}
-                </ul>
-              </div>
-              
-              <div class="project-technologies">
-                <h4>Technologieën:</h4>
-                <div class="tech-tags">
-                  ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        modal.style.display = 'block';
-      }
-    });
-  });
-
-  closeModal.addEventListener('click', function() {
-    modal.style.display = 'none';
-  });
-
-  window.addEventListener('click', function(event) {
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  });
-});
-
-
-// Voeg dit toe aan je JavaScript
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('header');
-    if (window.scrollY > 100) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
-    }
-});
-
-// --- SUPABASE LOGIN CHECK TOEVOEGEN ---
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg' // vervang door jouw anon public key
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-document.addEventListener('DOMContentLoaded', () => {
-  const loginBtn = document.querySelector('.login-btn');
-  if (!loginBtn) return;
+let user = null
+const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com'];
 
-  (async () => {
-    // Check huidige sessie
-    const { data: { session } } = await supabase.auth.getSession();
-    updateHeader(session, loginBtn);
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log("Projecten DOM geladen");
 
-    // Luister naar realtime auth changes
+  if (typeof ShootingStars !== 'undefined') new ShootingStars()
+
+  // --- Header hide-on-scroll ---
+  const header = document.querySelector("header");
+  let lastScroll = 0;
+  let isHidden = false;
+  const scrollThreshold = 100;
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 50) header.classList.add("scrolled");
+    else header.classList.remove("scrolled");
+
+    if (currentScroll > lastScroll && currentScroll > scrollThreshold && !isHidden) {
+      header.classList.add("hide");
+      isHidden = true;
+    } else if (currentScroll < lastScroll && isHidden) {
+      header.classList.remove("hide");
+      isHidden = false;
+    }
+
+    if (currentScroll <= scrollThreshold) {
+      header.classList.remove("hide");
+      isHidden = false;
+    }
+
+    lastScroll = currentScroll;
+  });
+
+  // --- Chat elementen ---
+  const chatToggle = document.getElementById('chatToggle')
+  const chatBox = document.getElementById('chatBox')
+  const closeChat = document.getElementById('closeChat')
+  const chatInput = document.getElementById('chatInput')
+  const sendChat = document.getElementById('sendChat')
+  const chatMessages = document.getElementById('chatMessages')
+  const loginBtn = document.querySelector('.login-btn')
+
+  // --- Supabase login check ---
+  if (loginBtn) {
+    const { data: { session } } = await supabase.auth.getSession()
+    user = session?.user ?? null
+    updateHeader(session)
+
     supabase.auth.onAuthStateChange((_event, session) => {
-      updateHeader(session, loginBtn);
-    });
-  })();
-});
-
-function updateHeader(session, loginBtn) {
-  if (!loginBtn) return;
-  if (session) {
-    loginBtn.innerText = 'Account';
-    loginBtn.href = 'account.html';
-  } else {
-    loginBtn.innerText = 'Login';
-    loginBtn.href = 'login.html';
+      user = session?.user ?? null
+      updateHeader(session)
+    })
   }
+
+  // --- Admin redirect voor chat ---
+  if (chatToggle) {
+    if (user && adminEmails.includes(user.email)) {
+      chatToggle.addEventListener('click', () => {
+        window.location.href = 'admin.html';
+      })
+    } else {
+      // Normale chat functionaliteit
+      chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'))
+      closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
+      if (sendChat && chatInput) {
+        sendChat.addEventListener('click', sendMessage)
+        chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
+      }
+    }
+  }
+})
+
+function updateHeader(session) {
+  const loginBtn = document.querySelector('.login-btn')
+  if (!loginBtn) return
+  if (session) {
+    loginBtn.innerText = 'Account'
+    loginBtn.href = 'account.html'
+  } else {
+    loginBtn.innerText = 'Login'
+    loginBtn.href = 'login.html'
+  }
+}
+
+async function sendMessage() {
+  const chatInput = document.getElementById('chatInput')
+  const chatMessages = document.getElementById('chatMessages')
+  if (!chatInput || !chatMessages) return
+
+  const tekst = chatInput.value.trim()
+  if (!tekst) return
+
+  if (!user) {
+    alert('Je moet inloggen om te chatten!')
+    return
+  }
+
+  const msgDiv = document.createElement('div')
+  msgDiv.className = 'message user'
+  msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+  chatMessages.appendChild(msgDiv)
+  chatInput.value = ''
+  chatMessages.scrollTop = chatMessages.scrollHeight
+
+  const { data: insertData, error: insertError } = await supabase
+    .from('messages')
+    .insert([{ user_id: user.id, email: user.email, message: tekst, role: 'user' }])
+    .select()
+
+  if (insertError) {
+    console.error('Fout bij opslaan in Supabase:', insertError)
+    alert('Bericht kon niet worden opgeslagen.')
+    return
+  }
+
+  setTimeout(() => {
+    const reply = document.createElement('div')
+    reply.className = 'message bot'
+    reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+    chatMessages.appendChild(reply)
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }, 800)
 }

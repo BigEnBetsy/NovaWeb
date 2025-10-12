@@ -30,7 +30,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: url('/Fotos/wp5.jpg') no-repeat center center fixed !important;
+            background: url('Fotos/wp6.jpg') no-repeat center center fixed !important;
             background-size: cover !important;
         }
 
@@ -390,6 +390,19 @@
             opacity: 0.7;
         }
 
+        .chat-box {
+    z-index: 2000; /* hoger dan glass-overlay (1000) */
+}
+
+.glass-overlay {
+    pointer-events: auto;
+}
+.glass-overlay > .glass-popup {
+    pointer-events: auto;
+}
+
+
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -428,6 +441,159 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(255, 214, 10, 0.3);
         }
+.chat-box.active {
+    display: block;
+}
+
+        /* Overlay */
+.glass-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.glass-popup {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(25px);
+    padding: 40px 60px;
+    text-align: center;
+    color: #fff;
+    max-width: 420px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: popupAppear 0.4s ease-out forwards;
+}
+
+/* Knoppen */
+.go-back-btn,
+.add-project-btn {
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.chat-box {
+    display: none; /* standaard verborgen */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: 90%;
+
+    border-radius: 15px;
+
+    z-index: 2000; /* altijd boven overlays */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: scale(0.8);
+    opacity: 0;
+}
+
+.chat-box.active {
+    display: flex;
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Header van de chat */
+.chat-header {
+    background: linear-gradient(90deg, #ffd60a, #ffed4e);
+
+    font-weight: bold;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+/* Chat messages scrollbaar */
+.chat-messages {
+    flex-grow: 1;
+    padding: 12px 16px;
+    overflow-y: auto;
+
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.message.bot {
+
+    color: #fff;
+    align-self: flex-start;
+}
+
+.message.user {
+
+    color: #fff;
+    align-self: flex-end;
+}
+
+/* Input area */
+.chat-input-area {
+    display: flex;
+    padding: 10px 12px;
+
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+
+}
+
+.chat-input-area button {
+    margin-left: 10px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: none;
+
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-input-area button:hover {
+    transform: translateY(-2px);
+}
+
+
+
+
+/* Project cards */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px,1fr)); gap:30px; }
+.project-card { backdrop-filter: blur(20px); border-radius:20px; padding:30px; transition: all 0.4s; position:relative; overflow:hidden; }
+
     </style>
 </head>
 
@@ -437,26 +603,50 @@
 
 
 
-    <header>
-        <div class="logo">
-            <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-                onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-            <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
-        </div>
+<header>
+  <div class="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+  
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="projecten.html">Portfolio</a>
+    <a href="diensten.html">Diensten</a>
+    <a href="klantenProject.html">Mijn projecten</a>
+  </nav>
 
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="over-ons.html">Over ons</a>
-            <a href="projecten.html">Portfolio</a>
-            <a href="diensten.html">Diensten</a>
-            <a href="klantenProject.html">Mijn projecten</a>
-        </nav>
+  <div class="header-buttons">
+    <a href="login.html" class="login-btn">Login</a>
+    <a href="diensten.html" class="contact-btn">Contact us</a>
 
-        <div class="header-buttons">
-            <a href="login.html" class="login-btn">Login</a>
-            <a href="diensten.html" class="contact-btn">Contact us</a>
-        </div>
-    </header>
+    <!-- Chat icoon geïntegreerd in de knopgroep -->
+    <div class="chat-container">
+      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+    </div>
+  </div>
+
+
+  <!-- Chatvenster -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-header">
+      <span>💬 Chat met NovaWeb</span>
+      <button id="closeChat">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+      <button id="sendChat">Verstuur</button>
+    </div>
+  </div>
+
+
+  
+</header>
     <section class="mijn-projecten">
         <h2>Mijn Projecten</h2>
         <div id="project-list">
@@ -468,250 +658,201 @@
     </section>
 
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-        // 🔧 Supabase config
-        const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
-        const supabase = createClient(supabaseUrl, supabaseKey)
+// --- Supabase Config ---
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-        // 📦 Elementen uit de HTML
-        const projectList = document.getElementById('project-list')
+// --- HTML Elements ---
+const projectList = document.getElementById('project-list')
+const loginBtn = document.querySelector('.login-btn')
+const logoutBtn = document.querySelector('.logout-btn')
+const chatToggle = document.getElementById('chatToggle')
+const chatBox = document.getElementById('chatBox')
+const closeChat = document.getElementById('closeChat')
+const chatInput = document.getElementById('chatInput')
+const sendChat = document.getElementById('sendChat')
+const chatMessages = document.getElementById('chatMessages')
 
-        // 🧩 Controleer loginstatus en laad projecten
-        document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session }, error } = await supabase.auth.getSession()
+let user = null
 
-            if (!session) {
-                // Voeg glazen overlay toe
-                const overlay = document.createElement('div')
-                overlay.classList.add('glass-overlay')
-                overlay.innerHTML = `
-    <div class="glass-popup">
-      <h3>Toegang geweigerd</h3>
-      <p>Je kunt deze projecten alleen bekijken als je bent ingelogd.</p>
-      <p class="small">Je wordt zo doorgestuurd naar de loginpagina...</p>
-    </div>
-  `
-                document.body.appendChild(overlay)
+// --- Chat functies ---
+function initChat() {
+    if (!chatToggle || !chatBox || !closeChat || !sendChat || !chatInput || !chatMessages) return
 
-                // Redirect na 3 seconden
-                overlay.innerHTML = `
-  <div class="glass-popup">
-    <h3>Toegang geweigerd</h3>
-    <p>Je kunt deze projecten alleen bekijken als je bent ingelogd.</p>
-    <button id="goBackBtn" class="go-back-btn">Terug naar login</button>
-  </div>
-`
+    chatBox.classList.remove('active')
 
-                document.body.appendChild(overlay)
+    // Admin emails
+    const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com']
 
-                // Klikknop functionaliteit
-                document.getElementById('goBackBtn').addEventListener('click', () => {
-                    window.location.href = 'login.html'
-                })
-
-                return
-            }
-
-
-            const user = session.user
-            console.log('Ingelogde gebruiker:', user.email)
-
-            // Haal projecten van deze gebruiker op
-            const { data: projects, error: projectError } = await supabase
-                .from('projects')
-                .select('*')
-                .eq('user_id', user.id)
-                .order('created_at', { ascending: false })
-
-            if (projectError) {
-                console.error('Fout bij ophalen projecten:', projectError)
-                projectList.innerHTML = `
-                    <div class="error-state">
-                        <h3>Er is een fout opgetreden</h3>
-                        <p>Fout bij ophalen projecten: ${projectError.message}</p>
-                    </div>
-                `
-                return
-            }
-
-            if (projects.length === 0) {
-                projectList.innerHTML = `
-                    <div class="empty-state">
-                        <h3>Nog geen projecten</h3>
-                        <p>Je hebt nog geen projecten toegevoegd. Begin met het toevoegen van je eerste project!</p>
-                        <a href="add-project.html" class="add-project-btn">Project Toevoegen</a>
-                    </div>
-                `
-                return
-            }
-
-            // Toon projecten in een mooie grid
-            projectList.innerHTML = `
-                <div class="projects-grid">
-                    ${projects.map(p => `
-                        <div class="project-card">
-                            <h3>${p.title}</h3>
-                            <p>${p.description || 'Geen beschrijving opgegeven.'}</p>
-                            ${p.link ? `<a href="${p.link}" class="project-link" target="_blank" rel="noopener noreferrer">Bekijk Project</a>` : ''}
-                            <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `
-        })
-
-
-        // --- SUPABASE LOGIN CHECK TOEVOEGEN ---
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginBtn = document.querySelector('.login-btn');
-            if (!loginBtn) return;
-
-            (async () => {
-                // Check huidige sessie
-                const { data: { session } } = await supabase.auth.getSession();
-                updateHeader(session, loginBtn);
-
-                // Luister naar realtime auth changes
-                supabase.auth.onAuthStateChange((_event, session) => {
-                    updateHeader(session, loginBtn);
-                });
-            })();
-        });
-
-        function updateHeader(session, loginBtn) {
-            if (!loginBtn) return;
-            if (session) {
-                loginBtn.innerText = 'Account';
-                loginBtn.href = 'account.html';
-            } else {
-                loginBtn.innerText = 'Login';
-                loginBtn.href = 'login.html';
-            }
+    chatToggle.addEventListener('click', () => {
+        if (user && adminEmails.includes(user.email)) {
+            // Admin gaat direct naar admin.html
+            window.location.href = 'admin.html'
+        } else {
+            // Normale gebruiker opent chat
+            chatBox.classList.toggle('active')
         }
+    })
 
-        class ShootingStars {
-            constructor() {
-                this.canvas = document.getElementById('shootingStarCanvas')
-                this.ctx = this.canvas.getContext('2d')
-                this.shootingStars = []
-                this.animationId = null
-                this.lastShootingStarTime = 0
-                this.shootingStarInterval = 5000
-                this.isAnimating = true
-                this.init()
-            }
+    closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
+    sendChat.addEventListener('click', sendMessage)
+    chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
+}
 
-            init() {
-                this.canvas.style.position = 'fixed'
-                this.canvas.style.top = '0'
-                this.canvas.style.left = '0'
-                this.canvas.style.width = '100%'
-                this.canvas.style.height = '100%'
-                this.canvas.style.zIndex = '-1'
-                this.canvas.style.pointerEvents = 'none'
 
-                this.resizeCanvas()
-                window.addEventListener('resize', () => this.resizeCanvas())
-                this.startAnimation()
-            }
+async function sendMessage() {
+    const tekst = chatInput.value.trim()
+    if (!tekst) return
 
-            resizeCanvas() {
-                this.canvas.width = window.innerWidth
-                this.canvas.height = window.innerHeight
-            }
+    if (!user) {
+        alert('Je moet inloggen om te chatten!')
+        return
+    }
 
-            startAnimation() {
-                const animate = () => {
-                    this.clearCanvas()
-                    this.updateShootingStars()
-                    this.maybeCreateShootingStar()
-                    if (this.isAnimating) this.animationId = requestAnimationFrame(animate)
-                }
-                animate()
-            }
+    // User message tonen
+    const msgDiv = document.createElement('div')
+    msgDiv.className = 'message user'
+    msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+    chatMessages.appendChild(msgDiv)
+    chatInput.value = ''
+    chatMessages.scrollTop = chatMessages.scrollHeight
 
-            clearCanvas() { this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) }
-            maybeCreateShootingStar() {
-                const now = Date.now()
-                if (now - this.lastShootingStarTime > this.shootingStarInterval) {
-                    this.createShootingStar()
-                    this.lastShootingStarTime = now
-                    this.shootingStarInterval = Math.random() * 4000 + 3000
-                }
-            }
+    // Verstuur naar Supabase
+    const { data: insertData, error: insertError } = await supabase
+        .from('messages')
+        .insert([{ user_id: user.id, email: user.email, message: tekst, role: 'user' }])
+        .select()
 
-            createShootingStar() {
-                const startX = Math.random() * this.canvas.width
-                const startY = Math.random() * this.canvas.height / 4
-                const angle = Math.random() * Math.PI / 3 + Math.PI / 6
-                const length = Math.random() * 80 + 120
-                const speed = Math.random() * 2 + 1.5
+    if (insertError) {
+        console.error('Fout bij opslaan in Supabase:', insertError)
+        alert('Bericht kon niet worden opgeslagen.')
+        return
+    }
 
-                this.shootingStars.push({ x: startX, y: startY, length, angle, speed, progress: 0 })
-            }
+    // Bot reply simuleren
+    setTimeout(() => {
+        const reply = document.createElement('div')
+        reply.className = 'message bot'
+        reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+        chatMessages.appendChild(reply)
+        chatMessages.scrollTop = chatMessages.scrollHeight
+    }, 800)
+}
 
-            updateShootingStars() {
-                for (let i = this.shootingStars.length - 1; i >= 0; i--) {
-                    const star = this.shootingStars[i]
-                    star.progress += star.speed / 100
-                    if (star.progress >= 1) { this.shootingStars.splice(i, 1); continue }
-                    this.drawShootingStar(star)
-                }
-            }
+// --- Header functies ---
+async function checkLogin() {
+    const { data: { session } } = await supabase.auth.getSession()
+    user = session?.user ?? null
+    return session
+}
 
-            drawShootingStar(star) {
-                const endX = star.x + Math.cos(star.angle) * star.length * star.progress
-                const endY = star.y + Math.sin(star.angle) * star.length * star.progress
-                const gradient = this.ctx.createLinearGradient(star.x, star.y, endX, endY)
-                gradient.addColorStop(0, 'rgba(255,255,255,0.8)')
-                gradient.addColorStop(0.3, 'rgba(200,220,255,0.5)')
-                gradient.addColorStop(0.7, 'rgba(150,180,255,0.2)')
-                gradient.addColorStop(1, 'rgba(100,150,255,0)')
-                this.ctx.strokeStyle = gradient
-                this.ctx.lineWidth = 1.5
-                this.ctx.lineCap = 'round'
-                this.ctx.beginPath()
-                this.ctx.moveTo(star.x, star.y)
-                this.ctx.lineTo(endX, endY)
-                this.ctx.stroke()
-                this.ctx.fillStyle = 'rgba(255,255,255,0.9)'
-                this.ctx.beginPath()
-                this.ctx.arc(endX, endY, 1, 0, Math.PI * 2)
-                this.ctx.fill()
-            }
-        }
+function updateHeader(session) {
+    if (!loginBtn) return
+    if (session) {
+        loginBtn.innerText = 'Account'
+        loginBtn.href = 'account.html'
+    } else {
+        loginBtn.innerText = 'Login'
+        loginBtn.href = 'login.html'
+    }
+}
 
-        let shootingStars;
+function initLogout() {
+    if (!logoutBtn) return
+    logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault()
+        const { error } = await supabase.auth.signOut()
+        if (error) alert(`Uitloggen mislukt: ${error.message}`)
+        else window.location.href = 'login.html'
+    })
+}
 
-        window.addEventListener('load', async () => {
-            shootingStars = new ShootingStars()
+// --- Projecten functies ---
+async function loadProjects(userId) {
+    const { data: projects, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
 
-            // --- Check login status ---
-            const { data: { session } } = await supabase.auth.getSession()
-            const loginBtn = document.querySelector('.login-btn')
-            if (session && loginBtn) {
-                loginBtn.innerText = 'Account'
-                loginBtn.href = 'account.html'
+    if (error) return showError(error.message)
+
+    if (!projects || projects.length === 0) {
+        projectList.innerHTML = `<div class="empty-state"><h3>Nog geen projecten</h3></div>`
+        return
+    }
+
+    projectList.innerHTML = `
+        <div class="projects-grid">
+        ${projects.map(p => `
+            <div class="project-card">
+                <h3>${p.title}</h3>
+                <p>${p.description || 'Geen beschrijving opgegeven.'}</p>
+                ${p.link ? `<a href="${p.link}" class="project-link" target="_blank">Bekijk Project</a>` : ''}
+                <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
+            </div>`).join('')}
+        </div>
+    `
+}
+
+function showError(message) {
+    projectList.innerHTML = `
+        <div class="error-state">
+            <h3>Er is een fout opgetreden</h3>
+            <p>${message}</p>
+        </div>
+    `
+}
+
+// --- Login overlay bij geen sessie ---
+function showLoginOverlay() {
+    const overlay = document.createElement('div')
+    overlay.className = 'glass-overlay'
+    overlay.innerHTML = `
+        <div class="glass-popup">
+            <h3>Toegang geweigerd</h3>
+            <p>Je kunt deze projecten alleen bekijken als je bent ingelogd.</p>
+            <button id="goBackBtn" class="go-back-btn">Terug naar login</button>
+        </div>
+    `
+    document.body.appendChild(overlay)
+    document.getElementById('goBackBtn').addEventListener('click', () => {
+        window.location.href = 'login.html'
+    })
+}
+
+// --- Initialisatie bij window load ---
+window.addEventListener('load', async () => {
+    initChat() // chat werkt direct
+
+    const session = await checkLogin()
+    updateHeader(session)
+    initLogout()
+
+    if (typeof ShootingStars !== 'undefined') new ShootingStars()
+
+    if (!session) showLoginOverlay()
+    else loadProjects(session.user.id)
+
+    // Supabase realtime updates van messages (optioneel)
+    supabase
+        .channel('realtime-messages')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
+            if (payload.new.role === 'bot') {
+                const reply = document.createElement('div')
+                reply.className = 'message bot'
+                reply.textContent = payload.new.message
+                chatMessages.appendChild(reply)
+                chatMessages.scrollTop = chatMessages.scrollHeight
             }
         })
-        // --- UITLOGGEN KNOP ---
-        const logoutBtn = document.querySelector('.logout-btn')
+        .subscribe()
+})
 
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', async (e) => {
-                e.preventDefault()
-                const { error } = await supabase.auth.signOut()
-                if (error) {
-                    alert(`Uitloggen mislukt: ${error.message}`)
-                } else {
-                    window.location.href = 'login.html'
-                }
-            })
-        }
+
 
     </script>
 

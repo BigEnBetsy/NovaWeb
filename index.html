@@ -33,7 +33,29 @@
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
     <a href="diensten.html" class="contact-btn">Contact us</a>
+
+    <!-- Chat icoon geïntegreerd in de knopgroep -->
+    <div class="chat-container">
+      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+    </div>
   </div>
+
+
+  <!-- Chatvenster -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-header">
+      <span>💬 Chat met NovaWeb</span>
+      <button id="closeChat">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+      <button id="sendChat">Verstuur</button>
+    </div>
+  </div>
+
 </header>
 
 <main>

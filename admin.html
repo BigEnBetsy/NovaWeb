@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaWeb - Chat Beheer</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+
+  <!-- Hamburger menu knop -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="projecten.html">Portfolio</a>
+    <a href="diensten.html">Diensten</a>
+    <a href="klantenProject.html">Mijn projecten</a>
+  </nav>
+
+  <div class="header-buttons">
+    <a href="login.html" class="login-btn">Login</a>
+    <a href="diensten.html" class="contact-btn">Contact us</a>
+
+    <!-- Chat icoon geïntegreerd in de knopgroep -->
+    <div class="chat-container">
+      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+    </div>
+  </div>
+
+
+  <!-- Chatvenster -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-header">
+      <span>💬 Chat met NovaWeb</span>
+      <button id="closeChat">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+      <button id="sendChat">Verstuur</button>
+    </div>
+  </div>
+
+</header>
+
+  <main class="admin-layout">
+    <!-- Dynamische zijbalk met gebruikers -->
+    <aside id="userList">
+      <h2>Gebruikers</h2>
+      <ul id="userListItems"></ul>
+    </aside>
+
+    <!-- Chatvenster -->
+    <section id="chatSection">
+      <div id="chatContainer">
+        <!-- Berichten komen hier -->
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
