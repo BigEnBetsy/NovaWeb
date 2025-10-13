@@ -142,6 +142,18 @@ const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
+// --- ADMIN CHECK: voorkom toegang als geen admin ---
+const adminEmails = ['gallerstef@gmail.com','robin.baeyens27@gmail.com']; // Vul je admin-emails in
+const { data: { session } } = await supabase.auth.getSession()
+const user = session?.user ?? null
+
+if (!user || !adminEmails.includes(user.email)) {
+  alert('Toegang geweigerd. Je bent geen admin!');
+  window.location.href = 'login.html';
+}
+
+// -------------------------------------------
+
 const userList = document.getElementById('userList')
 const chatHeader = document.getElementById('chatHeader')
 const chatMessages = document.getElementById('chatMessages')
@@ -160,11 +172,9 @@ async function loadUsers() {
 
   if (error) return console.error('Fout bij laden berichten:', error)
 
-  // Init usersState en tel ongelezen berichten
   messages.forEach(msg => {
     if (!msg.email) return
     if (!usersState[msg.email]) usersState[msg.email] = { unread: 0 }
-    // Alleen user-berichten tellen als ongelezen
     if (msg.role === 'user') usersState[msg.email].unread++
   })
 
@@ -174,22 +184,16 @@ async function loadUsers() {
 // 🔹 Render gebruikerslijst
 function renderUserList() {
   userList.innerHTML = ''
-
-  // Sorteer: eerst gebruikers met unread > 0
-  const sortedEmails = Object.keys(usersState).sort((a, b) => {
-    return usersState[b].unread - usersState[a].unread
-  })
+  const sortedEmails = Object.keys(usersState).sort((a, b) => usersState[b].unread - usersState[a].unread)
 
   sortedEmails.forEach(email => {
     const div = document.createElement('div')
     div.className = 'user-item'
     div.dataset.email = email
     div.textContent = email
-
     if (email === currentEmail) div.classList.add('active')
     if (usersState[email].unread > 0) div.classList.add('new-message')
 
-    // Badge
     if (usersState[email].unread > 0) {
       const badge = document.createElement('span')
       badge.className = 'user-notification'
@@ -257,25 +261,17 @@ supabase
     const msg = payload.new
     const email = msg.email
     if (!email) return
-
-    // Als chat van gebruiker open is → direct tonen
     if (email === currentEmail) addMessage(msg)
     else {
-      // Update usersState
       if (!usersState[email]) usersState[email] = { unread: 0 }
       usersState[email].unread++
     }
-
-    // Voeg nieuwe gebruiker toe als die nog niet bestaat
     if (!document.querySelector(`[data-email="${email}"]`)) usersState[email] = usersState[email] || { unread: 1 }
-
     renderUserList()
   })
   .subscribe()
 
-// Start
 loadUsers()
-
 </script>
 
 </body>
