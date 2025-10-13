@@ -134,7 +134,7 @@ async function sendMessage() {
   setTimeout(() => {
     const reply = document.createElement('div');
     reply.className = 'message bot';
-    reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
+    // reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
     chatMessages.appendChild(reply);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }, 800);

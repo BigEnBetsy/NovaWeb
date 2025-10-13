@@ -51,26 +51,51 @@ window.addEventListener('DOMContentLoaded', async () => {
     })
   } else {
     // --- Normale chat functionaliteit ---
-    chatToggle.addEventListener('click', () => {
+    chatToggle.addEventListener('click', async () => {
       chatBox.classList.toggle('active')
+      if (chatBox.classList.contains('active') && user) {
+        await loadMessages()
+      }
     })
     closeChat.addEventListener('click', () => {
       chatBox.classList.remove('active')
     })
-
     sendChat.addEventListener('click', sendMessage)
     chatInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendMessage()
     })
   }
 
+  // --- Functie: berichten ophalen ---
+  async function loadMessages() {
+    if (!user) return
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('email', user.email)
+      .order('created_at', { ascending: true })
+    if (error) {
+      console.error(error)
+      return
+    }
+    chatMessages.innerHTML = ''
+    data.forEach(msg => addMessage(msg))
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }
+
+  // --- Functie: bericht toevoegen aan chat ---
+  function addMessage(msg) {
+    const div = document.createElement('div')
+    div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
+    div.textContent = msg.message
+    chatMessages.appendChild(div)
+  }
+
   // --- Functie: bericht versturen ---
   async function sendMessage() {
     const tekst = chatInput.value.trim()
-    if (!tekst) return
-
-    if (!user) {
-      alert('Je moet inloggen om te chatten!')
+    if (!tekst || !user) {
+      if (!user) alert('Je moet inloggen om te chatten!')
       return
     }
 
@@ -91,24 +116,21 @@ window.addEventListener('DOMContentLoaded', async () => {
         role: 'user',
       },
     ])
-
     if (error) {
       console.error('❌ Fout bij opslaan in Supabase:', error)
       alert('Bericht kon niet worden opgeslagen.')
       return
     }
 
-    // Automatische bot-reply én opslaan in database
+    // Automatische bot-reply én opslaan
     setTimeout(async () => {
-      const replyText =
-        'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+      // const replyText = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
       const replyDiv = document.createElement('div')
       replyDiv.className = 'message bot'
       replyDiv.textContent = replyText
       chatMessages.appendChild(replyDiv)
       chatMessages.scrollTop = chatMessages.scrollHeight
 
-      // Sla ook botbericht op
       await supabase.from('messages').insert([
         {
           user_id: user.id,
@@ -120,7 +142,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }, 800)
   }
 
-  // --- Realtime berichten ---
+  // --- Realtime listener ---
   supabase
     .channel('public:messages')
     .on(
@@ -128,31 +150,14 @@ window.addEventListener('DOMContentLoaded', async () => {
       { event: 'INSERT', schema: 'public', table: 'messages' },
       (payload) => {
         const msg = payload.new
-        if (user && msg.email === user.email && msg.role === 'admin') {
-          // Admin heeft gereageerd → toon in chat
-          const adminMsg = document.createElement('div')
-          adminMsg.className = 'message bot'
-          adminMsg.textContent = msg.message
-          chatMessages.appendChild(adminMsg)
+        if (user && msg.email === user.email) {
+          const div = document.createElement('div')
+          div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
+          div.textContent = msg.message
+          chatMessages.appendChild(div)
           chatMessages.scrollTop = chatMessages.scrollHeight
         }
       }
     )
     .subscribe()
 })
-
-// --- Header hide-on-scroll ---
-let lastScroll = 0
-const header = document.querySelector('header')
-window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset
-  if (currentScroll > lastScroll && currentScroll > 50)
-    header.classList.add('hide')
-  else header.classList.remove('hide')
-  lastScroll = currentScroll
-})
-
-// --- ShootingStars class (houd bestaande code) ---
-class ShootingStars {
-  // je bestaande class-code hier
-}

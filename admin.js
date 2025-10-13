@@ -1,94 +1,130 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabaseKey = 'YOUR_SUPABASE_KEY'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-const chatContainer = document.getElementById('chatContainer')
-const userList = document.getElementById('userListItems')
+const userList = document.getElementById('userList')
+const chatHeader = document.getElementById('chatHeader')
+const chatMessages = document.getElementById('chatMessages')
+const chatInput = document.getElementById('chatInput')
+const sendBtn = document.getElementById('sendBtn')
 
-let selectedEmail = null
+let currentEmail = null
+let unreadCounts = {} // Houdt aantal ongelezen per email bij
 
-// ------------------------------------------------------------
-// 1️⃣ Laad unieke gebruikers (emails) uit messages-tabel
-// ------------------------------------------------------------
-async function loadUserList() {
+// 🔹 Laad unieke gebruikers
+async function loadUsers() {
   const { data, error } = await supabase
     .from('messages')
     .select('email')
     .not('email', 'is', null)
 
-  if (error) {
-    console.error('Fout bij ophalen gebruikers:', error)
-    return
-  }
+  if (error) return console.error(error)
 
-  // Unieke e-mails filteren
-  const uniqueEmails = [...new Set(data.map(item => item.email))].sort()
+  const uniqueEmails = [...new Set(data.map(m => m.email))]
+  renderUserList(uniqueEmails)
+}
 
+// 🔹 Render gebruikerslijst
+function renderUserList(emails) {
   userList.innerHTML = ''
-  uniqueEmails.forEach(email => {
-    const li = document.createElement('li')
-    li.textContent = email
-    li.addEventListener('click', () => selectUser(email))
-    userList.appendChild(li)
+  emails.forEach(email => {
+    const div = document.createElement('div')
+    div.className = 'user-item'
+    div.dataset.email = email
+    div.textContent = email
+
+    // Badge voor ongelezen berichten
+    if (unreadCounts[email] && unreadCounts[email] > 0) {
+      const badge = document.createElement('span')
+      badge.className = 'user-notification'
+      badge.textContent = unreadCounts[email]
+      div.appendChild(badge)
+      div.style.border = '2px solid red'
+    }
+
+    div.addEventListener('click', () => selectUser(email))
+    userList.appendChild(div)
   })
 }
 
-// ------------------------------------------------------------
-// 2️⃣ Gebruiker selecteren en berichten tonen
-// ------------------------------------------------------------
+// 🔹 Selecteer gebruiker
 async function selectUser(email) {
-  selectedEmail = email
+  currentEmail = email
+  unreadCounts[email] = 0 // Reset ongelezen berichten
+  renderUserList([...document.querySelectorAll('.user-item')].map(d => d.dataset.email))
 
-  // Active class bijwerken
-  document.querySelectorAll('#userList li').forEach(li => {
-    li.classList.toggle('active', li.textContent === email)
+  document.querySelectorAll('.user-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.email === email)
   })
 
-  chatContainer.innerHTML = '<p style="opacity:0.6;">Berichten laden...</p>'
+  chatHeader.textContent = 'Chat met: ' + email
   await loadMessages(email)
 }
 
-// ------------------------------------------------------------
-// 3️⃣ Bestaande showMessage-functie (niet wijzigen)
-// ------------------------------------------------------------
-function showMessage(message) {
+// 🔹 Berichten laden
+async function loadMessages(email) {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('email', email)
+    .order('created_at', { ascending: true })
+
+  if (error) return console.error(error)
+
+  chatMessages.innerHTML = ''
+  data.forEach(msg => addMessage(msg))
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// 🔹 Berichten tonen
+function addMessage(msg) {
   const div = document.createElement('div')
-  div.className = message.role === 'user' ? 'message user' : 'message bot'
-  div.innerHTML = `<strong>${message.email || 'Onbekend'}:</strong> ${message.message}`
-  chatContainer.appendChild(div)
-  chatContainer.scrollTop = chatContainer.scrollHeight
+  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'admin')
+  div.textContent = msg.message
+  chatMessages.appendChild(div)
 }
 
-// ------------------------------------------------------------
-// 4️⃣ Berichten laden voor een specifieke gebruiker
-// ------------------------------------------------------------
-async function loadMessages(emailFilter = null) {
-  let query = supabase.from('messages').select('*').order('created_at', { ascending: true })
-  if (emailFilter) query = query.eq('email', emailFilter)
+// 🔹 Admin bericht verzenden
+sendBtn.addEventListener('click', async () => {
+  const tekst = chatInput.value.trim()
+  if (!tekst || !currentEmail) return
 
-  const { data: messages, error } = await query
-  if (error) return console.error('Fout bij laden berichten:', error)
+  chatInput.value = ''
+  const msg = { email: currentEmail, message: tekst, role: 'admin' }
+  addMessage(msg)
 
-  chatContainer.innerHTML = ''
-  messages.forEach(msg => showMessage(msg))
-}
+  const { error } = await supabase.from('messages').insert([msg])
+  if (error) console.error(error)
+})
 
-// ------------------------------------------------------------
-// 5️⃣ Realtime updates (ongewijzigd)
-// ------------------------------------------------------------
+// 🔹 Realtime updates
 supabase
-  .channel('public:messages')
+  .channel('realtime-messages')
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
     const msg = payload.new
-    if (!selectedEmail || msg.email === selectedEmail) {
-      showMessage(msg)
+    const email = msg.email
+
+    // Indien open chat, toon direct
+    if (currentEmail === email) {
+      addMessage(msg)
+    } else {
+      // Ongelezen verhogen
+      unreadCounts[email] = (unreadCounts[email] || 0) + 1
+      // Verplaats gebruiker bovenaan en update badge
+      const items = [...document.querySelectorAll('.user-item')]
+      const emails = items.map(i => i.dataset.email)
+      // Plaats nieuw email bovenaan
+      if (!emails.includes(email)) emails.unshift(email)
+      else {
+        const index = emails.indexOf(email)
+        emails.splice(index, 1)
+        emails.unshift(email)
+      }
+      renderUserList(emails)
     }
   })
   .subscribe()
 
-// ------------------------------------------------------------
-// 6️⃣ Initieel laden
-// ------------------------------------------------------------
-loadUserList()
+loadUsers()
