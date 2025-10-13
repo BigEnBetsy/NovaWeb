@@ -36,6 +36,7 @@ body {
   border-radius: 8px;
   margin-bottom: 5px;
   cursor: pointer;
+  position: relative;
   transition: background 0.2s;
 }
 .user-item:hover {
@@ -43,6 +44,25 @@ body {
 }
 .user-item.active {
   background: #30363d;
+}
+.user-item.new-message {
+  border: 2px solid red;
+}
+.user-notification {
+  background: red;
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
 }
 .chat-area {
   flex-grow: 1;
@@ -70,7 +90,7 @@ body {
   background: #238636;
   align-self: flex-start;
 }
-.message.bot, .message.admin {
+.message.admin {
   background: #444c56;
   align-self: flex-end;
 }
@@ -115,7 +135,6 @@ body {
   </div>
 </div>
 
-
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
@@ -123,79 +142,107 @@ const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-let currentEmail = null
-
 const userList = document.getElementById('userList')
 const chatHeader = document.getElementById('chatHeader')
 const chatMessages = document.getElementById('chatMessages')
 const chatInput = document.getElementById('chatInput')
 const sendBtn = document.getElementById('sendBtn')
 
-// 🔹 Gebruikers laden
+let currentEmail = null
+let usersState = {} // Houdt ongelezen count bij
+
+// 🔹 Laad gebruikers en ongelezen berichten
 async function loadUsers() {
-  const { data, error } = await supabase
+  const { data: messages, error } = await supabase
     .from('messages')
-    .select('email')
-    .not('email', 'is', null)
+    .select('email, role, created_at')
+    .order('created_at', { ascending: true })
 
-  if (error) {
-    console.error('Fout bij ophalen gebruikers:', error)
-    return
-  }
+  if (error) return console.error('Fout bij laden berichten:', error)
 
-  const uniqueEmails = [...new Set(data.map(m => m.email))]
-  userList.innerHTML = uniqueEmails.map(email =>
-    `<div class="user-item" data-email="${email}">${email}</div>`
-  ).join('')
+  // Init usersState en tel ongelezen berichten
+  messages.forEach(msg => {
+    if (!msg.email) return
+    if (!usersState[msg.email]) usersState[msg.email] = { unread: 0 }
+    // Alleen user-berichten tellen als ongelezen
+    if (msg.role === 'user') usersState[msg.email].unread++
+  })
 
-  document.querySelectorAll('.user-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.user-item').forEach(i => i.classList.remove('active'))
-      item.classList.add('active')
-      currentEmail = item.dataset.email
-      chatHeader.textContent = 'Chat met: ' + currentEmail
-      loadMessages(currentEmail)
-    })
+  renderUserList()
+}
+
+// 🔹 Render gebruikerslijst
+function renderUserList() {
+  userList.innerHTML = ''
+
+  // Sorteer: eerst gebruikers met unread > 0
+  const sortedEmails = Object.keys(usersState).sort((a, b) => {
+    return usersState[b].unread - usersState[a].unread
+  })
+
+  sortedEmails.forEach(email => {
+    const div = document.createElement('div')
+    div.className = 'user-item'
+    div.dataset.email = email
+    div.textContent = email
+
+    if (email === currentEmail) div.classList.add('active')
+    if (usersState[email].unread > 0) div.classList.add('new-message')
+
+    // Badge
+    if (usersState[email].unread > 0) {
+      const badge = document.createElement('span')
+      badge.className = 'user-notification'
+      badge.textContent = usersState[email].unread
+      div.appendChild(badge)
+    }
+
+    div.addEventListener('click', () => selectUser(email))
+    userList.appendChild(div)
   })
 }
 
-// 🔹 Berichten laden voor geselecteerde gebruiker
+// 🔹 Selecteer gebruiker en reset unread
+async function selectUser(email) {
+  currentEmail = email
+  if (usersState[email]) usersState[email].unread = 0
+  renderUserList()
+
+  chatHeader.textContent = 'Chat met: ' + email
+  await loadMessages(email)
+}
+
+// 🔹 Laad berichten voor geselecteerde gebruiker
 async function loadMessages(email) {
   const { data, error } = await supabase
     .from('messages')
-    .select('email, message, role, created_at')
+    .select('*')
     .eq('email', email)
     .order('created_at', { ascending: true })
 
-  if (error) {
-    console.error('Fout bij ophalen berichten:', error)
-    return
-  }
+  if (error) return console.error('Fout bij laden berichten:', error)
 
   chatMessages.innerHTML = ''
   data.forEach(msg => addMessage(msg))
   chatMessages.scrollTop = chatMessages.scrollHeight
 }
 
-// 🔹 Bericht tonen in chat
+// 🔹 Voeg bericht toe aan chat
 function addMessage(msg) {
   const div = document.createElement('div')
   div.className = 'message ' + (msg.role === 'user' ? 'user' : 'admin')
   div.textContent = msg.message
   chatMessages.appendChild(div)
+  chatMessages.scrollTop = chatMessages.scrollHeight
 }
 
-// 🔹 Admin bericht verzenden
+// 🔹 Verstuur admin-bericht
 sendBtn.addEventListener('click', async () => {
   const tekst = chatInput.value.trim()
   if (!tekst || !currentEmail) return
 
   chatInput.value = ''
-  const msg = {
-    email: currentEmail,
-    message: tekst,
-    role: 'admin'
-  }
+  const msg = { email: currentEmail, message: tekst, role: 'admin' }
 
   addMessage(msg)
 
@@ -208,32 +255,26 @@ supabase
   .channel('realtime-messages')
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
     const msg = payload.new
+    const email = msg.email
+    if (!email) return
 
-    // Als de chat van die gebruiker open is → toon bericht
-    if (msg.email === currentEmail) {
-      addMessage(msg)
+    // Als chat van gebruiker open is → direct tonen
+    if (email === currentEmail) addMessage(msg)
+    else {
+      // Update usersState
+      if (!usersState[email]) usersState[email] = { unread: 0 }
+      usersState[email].unread++
     }
 
-    // Als nieuwe gebruiker → voeg toe zonder alles te herladen
-    if (!document.querySelector(`[data-email="${msg.email}"]`)) {
-      const newItem = document.createElement('div')
-      newItem.className = 'user-item'
-      newItem.dataset.email = msg.email
-      newItem.textContent = msg.email
-      newItem.addEventListener('click', () => {
-        document.querySelectorAll('.user-item').forEach(i => i.classList.remove('active'))
-        newItem.classList.add('active')
-        currentEmail = msg.email
-        chatHeader.textContent = 'Chat met: ' + currentEmail
-        loadMessages(currentEmail)
-      })
-      userList.appendChild(newItem)
-    }
+    // Voeg nieuwe gebruiker toe als die nog niet bestaat
+    if (!document.querySelector(`[data-email="${email}"]`)) usersState[email] = usersState[email] || { unread: 1 }
+
+    renderUserList()
   })
   .subscribe()
 
+// Start
 loadUsers()
-
 
 </script>
 

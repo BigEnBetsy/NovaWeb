@@ -1,10 +1,30 @@
-// login.js
+// Voeg dit bovenaan login.js of bovenaan admin.html script toe
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-// --- Vul hier je Supabase gegevens in ---
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg' // Vervang door je ANON key uit Supabase dashboard
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
+
+// --- Lijst met toegestane admin emails ---
+const allowedAdmins = ['admin1@example.com', 'admin2@example.com']
+
+// --- Check toegang tot admin pagina ---
+async function checkAdminAccess() {
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
+
+  if (!user || !allowedAdmins.includes(user.email)) {
+    alert('Je hebt geen toegang tot deze pagina!')
+    window.location.href = 'login.html' // terug naar login
+  }
+}
+
+// Alleen uitvoeren als we op admin.html zijn
+if (window.location.pathname.endsWith('admin.html')) {
+  checkAdminAccess()
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
   const loginForm = document.querySelector('.login-form')
@@ -236,4 +256,6 @@ async function sendMessage() {
     })
     .subscribe()
 })
+
+
   

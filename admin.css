@@ -550,3 +550,24 @@ body.dark-theme {
   --primary-medium: #0f2438;
   --primary-light: #152f47;
 }
+
+.user-item.new-message {
+  border: 2px solid red;
+}
+
+.user-notification {
+  background: red;
+  color: white;
+  font-size: 0.75rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
