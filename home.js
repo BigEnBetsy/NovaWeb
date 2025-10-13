@@ -1,15 +1,14 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+// --- Supabase setup ---
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-let user = null // globale user variabele
+let user = null
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // --- Shooting stars ---
-  if (typeof ShootingStars !== 'undefined') new ShootingStars()
-
   // --- DOM elementen ---
   const chatToggle = document.getElementById('chatToggle')
   const chatBox = document.getElementById('chatBox')
@@ -20,7 +19,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   const loginBtn = document.querySelector('.login-btn')
 
   // --- Check login status ---
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   user = session?.user ?? null
 
   if (user && loginBtn) {
@@ -29,7 +30,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // --- Realtime login/logout ---
-  supabase.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange((_event, session) => {
     user = session?.user ?? null
     if (!loginBtn) return
     if (user) {
@@ -44,20 +45,26 @@ window.addEventListener('DOMContentLoaded', async () => {
   // --- Admin check ---
   const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com']
   if (user && adminEmails.includes(user.email)) {
-      chatToggle.addEventListener('click', () => {
-          window.location.href = 'admin.html'
-      })
+    // admin -> open adminpagina
+    chatToggle.addEventListener('click', () => {
+      window.location.href = 'admin.html'
+    })
   } else {
-      // --- Normale chat functionaliteit ---
-      chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'))
-      closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
+    // --- Normale chat functionaliteit ---
+    chatToggle.addEventListener('click', () => {
+      chatBox.classList.toggle('active')
+    })
+    closeChat.addEventListener('click', () => {
+      chatBox.classList.remove('active')
+    })
 
-      // --- Verstuur bericht ---
-      sendChat.addEventListener('click', sendMessage)
-      chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
+    sendChat.addEventListener('click', sendMessage)
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage()
+    })
   }
 
-  // --- Functie om berichten te versturen ---
+  // --- Functie: bericht versturen ---
   async function sendMessage() {
     const tekst = chatInput.value.trim()
     if (!tekst) return
@@ -67,7 +74,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       return
     }
 
-    // DOM update (toon bericht direct)
+    // Toon bericht direct
     const msgDiv = document.createElement('div')
     msgDiv.className = 'message user'
     msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
@@ -75,35 +82,62 @@ window.addEventListener('DOMContentLoaded', async () => {
     chatInput.value = ''
     chatMessages.scrollTop = chatMessages.scrollHeight
 
-    // --- Verstuur bericht naar Supabase ---
-    const { data: insertData, error: insertError } = await supabase
-      .from('messages')
-      .insert([{ user_id: user.id, email: user.email, message: tekst, role: 'user' }])
-      .select()
+    // Opslaan in Supabase
+    const { error } = await supabase.from('messages').insert([
+      {
+        user_id: user.id,
+        email: user.email,
+        message: tekst,
+        role: 'user',
+      },
+    ])
 
-    if (insertError) {
-      console.error('❌ Fout bij opslaan in Supabase:', insertError)
-      alert('Bericht kon niet worden opgeslagen. Zie console voor details.')
+    if (error) {
+      console.error('❌ Fout bij opslaan in Supabase:', error)
+      alert('Bericht kon niet worden opgeslagen.')
       return
     }
 
-    // Automatische bot reply
-    setTimeout(() => {
-      const reply = document.createElement('div')
-      reply.className = 'message bot'
-      reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
-      chatMessages.appendChild(reply)
+    // Automatische bot-reply én opslaan in database
+    setTimeout(async () => {
+      const replyText =
+        'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+      const replyDiv = document.createElement('div')
+      replyDiv.className = 'message bot'
+      replyDiv.textContent = replyText
+      chatMessages.appendChild(replyDiv)
       chatMessages.scrollTop = chatMessages.scrollHeight
+
+      // Sla ook botbericht op
+      await supabase.from('messages').insert([
+        {
+          user_id: user.id,
+          email: user.email,
+          message: replyText,
+          role: 'bot',
+        },
+      ])
     }, 800)
   }
 
-  // --- Realtime berichten (optioneel) ---
+  // --- Realtime berichten ---
   supabase
     .channel('public:messages')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-      console.log('Nieuw bericht:', payload.new)
-      // hier kan je DOM bijwerken als je realtime wil tonen
-    })
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'messages' },
+      (payload) => {
+        const msg = payload.new
+        if (user && msg.email === user.email && msg.role === 'admin') {
+          // Admin heeft gereageerd → toon in chat
+          const adminMsg = document.createElement('div')
+          adminMsg.className = 'message bot'
+          adminMsg.textContent = msg.message
+          chatMessages.appendChild(adminMsg)
+          chatMessages.scrollTop = chatMessages.scrollHeight
+        }
+      }
+    )
     .subscribe()
 })
 
@@ -112,12 +146,13 @@ let lastScroll = 0
 const header = document.querySelector('header')
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset
-  if (currentScroll > lastScroll && currentScroll > 50) header.classList.add('hide')
+  if (currentScroll > lastScroll && currentScroll > 50)
+    header.classList.add('hide')
   else header.classList.remove('hide')
   lastScroll = currentScroll
 })
 
-// --- ShootingStars class (houd je bestaande code) ---
-class ShootingStars { /* ... kopieer je bestaande class ... */ }
-
-
+// --- ShootingStars class (houd bestaande code) ---
+class ShootingStars {
+  // je bestaande class-code hier
+}

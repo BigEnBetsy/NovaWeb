@@ -700,61 +700,6 @@ function initChat() {
     chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
 }
 
-// Haal oudere berichten op en render ze
-async function loadMessages() {
-    try {
-        const { data, error } = await supabase
-            .from('messages')
-            .select('*')
-            .order('created_at', { ascending: true }) // oudste eerst
-
-        if (error) {
-            console.error('Fout bij ophalen berichten:', error)
-            return
-        }
-
-        // Clear huidige messages (behoud eventueel wel de welkomstboodschap)
-        chatMessages.innerHTML = ''
-
-        // Toon elk bericht
-        data.forEach(msg => appendMessageToUI(msg))
-        chatMessages.scrollTop = chatMessages.scrollHeight
-    } catch (err) {
-        console.error('Unexpected error bij loadMessages:', err)
-    }
-}
-
-// Append logica voor één bericht object (payload of fetch)
-function appendMessageToUI(msg) {
-    const div = document.createElement('div')
-    // fallback role
-    const role = msg.role || 'user'
-    div.className = `message ${role === 'bot' ? 'bot' : 'user'}`
-
-    if (role === 'bot') {
-        div.textContent = msg.message
-    } else {
-        // toon e-mail + bericht voor gebruikers
-        const email = msg.email || 'Onbekend'
-        div.innerHTML = `<strong>${escapeHtml(email)}</strong>: ${escapeHtml(msg.message)}`
-    }
-
-    chatMessages.appendChild(div)
-    chatMessages.scrollTop = chatMessages.scrollHeight
-}
-
-// Escape helper (veiligheid + HTML)
-function escapeHtml(unsafe) {
-    if (unsafe === null || unsafe === undefined) return ''
-    return String(unsafe)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;")
-}
-
-// Verzenden van een bericht en opslaan in Supabase
 async function sendMessage() {
     const tekst = chatInput.value.trim()
     if (!tekst) return
@@ -764,40 +709,40 @@ async function sendMessage() {
         return
     }
 
-    // Optimistisch in UI tonen
-    const optimistic = {
-        user_id: user.id,
-        email: user.email,
-        message: tekst,
-        role: 'user',
-        created_at: new Date().toISOString()
-    }
-    appendMessageToUI(optimistic)
+    // Bericht van gebruiker tonen
+    const msgDiv = document.createElement('div')
+    msgDiv.className = 'message user'
+    msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+    chatMessages.appendChild(msgDiv)
     chatInput.value = ''
+    chatMessages.scrollTop = chatMessages.scrollHeight
 
-    try {
-        const { data: insertData, error: insertError } = await supabase
-            .from('messages')
-            .insert([{
-                user_id: user.id,
-                email: user.email,
-                message: tekst,
-                role: 'user'
-            }])
-            .select() // returns inserted row(s)
+    // Bericht opslaan in Supabase (messages tabel)
+    const { error } = await supabase
+        .from('messages')
+        .insert([{ 
+            user_id: user.id,
+            email: user.email,
+            message: tekst,
+            role: 'user'
+        }])
 
-        if (insertError) {
-            console.error('Fout bij opslaan in Supabase:', insertError)
-            alert('Bericht kon niet worden opgeslagen.')
-            return
-        }
-
-        // Optioneel: replace optimistic message met persisted versie (we skip matching here)
-    } catch (err) {
-        console.error('Unexpected error bij sendMessage:', err)
-        alert('Er ging iets mis bij het verzenden.')
+    if (error) {
+        console.error('Fout bij opslaan in Supabase:', error)
+        alert('Bericht kon niet worden opgeslagen.')
+        return
     }
+
+    // Simpele automatische reactie
+    setTimeout(() => {
+        const reply = document.createElement('div')
+        reply.className = 'message bot'
+        reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+        chatMessages.appendChild(reply)
+        chatMessages.scrollTop = chatMessages.scrollHeight
+    }, 800)
 }
+
 
 // --- Header functies ---
 async function checkLogin() {
@@ -827,9 +772,10 @@ function initLogout() {
     })
 }
 
-// --- Projecten functies (ongewijzigd; toont alleen eigen projecten) ---
+// --- Projecten functies ---
 async function loadProjects(userId) {
     if (!userId) {
+        // Niet ingelogd → toon empty state
         projectList.innerHTML = `
             <div class="empty-state">
                 <h3>Nog geen projecten</h3>
@@ -856,9 +802,9 @@ async function loadProjects(userId) {
         <div class="projects-grid">
         ${projects.map(p => `
             <div class="project-card">
-                <h3>${escapeHtml(p.title)}</h3>
-                <p>${escapeHtml(p.description || 'Geen beschrijving opgegeven.')}</p>
-                ${p.link ? `<a href="${escapeHtml(p.link)}" class="project-link" target="_blank">Bekijk Project</a>` : ''}
+                <h3>${p.title}</h3>
+                <p>${p.description || 'Geen beschrijving opgegeven.'}</p>
+                ${p.link ? `<a href="${p.link}" class="project-link" target="_blank">Bekijk Project</a>` : ''}
                 <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
             </div>`).join('')}
         </div>
@@ -869,20 +815,9 @@ function showError(message) {
     projectList.innerHTML = `
         <div class="error-state">
             <h3>Er is een fout opgetreden</h3>
-            <p>${escapeHtml(message)}</p>
+            <p>${message}</p>
         </div>
     `
-}
-
-// --- Realtime subscription voor messages (toon ALLE nieuwe berichten) ---
-function subscribeRealtimeMessages() {
-    supabase
-        .channel('realtime-messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-            const newMsg = payload.new
-            appendMessageToUI(newMsg)
-        })
-        .subscribe()
 }
 
 // --- Initialisatie bij window load ---
@@ -898,9 +833,18 @@ window.addEventListener('load', async () => {
     // Laad projecten, toont empty state als niet ingelogd
     loadProjects(session?.user?.id)
 
-    // Laad bestaande chatberichten en subscribe realtime
-    await loadMessages()
-    subscribeRealtimeMessages()
+supabase
+    .channel('realtime-messages')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
+        if (payload.new.role === 'bot') {
+            const reply = document.createElement('div')
+            reply.className = 'message bot'
+            reply.textContent = payload.new.message
+            chatMessages.appendChild(reply)
+        }
+    })
+    .subscribe()
+
 })
 
 
