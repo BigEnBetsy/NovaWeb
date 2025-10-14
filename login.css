@@ -555,3 +555,95 @@
     font-size: 1.3rem;
   }
 }
+
+
+/* Responsive aanpassingen */
+@media (max-width: 768px) {
+  .header-buttons {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .login-btn {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    order: -1; /* Zet login knop bovenaan op mobiel */
+  }
+  
+  .contact-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .logo,
+  .logo-img,
+  .logo-fallback {
+    display: none;
+  }
+
+  /* Hamburger menu links uitlijnen */
+  nav {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+    align-items: flex-start; /* Links uitlijnen */
+    padding-left: 20px;      /* Ruimte van links */
+  }
+
+  nav.active {
+    transform: translateX(0);
+  }
+
+  /* Voeg login en contact knoppen toe aan menu */
+  nav::after {
+    content: '';
+    display: block;
+    height: 0;
+  }
+
+  /* Specifiek: de knoppen verplaatsen naar nav */
+  nav a.login-btn,
+  nav a.contact-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    text-align: left;
+    padding-left: 10px;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+  }
+
+  /* Verberg oude header-buttons */
+  .header-buttons {
+    display: none;
+  }
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #ffd60a;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex; /* Nu zichtbaar op mobiel */
+  }
+}

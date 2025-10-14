@@ -130,3 +130,9 @@ async function sendMessage() {
     chatMessages.scrollTop = chatMessages.scrollHeight
   }, 800)
 }
+const hamburger = document.querySelector('.hamburger');
+const nav = document.querySelector('nav');
+
+hamburger.addEventListener('click', () => {
+  nav.classList.toggle('active');
+});
