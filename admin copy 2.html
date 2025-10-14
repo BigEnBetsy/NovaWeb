@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Chat - NovaWeb</title>
+<style>
+body {
+  margin: 0;
+  background: #0d1117;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.sidebar {
+  width: 280px;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.user-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.user-item {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+.user-item:hover {
+  background: #21262d;
+}
+.user-item.active {
+  background: #30363d;
+}
+.user-item.new-message {
+  border: 2px solid red;
+}
+.user-notification {
+  background: red;
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+.chat-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat-header {
+  background: #161b22;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #30363d;
+}
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+.message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+.message.user {
+  background: #238636;
+  align-self: flex-start;
+}
+.message.admin {
+  background: #444c56;
+  align-self: flex-end;
+}
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid #30363d;
+}
+.chat-input-area input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: #0d1117;
+  color: white;
+}
+.chat-input-area button {
+  padding: 10px 20px;
+  border: none;
+  background: #238636;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+.chat-input-area button:hover {
+  background: #2ea043;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Gebruikers</h2>
+  <div id="userList" class="user-list"></div>
+</div>
+
+<div class="chat-area">
+  <div id="chatHeader" class="chat-header">Selecteer een gebruiker</div>
+  <div id="chatMessages" class="chat-messages"></div>
+  <div class="chat-input-area">
+    <input id="chatInput" type="text" placeholder="Typ een antwoord..." />
+    <button id="sendBtn">Versturen</button>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+const adminEmails = ['gallerstef@gmail.com','robin.baeyens27@gmail.com']
+
+// Admin check
+const { data: { session } } = await supabase.auth.getSession()
+const user = session?.user ?? null
+if (!user || !adminEmails.includes(user.email)) {
+  alert('Toegang geweigerd. Je bent geen admin!');
+  window.location.href = 'login.html';
+}
+
+const userList = document.getElementById('userList')
+const chatHeader = document.getElementById('chatHeader')
+const chatMessages = document.getElementById('chatMessages')
+const chatInput = document.getElementById('chatInput')
+const sendBtn = document.getElementById('sendBtn')
+
+let currentEmail = null
+let usersState = {}
+
+// 🔹 Laad gebruikers en ongelezen berichten
+async function loadUsers() {
+  const { data: messages, error } = await supabase
+    .from('messages')
+    .select('id,email,role,read,created_at')
+    .order('created_at', { ascending: true })
+
+  if (error) return console.error('Fout bij laden berichten:', error)
+
+  usersState = {}
+
+  messages.forEach(msg => {
+    if (!msg.email) return
+    if (!usersState[msg.email]) usersState[msg.email] = { unread: 0 }
+    if (msg.role === 'user' && !msg.read) usersState[msg.email].unread++
+  })
+
+  renderUserList()
+}
+
+// 🔹 Render gebruikerslijst
+function renderUserList() {
+  userList.innerHTML = ''
+  const sortedEmails = Object.keys(usersState).sort((a,b) => usersState[b].unread - usersState[a].unread)
+
+  sortedEmails.forEach(email => {
+    const div = document.createElement('div')
+    div.className = 'user-item'
+    div.dataset.email = email
+    div.textContent = email
+    if (email === currentEmail) div.classList.add('active')
+    if (usersState[email].unread > 0) div.classList.add('new-message')
+
+    if (usersState[email].unread > 0) {
+      const badge = document.createElement('span')
+      badge.className = 'user-notification'
+      badge.textContent = usersState[email].unread
+      div.appendChild(badge)
+    }
+
+    div.addEventListener('click', () => selectUser(email))
+    userList.appendChild(div)
+  })
+}
+
+// 🔹 Selecteer gebruiker en markeer ongelezen berichten als gelezen
+async function selectUser(email) {
+  currentEmail = email
+  renderUserList()
+  chatHeader.textContent = 'Chat met: ' + email
+
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('email', email)
+    .order('created_at', { ascending: true })
+
+  if (error) return console.error(error)
+
+  // Markeer ongelezen berichten als gelezen
+  const unreadIds = data.filter(m => m.role==='user' && !m.read).map(m => m.id)
+  if (unreadIds.length > 0) {
+    await supabase.from('messages').update({ read: true }).in('id', unreadIds)
+  }
+
+  usersState[email].unread = 0
+  renderUserList()
+
+  chatMessages.innerHTML = ''
+  data.forEach(addMessage)
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// 🔹 Voeg bericht toe aan chat
+function addMessage(msg) {
+  const div = document.createElement('div')
+  div.className = 'message ' + (msg.role==='user' ? 'user':'admin')
+  div.textContent = msg.message
+  chatMessages.appendChild(div)
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// 🔹 Verstuur admin-bericht
+sendBtn.addEventListener('click', async () => {
+  const tekst = chatInput.value.trim()
+  if (!tekst || !currentEmail) return
+  chatInput.value = ''
+
+  const msg = { email: currentEmail, message: tekst, role: 'admin', read: true }
+  addMessage(msg)
+  const { error } = await supabase.from('messages').insert([msg])
+  if (error) console.error('Fout bij verzenden:', error)
+})
+
+// 🔹 Realtime updates
+supabase
+  .channel('realtime-messages')
+  .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages' }, async payload => {
+    const msg = payload.new
+    const email = msg.email
+    if (!email) return
+
+    if (email === currentEmail) {
+      addMessage(msg)
+      // Als bericht van user, markeer meteen als gelezen
+      if (msg.role==='user' && !msg.read) {
+        await supabase.from('messages').update({ read: true }).eq('id', msg.id)
+      }
+    } else {
+      if (!usersState[email]) usersState[email] = { unread:0 }
+      if (!msg.read && msg.role==='user') usersState[email].unread++
+    }
+
+    renderUserList()
+  })
+  .subscribe()
+
+loadUsers()
+</script>
+
+</body>
+</html>
