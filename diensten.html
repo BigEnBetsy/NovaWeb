@@ -1,67 +1,63 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NovaWeb - Diensten</title>
   <link rel="stylesheet" href="diensten.css">
 </head>
-
 <body>
-  <!-- Parallax sterrenlagen -->
-  <div class="stars-deep" id="starsDeep"></div>
-  <div class="stars-background" id="starsBackground"></div>
 
-  <header>
-    <div class="logo" id="logo">
-      <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-      <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+<!-- Parallax sterrenlagen -->
+<div class="stars-deep" id="starsDeep"></div>
+<div class="stars-background" id="starsBackground"></div>
+
+<header>
+  <div class="logo" id="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+
+  <nav id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="over-ons.html">Over ons</a>
+    <a href="projecten.html">Portfolio</a>
+    <a href="diensten.html">Diensten</a>
+    <a href="klantenProject.html">Mijn projecten</a>
+  </nav>
+
+  <div class="header-buttons">
+    <a href="login.html" class="login-btn">Login</a>
+    <a href="contact.html" class="contact-btn">Contact us</a>
+
+    <div class="chat-container">
+      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
     </div>
+  </div>
 
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="over-ons.html">Over ons</a>
-      <a href="projecten.html">Portfolio</a>
-      <a href="diensten.html">Diensten</a>
-      <a href="klantenProject.html">Mijn projecten</a>
-    </nav>
-
-    <div class="header-buttons">
-      <a href="login.html" class="login-btn">Login</a>
-      <a href="contact.html" class="contact-btn">Contact us</a>
-
-      <!-- Chat icoon geïntegreerd in de knopgroep -->
-      <div class="chat-container">
-        <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
-      </div>
+  <!-- Chatvenster -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-header">
+      <span>💬 Chat met NovaWeb</span>
+      <button id="closeChat">×</button>
     </div>
-
-
-    <!-- Chatvenster -->
-    <div class="chat-box" id="chatBox">
-      <div class="chat-header">
-        <span>💬 Chat met NovaWeb</span>
-        <button id="closeChat">×</button>
-      </div>
-      <div class="chat-messages" id="chatMessages">
-        <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-      </div>
-      <div class="chat-input-area">
-        <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-        <button id="sendChat">Verstuur</button>
-      </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
     </div>
-
-    <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+      <button id="sendChat">Verstuur</button>
     </div>
+  </div>
 
-  </header>
+</header>
 
   <main>
 
@@ -393,17 +389,150 @@
     </section>
   </main>
 
-  <canvas id="shootingStarCanvas"></canvas>
+<footer>
+  <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
+</footer>
 
-  <footer>
-    <div class="footer-content">
-      <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden. | Gemaakt met ❤️ door student-ondernemers</p>
-    </div>
-  </footer>
+<script type="module">
+// --- Supabase setup ---
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  <!-- Load scripts in correct order -->
-  <script src="shootingStars.js"></script>
-  <script type="module" src="diensten.js"></script>
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+let user = null;
+
+window.addEventListener('DOMContentLoaded', async () => {
+
+  const loginBtn = document.querySelector('.login-btn');
+  const chatToggle = document.getElementById('chatToggle');
+  const chatBox = document.getElementById('chatBox');
+  const closeChat = document.getElementById('closeChat');
+  const chatInput = document.getElementById('chatInput');
+  const sendChat = document.getElementById('sendChat');
+  const chatMessages = document.getElementById('chatMessages');
+  const navMenu = document.getElementById('navMenu');
+  const hamburger = document.getElementById('hamburger');
+
+  // Hamburger toggle
+  hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+
+  // Check login status
+  const { data: { session } } = await supabase.auth.getSession();
+  user = session?.user ?? null;
+  updateHeader(session);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    user = session?.user ?? null;
+    updateHeader(session);
+  });
+
+  function updateHeader(session) {
+    if (!loginBtn) return;
+    if (session) {
+      loginBtn.innerText = 'Account';
+      loginBtn.href = 'account.html';
+    } else {
+      loginBtn.innerText = 'Login';
+      loginBtn.href = 'login.html';
+    }
+  }
+
+  // Admin check
+  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
+  if (user && adminEmails.includes(user.email)) {
+    chatToggle.addEventListener('click', () => window.location.href='admin.html');
+  } else {
+    chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
+    closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
+    sendChat.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendMessage() });
+  }
+
+  // Load messages
+  async function loadMessages() {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('email', user.email)
+      .order('created_at', { ascending: true });
+
+    if (error) { console.error(error); return; }
+
+    chatMessages.innerHTML = '';
+    if (data.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'message bot';
+      emptyDiv.textContent = 'Nog geen berichten. Stuur een bericht om te starten!';
+      chatMessages.appendChild(emptyDiv);
+    } else data.forEach(addMessage);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addMessage(msg) {
+    const div = document.createElement('div');
+    div.className = 'message ' + (msg.role==='user'?'user':'bot');
+    const textDiv = document.createElement('div');
+    textDiv.textContent = msg.message;
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'});
+    div.appendChild(textDiv);
+    div.appendChild(timeDiv);
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const tekst = chatInput.value.trim();
+    if (!tekst) return;
+
+    if (!user) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className='message bot';
+      msgDiv.textContent='Je moet inloggen om te kunnen chatten! 😊';
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return;
+    }
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className='message user';
+    msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`;
+    chatMessages.appendChild(msgDiv);
+    chatInput.value='';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    const { error } = await supabase.from('messages').insert([{
+      user_id:user.id,
+      email:user.email,
+      message:tekst,
+      role:'user',
+      created_at:new Date().toISOString()
+    }]);
+    if(error) console.error(error);
+
+    setTimeout(async()=>{
+      const replyDiv = document.createElement('div');
+      replyDiv.className='message bot';
+      replyDiv.textContent='Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
+      chatMessages.appendChild(replyDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      await supabase.from('messages').insert([{
+        user_id:user.id,
+        email:user.email,
+        message:'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊',
+        role:'bot',
+        created_at:new Date().toISOString()
+      }]);
+    },800);
+  }
+
+});
+</script>
+
 </body>
-
 </html>

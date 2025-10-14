@@ -571,3 +571,74 @@ body.dark-theme {
   transform: translateY(-50%);
   font-weight: bold;
 }
+
+.user-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.user-item button {
+  background: var(--accent-color);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.user-item button:hover {
+  background: var(--accent-hover);
+}
+
+/* Voeg deze CSS toe aan je bestaande styles */
+.mark-read-btn {
+  background: var(--accent-color) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  color: white !important;
+  font-weight: 600 !important;
+  margin-left: 8px !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.mark-read-btn:hover {
+  background: var(--accent-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+.user-item-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+
+/* Zorg dat de user-item genoeg ruimte heeft */
+.user-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 15px !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  position: relative !important;
+  border-left: 3px solid transparent !important;
+  gap: 12px !important;
+}
+
+.user-info {
+  flex-grow: 1 !important;
+  overflow: hidden !important;
+  min-width: 0 !important;
+}

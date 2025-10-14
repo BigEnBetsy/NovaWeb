@@ -19,7 +19,7 @@
   <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
 </div>
   
-  <nav>
+  <nav id="nav">
     <a href="index.html">Home</a>
     <a href="over-ons.html">Over ons</a>
     <a href="projecten.html">Portfolio</a>
@@ -370,8 +370,13 @@ chatToggle.addEventListener('click', () => {
   chatBox.classList.toggle('active');
 });
 
+chatToggle.addEventListener('click', () => {
+  console.log('Chat toggle clicked');
+  chatBox.classList.toggle('active');
+});
 
 </script>
+
 </body>
 
 </html>

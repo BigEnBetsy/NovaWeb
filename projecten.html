@@ -3,21 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovaWeb - Onze Projecten</title>
+  <title>NovaWeb - Projecten</title>
   <link rel="stylesheet" href="projecten.css">
 </head>
 <body>
-  <!-- Parallax sterrenlagen -->
-
 
 <header>
-<div class="logo" id="logo">
-  <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-    onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-  <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
-</div>
-  
-  <nav>
+  <div class="logo">
+    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="navMenu">
     <a href="index.html">Home</a>
     <a href="over-ons.html">Over ons</a>
     <a href="projecten.html">Portfolio</a>
@@ -29,12 +33,10 @@
     <a href="login.html" class="login-btn">Login</a>
     <a href="contact.html" class="contact-btn">Contact us</a>
 
-    <!-- Chat icoon geïntegreerd in de knopgroep -->
     <div class="chat-container">
       <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
     </div>
   </div>
-
 
   <!-- Chatvenster -->
   <div class="chat-box" id="chatBox">
@@ -50,13 +52,6 @@
       <button id="sendChat">Verstuur</button>
     </div>
   </div>
-
-    <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
 </header>
 
   <main>
@@ -125,7 +120,7 @@
           <!-- MuziekAcademie -->
           <div class="portfolio-item" data-category="website business">
             <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/cafewp');"></div>
+              <div class="website-screenshot" style="background-image: url('Fotos/muziek.png');"></div>
               <div class="project-overlay">
                 <div class="project-links">
                   <a href="https://bigenbetsy.github." target="_blank" class="view-project-btn">Live Bekijken</a>
@@ -189,10 +184,10 @@
           <!-- StudentenClub -->
           <div class="portfolio-item" data-category="student website">
             <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/cafew.png');"></div>
+              <div class="website-screenshot" style="background-image: url('Fotos/studentenClub.png');"></div>
               <div class="project-overlay">
                 <div class="project-links">
-                  <a href="https://voorbeeld.com/studentenclub" target="_blank" class="view-project-btn">Live Bekijken</a>
+                  <a href="https://bigenbetsy.github.io/College/" target="_blank" class="view-project-btn">Live Bekijken</a>
                   <a href="#" class="project-details-btn">Meer Details</a>
                 </div>
               </div>
@@ -331,80 +326,29 @@
         </div>
       </div>
     </section>
-  </main>
+</main>
 
-  <canvas id="shootingStarCanvas"></canvas>
+<footer>
+  <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
+</footer>
 
-  <footer>
-    <div class="footer-content">
-      <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden. | Gemaakt met ❤️ door student-ondernemers</p>
-    </div>
-  </footer>
-
-  <!-- Load scripts in correct order -->
-  <script type="module" src="projecten.js"></script>
-  <script type="module" src="home.js"></script>
+<!-- JS modules -->
+<script type="module" src="home.js"></script>
 
 <script>
-const nav = document.getElementById('navMenu');
-const headerButtons = document.querySelector('.header-buttons');
-const chatBox = document.getElementById('chatBox');
-const chatToggle = document.getElementById('chatToggle');
-const closeChat = document.getElementById('closeChat');
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('navMenu');
+  hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-function moveHeaderButtonsToNav() {
-  // Verwijder oude clone als die er is
-  const oldClone = document.querySelector('.nav-header-buttons');
-  if (oldClone) oldClone.remove();
+  // Chat functionaliteit
+  const chatToggle = document.getElementById('chatToggle');
+  const chatBox = document.getElementById('chatBox');
+  const closeChat = document.getElementById('closeChat');
 
-  if (window.innerWidth <= 768) {
-    const clone = headerButtons.cloneNode(true);
-    clone.classList.add('nav-header-buttons');
-
-    // Stijl voor mobiel
-    clone.style.display = 'flex';
-    clone.style.flexDirection = 'column';
-    clone.style.alignItems = 'center';
-    clone.style.gap = '10px';
-    clone.querySelectorAll('a, .chat-container').forEach(el => {
-      el.style.width = '80%';
-      el.style.textAlign = 'center';
-      el.style.margin = '5px 0';
-    });
-
-    nav.appendChild(clone);
-
-    // Voeg chat functionaliteit opnieuw toe voor gekloonde knop
-    const clonedChat = clone.querySelector('.chat-container');
-    if (clonedChat) {
-      clonedChat.addEventListener('click', () => {
-        chatBox.classList.toggle('active');
-      });
-    }
-  }
-}
-
-// Bij laden en resize
-window.addEventListener('DOMContentLoaded', moveHeaderButtonsToNav);
-window.addEventListener('resize', moveHeaderButtonsToNav);
-
-// Hamburger menu toggle
-const hamburger = document.querySelector('.hamburger');
-hamburger.addEventListener('click', () => {
-  nav.classList.toggle('active');
-});
-
-// Sluit chat knop
-closeChat.addEventListener('click', () => {
-  chatBox.classList.remove('active');
-});
-
-// Event listener voor originele chat knop (desktop)
-chatToggle.addEventListener('click', () => {
-  chatBox.classList.toggle('active');
-});
-
-
+  chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
+  closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
 </script>
+
 </body>
 </html>

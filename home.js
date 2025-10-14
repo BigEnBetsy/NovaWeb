@@ -60,87 +60,129 @@ window.addEventListener('DOMContentLoaded', async () => {
     closeChat.addEventListener('click', () => {
       chatBox.classList.remove('active')
     })
-    sendChat.addEventListener('click', sendMessage)
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage()
-    })
+document.getElementById('sendChat').addEventListener('click', sendMessage)
+document.getElementById('chatInput').addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') sendMessage()
+})
+
   }
 
   // --- Functie: berichten ophalen ---
-  async function loadMessages() {
-    if (!user) return
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('email', user.email)
-      .order('created_at', { ascending: true })
-    if (error) {
-      console.error(error)
-      return
-    }
-    chatMessages.innerHTML = ''
-    data.forEach(msg => addMessage(msg))
-    chatMessages.scrollTop = chatMessages.scrollHeight
+async function loadMessages() {
+  if (!user) return
+  const chatMessages = document.getElementById('chatMessages')
+
+  // Haal alle berichten op van deze gebruiker
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('email', user.email)
+    .order('created_at', { ascending: true })
+
+  if (error) {
+    console.error(error)
+    return
   }
+
+  chatMessages.innerHTML = ''
+
+  if (data.length === 0) {
+    const emptyDiv = document.createElement('div')
+    emptyDiv.className = 'message bot'
+    emptyDiv.textContent = 'Nog geen berichten. Stuur een bericht om te starten!'
+    chatMessages.appendChild(emptyDiv)
+  } else {
+    data.forEach(addMessage)
+  }
+
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+
 
   // --- Functie: bericht toevoegen aan chat ---
-  function addMessage(msg) {
-    const div = document.createElement('div')
-    div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
-    div.textContent = msg.message
-    chatMessages.appendChild(div)
-  }
+function addMessage(msg) {
+  const chatMessages = document.getElementById('chatMessages')
+  const div = document.createElement('div')
+  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
+
+  const messageText = document.createElement('div')
+  messageText.textContent = msg.message
+
+  const messageTime = document.createElement('div')
+  messageTime.className = 'message-time'
+  messageTime.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+
+  div.appendChild(messageText)
+  div.appendChild(messageTime)
+  chatMessages.appendChild(div)
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+
 
   // --- Functie: bericht versturen ---
-  async function sendMessage() {
-    const tekst = chatInput.value.trim()
-    if (!tekst || !user) {
-      if (!user) alert('Je moet inloggen om te chatten!')
-      return
-    }
+async function sendMessage() {
+  const chatInput = document.getElementById('chatInput')
+  const tekst = chatInput.value.trim()
 
-    // Toon bericht direct
+  if (!tekst) return
+
+  if (!user) {
+    const chatMessages = document.getElementById('chatMessages')
     const msgDiv = document.createElement('div')
-    msgDiv.className = 'message user'
-    msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+    msgDiv.className = 'message bot'
+    msgDiv.textContent = 'Je moet inloggen om te kunnen chatten! 😊'
     chatMessages.appendChild(msgDiv)
-    chatInput.value = ''
     chatMessages.scrollTop = chatMessages.scrollHeight
+    return
+  }
 
-    // Opslaan in Supabase
-    const { error } = await supabase.from('messages').insert([
+  // Toon bericht direct
+  const msgDiv = document.createElement('div')
+  msgDiv.className = 'message user'
+  msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+  document.getElementById('chatMessages').appendChild(msgDiv)
+  chatInput.value = ''
+  document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight
+
+  // Opslaan in Supabase
+  const { error } = await supabase.from('messages').insert([
+    {
+      user_id: user.id,
+      email: user.email,
+      message: tekst,
+      role: 'user',
+      created_at: new Date().toISOString()
+    },
+  ])
+  if (error) {
+    console.error('❌ Fout bij opslaan in Supabase:', error)
+    alert('Bericht kon niet worden opgeslagen.')
+    return
+  }
+
+  // Bot reply
+  // const replyText = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+  setTimeout(async () => {
+    const replyDiv = document.createElement('div')
+    replyDiv.className = 'message bot'
+    replyDiv.textContent = replyText
+    document.getElementById('chatMessages').appendChild(replyDiv)
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight
+
+    await supabase.from('messages').insert([
       {
         user_id: user.id,
         email: user.email,
-        message: tekst,
-        role: 'user',
+        message: replyText,
+        role: 'bot',
+        created_at: new Date().toISOString()
       },
     ])
-    if (error) {
-      console.error('❌ Fout bij opslaan in Supabase:', error)
-      alert('Bericht kon niet worden opgeslagen.')
-      return
-    }
+  }, 800)
+}
 
-    // Automatische bot-reply én opslaan
-    setTimeout(async () => {
-      // const replyText = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
-      const replyDiv = document.createElement('div')
-      replyDiv.className = 'message bot'
-      replyDiv.textContent = replyText
-      chatMessages.appendChild(replyDiv)
-      chatMessages.scrollTop = chatMessages.scrollHeight
-
-      await supabase.from('messages').insert([
-        {
-          user_id: user.id,
-          email: user.email,
-          message: replyText,
-          role: 'bot',
-        },
-      ])
-    }, 800)
-  }
 
   // --- Realtime listener ---
   supabase
@@ -163,4 +205,19 @@ window.addEventListener('DOMContentLoaded', async () => {
 })
 
 
+// Toggle chatvenster
+function toggleChat() {
+  const chatBox = document.getElementById('chatBox')
+  chatBox.classList.toggle('active')
+}
+
+// Sluit chat
+function closeChat() {
+  const chatBox = document.getElementById('chatBox')
+  chatBox.classList.remove('active')
+}
+
+// Event listeners
+document.getElementById('chatToggle').addEventListener('click', toggleChat)
+document.getElementById('closeChat').addEventListener('click', closeChat)
 

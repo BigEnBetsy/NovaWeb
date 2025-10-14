@@ -1208,3 +1208,65 @@ html body header.hide {
     display: flex; /* Nu zichtbaar op mobiel */
   }
 }
+
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background: #fff;
+}
+
+.chat-input-area input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 1rem;
+}
+
+.chat-input-area button {
+  background: #ffd60a;
+  border: none;
+  color: #0d3b66;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-left: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.chat-input-area button:hover {
+  background: #ffed4e;
+}
+
+
+
+/* Chat box styling */
+.chat-box {
+  background: #929292; /* donkergrijs voor hele chatbox */
+}
+
+/* Chatberichten area */
+.chat-messages {
+  background: #a4a4a4; /* iets lichter grijs voor berichtenlijst */
+}
+
+/* Input veld area */
+.chat-input-area {
+  background: #ffffff; /* passend grijs */
+}
+
+/* Eventueel tekstkleur aanpassen zodat het zichtbaar blijft */
+.chat-messages .message.bot {
+  color: #000000; /* donkere tekst voor contrast */
+}
+
+.chat-messages .message.user {
+  color: #0d3b66; /* blijft hetzelfde, kan aangepast naar wit indien nodig */
+}
+
+.chat-input-area input {
+  background: #dbdbdb; /* input veld grijs maken */
+  color: rgb(0, 0, 0); /* tekst in input zichtbaar */
+}
