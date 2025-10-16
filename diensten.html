@@ -42,20 +42,22 @@
     <span></span>
   </div>
 
-  <!-- Chatvenster -->
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span>💬 Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
-    </div>
+
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">
+    <span>💬 Chat met NovaWeb</span>
+    <button id="closeChat">×</button>
   </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+    <button id="sendChat">Verstuur</button>
+  </div>
+</div>
+
 
 </header>
 
@@ -394,145 +396,192 @@
 </footer>
 
 <script type="module">
-// --- Supabase setup ---
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+// --- Supabase setup ---
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-let user = null;
+let user = null
+const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com']
 
-window.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  const loginBtn = document.querySelector('.login-btn')
+  const chatToggle = document.getElementById('chatToggle')
+  const chatBox = document.getElementById('chatBox')
+  const closeChat = document.getElementById('closeChat')
+  const chatInput = document.getElementById('chatInput')
+  const sendChat = document.getElementById('sendChat')
+  const chatMessages = document.getElementById('chatMessages')
+  const navMenu = document.getElementById('navMenu')
+  const hamburger = document.getElementById('hamburger')
 
-  const loginBtn = document.querySelector('.login-btn');
-  const chatToggle = document.getElementById('chatToggle');
-  const chatBox = document.getElementById('chatBox');
-  const closeChat = document.getElementById('closeChat');
-  const chatInput = document.getElementById('chatInput');
-  const sendChat = document.getElementById('sendChat');
-  const chatMessages = document.getElementById('chatMessages');
-  const navMenu = document.getElementById('navMenu');
-  const hamburger = document.getElementById('hamburger');
+  // --- Hamburger menu ---
+  hamburger.addEventListener('click', () => navMenu.classList.toggle('active'))
 
-  // Hamburger toggle
-  hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
-
-  // Check login status
-  const { data: { session } } = await supabase.auth.getSession();
-  user = session?.user ?? null;
-  updateHeader(session);
+  // --- Check login status ---
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  user = session?.user ?? null
+  updateHeader(session)
 
   supabase.auth.onAuthStateChange((_event, session) => {
-    user = session?.user ?? null;
-    updateHeader(session);
-  });
+    user = session?.user ?? null
+    updateHeader(session)
+  })
 
   function updateHeader(session) {
-    if (!loginBtn) return;
+    if (!loginBtn) return
     if (session) {
-      loginBtn.innerText = 'Account';
-      loginBtn.href = 'account.html';
+      loginBtn.innerText = 'Account'
+      loginBtn.href = 'account.html'
     } else {
-      loginBtn.innerText = 'Login';
-      loginBtn.href = 'login.html';
+      loginBtn.innerText = 'Login'
+      loginBtn.href = 'login.html'
     }
   }
 
-  // Admin check
-  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
+  // --- Admin redirect ---
   if (user && adminEmails.includes(user.email)) {
-    chatToggle.addEventListener('click', () => window.location.href='admin.html');
+    chatToggle?.addEventListener('click', () => {
+      window.location.href = 'admin.html'
+    })
   } else {
-    chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
-    closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
-    sendChat.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendMessage() });
+    chatToggle?.addEventListener('click', () => {
+      chatBox?.classList.toggle('active')
+      if (chatBox?.classList.contains('active') && user) {
+        loadMessages()
+      }
+    })
+    closeChat?.addEventListener('click', () => chatBox?.classList.remove('active'))
+    sendChat?.addEventListener('click', sendMessage)
+    chatInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage()
+    })
   }
 
-  // Load messages
-  async function loadMessages() {
-    if (!user) return;
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('email', user.email)
-      .order('created_at', { ascending: true });
+  // --- Realtime berichten ---
+  supabase
+    .channel('public:messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+      addMessage(payload.new)
+    })
+    .subscribe()
+})
 
-    if (error) { console.error(error); return; }
+// --- Berichten ophalen ---
+async function loadMessages() {
+  if (!user) return
+  const chatMessages = document.getElementById('chatMessages')
 
-    chatMessages.innerHTML = '';
-    if (data.length === 0) {
-      const emptyDiv = document.createElement('div');
-      emptyDiv.className = 'message bot';
-      emptyDiv.textContent = 'Nog geen berichten. Stuur een bericht om te starten!';
-      chatMessages.appendChild(emptyDiv);
-    } else data.forEach(addMessage);
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('email', user.email)
+    .order('created_at', { ascending: true })
 
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  if (error) {
+    console.error(error)
+    return
   }
 
-  function addMessage(msg) {
-    const div = document.createElement('div');
-    div.className = 'message ' + (msg.role==='user'?'user':'bot');
-    const textDiv = document.createElement('div');
-    textDiv.textContent = msg.message;
-    const timeDiv = document.createElement('div');
-    timeDiv.className = 'message-time';
-    timeDiv.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'});
-    div.appendChild(textDiv);
-    div.appendChild(timeDiv);
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  chatMessages.innerHTML = ''
+  if (data.length === 0) {
+    const emptyDiv = document.createElement('div')
+    emptyDiv.className = 'message bot'
+    emptyDiv.textContent = 'Nog geen berichten. Stuur een bericht om te starten!'
+    chatMessages.appendChild(emptyDiv)
+  } else {
+    data.forEach(addMessage)
+  }
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// --- Bericht tonen ---
+function addMessage(msg) {
+  const chatMessages = document.getElementById('chatMessages')
+  const div = document.createElement('div')
+  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
+
+  const messageText = document.createElement('div')
+  messageText.textContent = msg.message
+
+  const messageTime = document.createElement('div')
+  messageTime.className = 'message-time'
+  messageTime.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  div.appendChild(messageText)
+  div.appendChild(messageTime)
+  chatMessages.appendChild(div)
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// --- Bericht versturen ---
+async function sendMessage() {
+  const chatInput = document.getElementById('chatInput')
+  const chatMessages = document.getElementById('chatMessages')
+  const tekst = chatInput.value.trim()
+
+  if (!tekst) return
+
+  if (!user) {
+    const msgDiv = document.createElement('div')
+    msgDiv.className = 'message bot'
+    msgDiv.textContent = 'Je moet inloggen om te kunnen chatten! 😊'
+    chatMessages.appendChild(msgDiv)
+    chatMessages.scrollTop = chatMessages.scrollHeight
+    return
   }
 
-  async function sendMessage() {
-    const tekst = chatInput.value.trim();
-    if (!tekst) return;
+  const msgDiv = document.createElement('div')
+  msgDiv.className = 'message user'
+  msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
+  chatMessages.appendChild(msgDiv)
+  chatInput.value = ''
+  chatMessages.scrollTop = chatMessages.scrollHeight
 
-    if (!user) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className='message bot';
-      msgDiv.textContent='Je moet inloggen om te kunnen chatten! 😊';
-      chatMessages.appendChild(msgDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      return;
-    }
-
-    const msgDiv = document.createElement('div');
-    msgDiv.className='message user';
-    msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`;
-    chatMessages.appendChild(msgDiv);
-    chatInput.value='';
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    const { error } = await supabase.from('messages').insert([{
-      user_id:user.id,
-      email:user.email,
-      message:tekst,
-      role:'user',
-      created_at:new Date().toISOString()
-    }]);
-    if(error) console.error(error);
-
-    setTimeout(async()=>{
-      const replyDiv = document.createElement('div');
-      replyDiv.className='message bot';
-      replyDiv.textContent='Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
-      chatMessages.appendChild(replyDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      await supabase.from('messages').insert([{
-        user_id:user.id,
-        email:user.email,
-        message:'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊',
-        role:'bot',
-        created_at:new Date().toISOString()
-      }]);
-    },800);
+  const { error } = await supabase.from('messages').insert([
+    {
+      user_id: user.id,
+      email: user.email,
+      message: tekst,
+      role: 'user',
+      created_at: new Date().toISOString(),
+    },
+  ])
+  if (error) {
+    console.error('❌ Fout bij opslaan in Supabase:', error)
+    alert('Bericht kon niet worden opgeslagen.')
+    return
   }
 
-});
+  // const replyText = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
+  setTimeout(async () => {
+    const replyDiv = document.createElement('div')
+    replyDiv.className = 'message bot'
+    replyDiv.textContent = replyText
+    chatMessages.appendChild(replyDiv)
+    chatMessages.scrollTop = chatMessages.scrollHeight
+
+    await supabase.from('messages').insert([
+      {
+        user_id: user.id,
+        email: user.email,
+        message: replyText,
+        role: 'bot',
+        created_at: new Date().toISOString(),
+      },
+    ])
+  }, 800)
+}
 </script>
+
 
 </body>
 </html>

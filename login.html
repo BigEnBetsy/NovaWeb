@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NovaWeb - Login</title>
   <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
   <!-- Parallax sterrenlagen -->
   <div class="stars-deep" id="starsDeep"></div>
@@ -17,7 +19,7 @@
         onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
       <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
     </div>
-    
+
     <nav>
       <a href="index.html">Home</a>
       <a href="over-ons.html">Over ons</a>
@@ -26,33 +28,33 @@
       <a href="klantenProject.html">Mijn projecten</a>
     </nav>
 
-  <div class="header-buttons">
-    <a href="login.html" class="login-btn">Login</a>
-    <a href="contact.html" class="contact-btn">Contact us</a>
+    <div class="header-buttons">
+      <a href="login.html" class="login-btn">Login</a>
+      <a href="contact.html" class="contact-btn">Contact us</a>
 
-    <!-- Chat icoon geïntegreerd in de knopgroep -->
-    <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+      <!-- Chat icoon geïntegreerd in de knopgroep -->
+      <div class="chat-container">
+        <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+      </div>
     </div>
-  </div>
 
 
-  <!-- Chatvenster -->
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span>💬 Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
+    <!-- Chatvenster -->
+    <div class="chat-box" id="chatBox">
+      <div class="chat-header">
+        <span>💬 Chat met NovaWeb</span>
+        <button id="closeChat">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+        <button id="sendChat">Verstuur</button>
+      </div>
     </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
-    </div>
-  </div>
 
-      <div class="hamburger" id="hamburger">
+    <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
@@ -85,12 +87,12 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="input-container">
-                <input type="password" id="password" required>
-                <label for="password">Wachtwoord</label>
-              </div>
+            <div class="input-container password-container">
+              <input type="password" id="password" required>
+              <label for="password">Wachtwoord</label>
+              <button type="button" class="toggle-password" aria-label="Toon wachtwoord">🐵</button>
             </div>
+
 
             <button type="submit" class="login-submit-btn">
               <span class="btn-text">Inloggen</span>
@@ -105,7 +107,7 @@
 
           <!-- Wachtwoord vergeten link buiten form -->
           <div class="form-options">
-             <a href="resetww.html" class="forgot-password">Wachtwoord vergeten?</a>
+            <a href="resetww.html" class="forgot-password">Wachtwoord vergeten?</a>
           </div>
 
           <div class="login-divider">
@@ -127,7 +129,7 @@
           <div class="side-content">
             <h2>NovaWeb Platform</h2>
             <p>Beheer je projecten, bekijk statistieken en communiceer met ons team via ons beveiligde platform.</p>
-            
+
             <div class="features-list">
               <div class="feature-item">
                 <div class="feature-icon">🚀</div>
@@ -136,7 +138,7 @@
                   <p>Volg de voortgang van je website</p>
                 </div>
               </div>
-              
+
               <div class="feature-item">
                 <div class="feature-icon">📊</div>
                 <div class="feature-text">
@@ -144,7 +146,7 @@
                   <p>Bekijk real-time analytics</p>
                 </div>
               </div>
-              
+
               <div class="feature-item">
                 <div class="feature-icon">💬</div>
                 <div class="feature-text">
@@ -168,66 +170,77 @@
 
   <script type="module" src="home.js"></script>
 
-<script>
-const nav = document.getElementById('navMenu');
-const headerButtons = document.querySelector('.header-buttons');
-const chatBox = document.getElementById('chatBox');
-const chatToggle = document.getElementById('chatToggle');
-const closeChat = document.getElementById('closeChat');
+  <script>
+    const nav = document.getElementById('navMenu');
+    const headerButtons = document.querySelector('.header-buttons');
+    const chatBox = document.getElementById('chatBox');
+    const chatToggle = document.getElementById('chatToggle');
+    const closeChat = document.getElementById('closeChat');
 
-function moveHeaderButtonsToNav() {
-  // Verwijder oude clone als die er is
-  const oldClone = document.querySelector('.nav-header-buttons');
-  if (oldClone) oldClone.remove();
+    function moveHeaderButtonsToNav() {
+      // Verwijder oude clone als die er is
+      const oldClone = document.querySelector('.nav-header-buttons');
+      if (oldClone) oldClone.remove();
 
-  if (window.innerWidth <= 768) {
-    const clone = headerButtons.cloneNode(true);
-    clone.classList.add('nav-header-buttons');
+      if (window.innerWidth <= 768) {
+        const clone = headerButtons.cloneNode(true);
+        clone.classList.add('nav-header-buttons');
 
-    // Stijl voor mobiel
-    clone.style.display = 'flex';
-    clone.style.flexDirection = 'column';
-    clone.style.alignItems = 'center';
-    clone.style.gap = '10px';
-    clone.querySelectorAll('a, .chat-container').forEach(el => {
-      el.style.width = '80%';
-      el.style.textAlign = 'center';
-      el.style.margin = '5px 0';
+        // Stijl voor mobiel
+        clone.style.display = 'flex';
+        clone.style.flexDirection = 'column';
+        clone.style.alignItems = 'center';
+        clone.style.gap = '10px';
+        clone.querySelectorAll('a, .chat-container').forEach(el => {
+          el.style.width = '80%';
+          el.style.textAlign = 'center';
+          el.style.margin = '5px 0';
+        });
+
+        nav.appendChild(clone);
+
+        // Voeg chat functionaliteit opnieuw toe voor gekloonde knop
+        const clonedChat = clone.querySelector('.chat-container');
+        if (clonedChat) {
+          clonedChat.addEventListener('click', () => {
+            chatBox.classList.toggle('active');
+          });
+        }
+      }
+    }
+
+    // Bij laden en resize
+    window.addEventListener('DOMContentLoaded', moveHeaderButtonsToNav);
+    window.addEventListener('resize', moveHeaderButtonsToNav);
+
+    // Hamburger menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('active');
     });
 
-    nav.appendChild(clone);
+    // Sluit chat knop
+    closeChat.addEventListener('click', () => {
+      chatBox.classList.remove('active');
+    });
 
-    // Voeg chat functionaliteit opnieuw toe voor gekloonde knop
-    const clonedChat = clone.querySelector('.chat-container');
-    if (clonedChat) {
-      clonedChat.addEventListener('click', () => {
-        chatBox.classList.toggle('active');
-      });
-    }
-  }
-}
+    // Event listener voor originele chat knop (desktop)
+    chatToggle.addEventListener('click', () => {
+      chatBox.classList.toggle('active');
+    });
 
-// Bij laden en resize
-window.addEventListener('DOMContentLoaded', moveHeaderButtonsToNav);
-window.addEventListener('resize', moveHeaderButtonsToNav);
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
 
-// Hamburger menu toggle
-const hamburger = document.querySelector('.hamburger');
-hamburger.addEventListener('click', () => {
-  nav.classList.toggle('active');
-});
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
 
-// Sluit chat knop
-closeChat.addEventListener('click', () => {
-  chatBox.classList.remove('active');
-});
+      // Optioneel: wissel het icoon tussen open en gesloten oog
+      togglePassword.textContent = type === 'password' ? '🐵 ' : '🙈';
+    });
 
-// Event listener voor originele chat knop (desktop)
-chatToggle.addEventListener('click', () => {
-  chatBox.classList.toggle('active');
-});
-
-
-</script>
+  </script>
 </body>
+
 </html>

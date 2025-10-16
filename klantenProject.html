@@ -10,703 +10,364 @@
         /* Import basis stijlen */
         @import url('home.css');
 
-        /* Verberg scrollbar maar behoud scroll functionaliteit */
-        html {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            scroll-behavior: smooth;
-        }
-
-        html::-webkit-scrollbar {
-            display: none;
-        }
-
-        body {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            overflow-x: hidden;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: url('Fotos/wp3.jpg') no-repeat center center fixed !important;
-            background-size: cover !important;
-        }
-
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* HEADER FIX */
-        body header {
-            transition: transform 0.3s ease !important;
-        }
-
-        body header.hide {
-            transform: translateY(-100%) !important;
-        }
-
-        /* PROJECTEN SECTIE STYLING */
-        .mijn-projecten {
-            padding: 120px 20px 50px;
-            min-height: 100vh;
-            position: relative;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .mijn-projecten h2 {
-            text-align: center;
-            font-size: 3.5rem;
-            margin-bottom: 60px;
-            background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .mijn-projecten h2::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(45deg, #ffd60a, #ffed4e);
-            border-radius: 2px;
-        }
-
-        @keyframes gradientShift {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        /* PROJECT CARDS GRID */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .project-card:hover::before {
-            left: 100%;
-        }
-
-        .project-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 214, 10, 0.3);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 214, 10, 0.15);
-        }
-
-        .project-card h3 {
-            color: #ffd60a;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .project-card p {
-            margin-bottom: 20px;
-            opacity: 0.9;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #ffd60a;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 10px 0;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid transparent;
-            margin-bottom: 15px;
-            align-self: flex-start;
-        }
-
-        .project-link:hover {
-            color: #ffed4e;
-            border-bottom: 1px solid #ffed4e;
-            transform: translateX(5px);
-        }
-
-        .project-link::after {
-            content: '↗';
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .project-link:hover::after {
-            transform: translate(3px, -3px);
-        }
-
-        .project-date {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* EMPTY STATE */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .empty-state h3 {
-            color: #ffd60a;
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-
-        .empty-state p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-        }
-
-        .add-project-btn {
-            background: linear-gradient(45deg, #ffd60a, #ffed4e);
-            color: #0d3b66;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .add-project-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 214, 10, 0.3);
-        }
-
-        /* LOADING STATE */
-        .loading-state {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffd60a;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ERROR STATE */
-        .error-state {
-            text-align: center;
-            padding: 40px;
-            background: rgba(255, 0, 0, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .error-state h3 {
-            color: #ff6b6b;
-            margin-bottom: 15px;
-        }
-
-        /* RESPONSIVE DESIGN */
-        @media (max-width: 1024px) {
-            .mijn-projecten h2 {
-                font-size: 3rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            }
-        }
-
-        @media (max-width: 768px) {
-            .mijn-projecten {
-                padding: 100px 15px 30px;
-            }
-
-            .mijn-projecten h2 {
-                font-size: 2.5rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .project-card {
-                padding: 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .mijn-projecten {
-                padding: 80px 10px 20px;
-            }
-
-            .mijn-projecten h2 {
-                font-size: 2rem;
-            }
-
-            .project-card {
-                padding: 20px;
-            }
-        }
-
-        /* DEBUG: Forceer header hide */
-        html body header.hide {
-            transform: translateY(-100%) !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        .stars-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('Fotos/achtergrondWS2.jpg');
-            background-repeat: repeat;
-            background-size: 400px 400px;
-            z-index: -2;
-            pointer-events: none;
-            animation: moveStars 150s linear infinite;
-        }
-
-        .stars-deep {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('Fotos/achtergrondWS2.jpg');
-            background-repeat: repeat;
-            background-size: 600px 600px;
-            z-index: -3;
-            pointer-events: none;
-            animation: moveStarsSlow 200s linear infinite;
-            opacity: 0.8;
-        }
-
-        .glass-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .glass-popup {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            backdrop-filter: blur(25px);
-            padding: 40px 60px;
-            text-align: center;
-            color: #fff;
-            max-width: 420px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: popupAppear 0.4s ease-out forwards;
-        }
-
-        .glass-popup h3 {
-            font-size: 1.8rem;
-            color: #ffd60a;
-            margin-bottom: 15px;
-        }
-
-        .glass-popup p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .glass-popup .small {
-            font-size: 0.9rem;
-            margin-top: 15px;
-            opacity: 0.7;
-        }
-
-        .chat-box {
-            z-index: 2000;
-            /* hoger dan glass-overlay (1000) */
-        }
-
-        .glass-overlay {
-            pointer-events: auto;
-        }
-
-        .glass-overlay>.glass-popup {
-            pointer-events: auto;
-        }
-
-
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes popupAppear {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .go-back-btn {
-            margin-top: 25px;
-            background: linear-gradient(45deg, #ffd60a, #ffed4e);
-            color: #0d3b66;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .go-back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(255, 214, 10, 0.3);
-        }
-
-        .chat-box.active {
-            display: block;
-        }
-
-        /* Overlay */
-        .glass-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .glass-popup {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            backdrop-filter: blur(25px);
-            padding: 40px 60px;
-            text-align: center;
-            color: #fff;
-            max-width: 420px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: popupAppear 0.4s ease-out forwards;
-        }
-
-        /* Knoppen */
-        .go-back-btn,
-        .add-project-btn {
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-
-        .chat-box {
-            display: none;
-            /* standaard verborgen */
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            max-width: 90%;
-
-            border-radius: 15px;
-
-            z-index: 2000;
-            /* altijd boven overlays */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            transform: scale(0.8);
-            opacity: 0;
-        }
-
-        .chat-box.active {
-            display: flex;
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        /* Header van de chat */
-        .chat-header {
-            background: linear-gradient(90deg, #ffd60a, #ffed4e);
-
-            font-weight: bold;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header button {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-
-            font-weight: bold;
-        }
-
-        /* Chat messages scrollbaar */
-        .chat-messages {
-            flex-grow: 1;
-            padding: 12px 16px;
-            overflow-y: auto;
-
-        }
-
-        .message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            max-width: 85%;
-            word-wrap: break-word;
-        }
-
-        .message.bot {
-
-            color: #fff;
-            align-self: flex-start;
-        }
-
-        .message.user {
-
-            color: #fff;
-            align-self: flex-end;
-        }
-
-        /* Input area */
-        .chat-input-area {
-            display: flex;
-            padding: 10px 12px;
-
-        }
-
-        .chat-input-area input {
-            flex-grow: 1;
-            padding: 8px 12px;
-            border-radius: 50px;
-            border: none;
-            outline: none;
-
-        }
-
-        .chat-input-area button {
-            margin-left: 10px;
-            padding: 8px 16px;
-            border-radius: 50px;
-            border: none;
-
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .chat-input-area button:hover {
-            transform: translateY(-2px);
-        }
-
-
-
-
-        /* Project cards */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card {
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-
-        /* Responsive aanpassingen */
-        @media (max-width: 768px) {
-            .header-buttons {
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-                align-items: center;
-                margin-top: 15px;
-            }
-
-            .login-btn {
-                margin-left: 0;
-                width: 100%;
-                text-align: center;
-                order: -1;
-                /* Zet login knop bovenaan op mobiel */
-            }
-
-            .contact-btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
-
-
-        @media (max-width: 768px) {
-
-            .logo,
-            .logo-img,
-            .logo-fallback {
-                display: none;
-            }
-
-            /* Hamburger menu links uitlijnen */
-            nav {
-                left: 0;
-                right: auto;
-                transform: translateX(-100%);
-                align-items: flex-start;
-                /* Links uitlijnen */
-                padding-left: 20px;
-                /* Ruimte van links */
-            }
-
-            nav.active {
-                transform: translateX(0);
-            }
-
-            /* Voeg login en contact knoppen toe aan menu */
-            nav::after {
-                content: '';
-                display: block;
-                height: 0;
-            }
-
-            /* Specifiek: de knoppen verplaatsen naar nav */
-            nav a.login-btn,
-            nav a.contact-btn {
-                display: block;
-                width: 100%;
-                margin: 10px 0;
-                text-align: left;
-                padding-left: 10px;
-                border-bottom: 1px solid rgba(255, 214, 10, 0.2);
-            }
-
-            /* Verberg oude header-buttons */
-            .header-buttons {
-                display: none;
-            }
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 22px;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background: #ffd60a;
-            border-radius: 2px;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-                /* Nu zichtbaar op mobiel */
-            }
-        }
+/* ===== ALGEMENE STIJLEN ===== */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow-x: hidden;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: url('Fotos/wp3.jpg') no-repeat center center fixed !important;
+  background-size: cover !important;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* HEADER FIX */
+body header {
+  transition: transform 0.3s ease !important;
+}
+
+body header.hide {
+  transform: translateY(-100%) !important;
+}
+
+/* PROJECTEN SECTIE STYLING */
+.mijn-projecten {
+  padding: 120px 20px 50px;
+  min-height: 100vh;
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mijn-projecten h2 {
+  text-align: center;
+  font-size: 3.5rem;
+  margin-bottom: 60px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+  font-weight: 800;
+  position: relative;
+}
+
+.mijn-projecten h2::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(45deg, #ffd60a, #ffed4e);
+  border-radius: 2px;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* PROJECT CARDS GRID */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.project-card:hover::before {
+  left: 100%;
+}
+
+.project-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 214, 10, 0.3);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255, 214, 10, 0.15);
+}
+
+.project-card h3 {
+  color: #ffd60a;
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.project-card p {
+  margin-bottom: 20px;
+  opacity: 0.9;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffd60a;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 15px;
+  align-self: flex-start;
+}
+
+.project-link:hover {
+  color: #ffed4e;
+  border-bottom: 1px solid #ffed4e;
+  transform: translateX(5px);
+}
+
+.project-link::after {
+  content: '↗';
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.project-link:hover::after {
+  transform: translate(3px, -3px);
+}
+
+.project-date {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.empty-state h3 {
+  color: #ffd60a;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.empty-state p {
+  opacity: 0.9;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.add-project-btn {
+  background: linear-gradient(45deg, #ffd60a, #ffed4e);
+  color: #0d3b66;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.add-project-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255, 214, 10, 0.3);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .mijn-projecten h2 { font-size: 3rem; }
+  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .mijn-projecten { padding: 100px 15px 30px; }
+  .mijn-projecten h2 { font-size: 2.5rem; }
+  .projects-grid { grid-template-columns: 1fr; gap: 20px; }
+  .project-card { padding: 25px; }
+}
+
+@media (max-width: 480px) {
+  .mijn-projecten { padding: 80px 10px 20px; }
+  .mijn-projecten h2 { font-size: 2rem; }
+  .project-card { padding: 20px; }
+}
+
+/* ===== CHATWIDGET ===== */
+.chat-container {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.chat-icon {
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.chat-icon:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.chat-box {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  background: #929292; /* donkergrijs voor de hele box */
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(120%);
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+
+.chat-box.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.chat-header {
+  background: #0d3b66;
+  color: white;
+  font-weight: bold;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: #a4a4a4; /* lichte grijs voor berichtenlijst */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-size: 0.95rem;
+}
+
+/* Ontvangen berichten (van gebruiker) */
+.message.bot {
+  background: #5794d2; /* blauw */
+  color: white;
+  align-self: flex-start;
+}
+
+/* Verzonden berichten (van agent/jij) */
+.message.user {
+  background: #ffd60a; /* geel */
+  color: #0d3b66; /* donkerblauw */
+  align-self: flex-end;
+}
+
+/* Input area */
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.chat-input-area input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  background: #dbdbdb;
+  color: #000;
+}
+
+.chat-input-area button {
+  background: #ffd60a;
+  border: none;
+  color: #0d3b66;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-left: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.chat-input-area button:hover {
+  background: #ffed4e;
+}
+
     </style>
 </head>
 
@@ -739,29 +400,27 @@
             <div class="chat-container">
                 <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
             </div>
-        </div>
+
+            <div class="chat-box" id="chatBox">
+                <div class="chat-header">
+                    <span>💬 Chat met NovaWeb</span>
+                    <button id="closeChat">×</button>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Typ een bericht..." />
+                    <button id="sendChat">Verstuur</button>
+                </div>
+            </div>
 
 
-        <!-- Chatvenster -->
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                <span>💬 Chat met NovaWeb</span>
-                <button id="closeChat">×</button>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-                <button id="sendChat">Verstuur</button>
-            </div>
-        </div>
-
-        <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
 
     </header>
     <section class="mijn-projecten">
@@ -774,204 +433,205 @@
         </div>
     </section>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-        // --- Supabase Config ---
-        const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
-        const supabase = createClient(supabaseUrl, supabaseKey)
+// --- Supabase Config ---
+const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-        // --- HTML Elements ---
-        const projectList = document.getElementById('project-list')
-        const loginBtn = document.querySelector('.login-btn')
-        const logoutBtn = document.querySelector('.logout-btn')
-        const chatToggle = document.getElementById('chatToggle')
-        const chatBox = document.getElementById('chatBox')
-        const closeChat = document.getElementById('closeChat')
-        const chatInput = document.getElementById('chatInput')
-        const sendChat = document.getElementById('sendChat')
-        const chatMessages = document.getElementById('chatMessages')
+// --- HTML Elements ---
+const chatToggle = document.getElementById('chatToggle')
+const chatBox = document.getElementById('chatBox')
+const closeChat = document.getElementById('closeChat')
+const chatInput = document.getElementById('chatInput')
+const sendChat = document.getElementById('sendChat')
+const chatMessages = document.getElementById('chatMessages')
+const loginBtn = document.querySelector('.login-btn')
+const logoutBtn = document.querySelector('.logout-btn')
+const projectList = document.getElementById('project-list')
+const hamburger = document.querySelector('.hamburger')
+const nav = document.querySelector('nav')
 
-        let user = null
+let user = null
 
-        // --- Chat functies ---
-        function initChat() {
-            if (!chatToggle || !chatBox || !closeChat || !sendChat || !chatInput || !chatMessages) return
+// ------------------ CHAT ------------------ //
+function initChat() {
+  const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com']
 
-            chatBox.classList.remove('active')
+  chatToggle.addEventListener('click', async () => {
+    if (!user) {
+      alert('Je moet inloggen om te chatten!')
+      return
+    }
 
-            // Admin emails
-            const adminEmails = ['gallerstef@gmail.com', 'robinb@gmail.com']
+    if (adminEmails.includes(user.email)) {
+      window.location.href = 'admin.html'
+      return
+    }
 
-            chatToggle.addEventListener('click', () => {
-                if (user && adminEmails.includes(user.email)) {
-                    window.location.href = 'admin.html'
-                } else {
-                    chatBox.classList.toggle('active')
-                }
-            })
+    chatBox.classList.toggle('active')
 
-            closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
-            sendChat.addEventListener('click', sendMessage)
-            chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
-        }
+    if (chatBox.classList.contains('active')) {
+      await loadChatHistory()
+    }
+  })
 
-        async function sendMessage() {
-            const tekst = chatInput.value.trim()
-            if (!tekst) return
+  closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
+  sendChat.addEventListener('click', sendMessage)
+  chatInput.addEventListener('keypress', e => e.key === 'Enter' && sendMessage())
+}
 
-            if (!user) {
-                alert('Je moet inloggen om te chatten!')
-                return
-            }
+// Laad oude berichten en toon ze
+async function loadChatHistory() {
+  chatMessages.innerHTML = ''
+  const { data: messages, error } = await supabase
+    .from('messages')
+    .select('*')
+    .order('created_at', { ascending: true })
 
-            // Bericht van gebruiker tonen
-            const msgDiv = document.createElement('div')
-            msgDiv.className = 'message user'
-            msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
-            chatMessages.appendChild(msgDiv)
-            chatInput.value = ''
-            chatMessages.scrollTop = chatMessages.scrollHeight
+  if (error) {
+    console.error('Fout bij laden chatgeschiedenis:', error)
+    appendMessage('bot', '⚠️ Er ging iets mis bij het laden van de chat.')
+    return
+  }
 
-            // Bericht opslaan in Supabase (messages tabel)
-            const { error } = await supabase
-                .from('messages')
-                .insert([{
-                    user_id: user.id,
-                    email: user.email,
-                    message: tekst,
-                    role: 'user'
-                }])
+  if (!messages || messages.length === 0) {
+    appendMessage('bot', 'Hoi! Hoe kunnen we je helpen vandaag? 😊')
+    return
+  }
 
-            if (error) {
-                console.error('Fout bij opslaan in Supabase:', error)
-                alert('Bericht kon niet worden opgeslagen.')
-                return
-            }
+  messages.forEach(msg => {
+    const role = msg.user_id === user?.id ? 'user' : msg.role || 'bot'
+    appendMessage(role, `${msg.email}: ${msg.message}`)
+  })
 
-            // Simpele automatische reactie
-            setTimeout(() => {
-                const reply = document.createElement('div')
-                reply.className = 'message bot'
-                reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
-                chatMessages.appendChild(reply)
-                chatMessages.scrollTop = chatMessages.scrollHeight
-            }, 800)
-        }
+  scrollChatToBottom()
+}
+
+// Verstuur bericht
+async function sendMessage() {
+  const tekst = chatInput.value.trim()
+  if (!tekst) return
+  if (!user) return alert('Je moet inloggen om te chatten!')
+
+  appendMessage('user', `${user.email}: ${tekst}`)
+  chatInput.value = ''
+  scrollChatToBottom()
+
+  const { error } = await supabase.from('messages').insert([
+    { user_id: user.id, email: user.email, message: tekst, role: 'user' }
+  ])
+  if (error) console.error('Supabase fout:', error)
+}
+
+// Voeg bericht toe aan de chatbox
+function appendMessage(role, text) {
+  const msg = document.createElement('div')
+  msg.className = `message ${role}`
+  msg.textContent = text
+  chatMessages.appendChild(msg)
+}
+
+// Scroll naar onder
+function scrollChatToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight
+}
+
+// ------------------ LOGIN + HEADER ------------------ //
+async function checkLogin() {
+  const { data: { session } } = await supabase.auth.getSession()
+  user = session?.user ?? null
+  return session
+}
+
+function updateHeader(session) {
+  if (session) {
+    loginBtn.innerText = 'Account'
+    loginBtn.href = 'account.html'
+  } else {
+    loginBtn.innerText = 'Login'
+    loginBtn.href = 'login.html'
+  }
+}
+
+function initLogout() {
+  logoutBtn.addEventListener('click', async e => {
+    e.preventDefault()
+    const { error } = await supabase.auth.signOut()
+    if (error) alert('Uitloggen mislukt.')
+    else window.location.href = 'login.html'
+  })
+}
+
+// ------------------ PROJECTEN ------------------ //
+async function loadProjects(userId) {
+  if (!userId) {
+    projectList.innerHTML = `
+      <div class="empty-state">
+        <h3>Nog geen projecten</h3>
+        <p>Log in om je projecten te bekijken.</p>
+      </div>`
+    return
+  }
+
+  const { data: projects, error } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    projectList.innerHTML = `<div class="error-state"><h3>Er ging iets mis</h3><p>${error.message}</p></div>`
+    return
+  }
+
+  if (!projects || projects.length === 0) {
+    projectList.innerHTML = `<div class="empty-state"><h3>Nog geen projecten</h3></div>`
+    return
+  }
+
+  projectList.innerHTML = `
+    <div class="projects-grid">
+      ${projects.map(p => `
+        <div class="project-card">
+          <h3>${p.title}</h3>
+          <p>${p.description || 'Geen beschrijving.'}</p>
+          ${p.link ? `<a href="${p.link}" class="project-link" target="_blank">Bekijk Project</a>` : ''}
+          <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
+        </div>`).join('')}
+    </div>`
+}
+
+// ------------------ INITIALISATIE ------------------ //
+window.addEventListener('load', async () => {
+  initChat()
+  const session = await checkLogin()
+  updateHeader(session)
+  initLogout()
+  loadProjects(session?.user?.id)
+
+  // Realtime chat updates voor alle nieuwe berichten
+  supabase
+    .channel('public:messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+      const msg = payload.new
+      // Toon berichten van iedereen, onderscheid bot/user
+      const role = msg.user_id === user?.id ? 'user' : msg.role || 'bot'
+      appendMessage(role, `${msg.email}: ${msg.message}`)
+      scrollChatToBottom()
+    })
+    .subscribe()
+})
+
+// ------------------ HAMBURGER MENU ------------------ //
+hamburger.addEventListener('click', () => nav.classList.toggle('active'))
 
 
-        // --- Header functies ---
-        async function checkLogin() {
-            const { data: { session } } = await supabase.auth.getSession()
-            user = session?.user ?? null
-            return session
-        }
+</script>
 
-        function updateHeader(session) {
-            if (!loginBtn) return
-            if (session) {
-                loginBtn.innerText = 'Account'
-                loginBtn.href = 'account.html'
-            } else {
-                loginBtn.innerText = 'Login'
-                loginBtn.href = 'login.html'
-            }
-        }
 
-        function initLogout() {
-            if (!logoutBtn) return
-            logoutBtn.addEventListener('click', async (e) => {
-                e.preventDefault()
-                const { error } = await supabase.auth.signOut()
-                if (error) alert(`Uitloggen mislukt: ${error.message}`)
-                else window.location.href = 'login.html'
-            })
-        }
-
-        // --- Projecten functies ---
-        async function loadProjects(userId) {
-            if (!userId) {
-                // Niet ingelogd → toon empty state
-                projectList.innerHTML = `
-            <div class="empty-state">
-                <h3>Nog geen projecten</h3>
-                <p>Log in om je projecten te bekijken.</p>
-            </div>
-        `
-                return
-            }
-
-            const { data: projects, error } = await supabase
-                .from('projects')
-                .select('*')
-                .eq('user_id', userId)
-                .order('created_at', { ascending: false })
-
-            if (error) return showError(error.message)
-
-            if (!projects || projects.length === 0) {
-                projectList.innerHTML = `<div class="empty-state"><h3>Nog geen projecten</h3></div>`
-                return
-            }
-
-            projectList.innerHTML = `
-        <div class="projects-grid">
-        ${projects.map(p => `
-            <div class="project-card">
-                <h3>${p.title}</h3>
-                <p>${p.description || 'Geen beschrijving opgegeven.'}</p>
-                ${p.link ? `<a href="${p.link}" class="project-link" target="_blank">Bekijk Project</a>` : ''}
-                <div class="project-date">Aangemaakt op: ${new Date(p.created_at).toLocaleDateString('nl-NL')}</div>
-            </div>`).join('')}
-        </div>
-    `
-        }
-
-        function showError(message) {
-            projectList.innerHTML = `
-        <div class="error-state">
-            <h3>Er is een fout opgetreden</h3>
-            <p>${message}</p>
-        </div>
-    `
-        }
-
-        // --- Initialisatie bij window load ---
-        window.addEventListener('load', async () => {
-            initChat()
-
-            const session = await checkLogin()
-            updateHeader(session)
-            initLogout()
-
-            if (typeof ShootingStars !== 'undefined') new ShootingStars()
-
-            // Laad projecten, toont empty state als niet ingelogd
-            loadProjects(session?.user?.id)
-
-            supabase
-                .channel('realtime-messages')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
-                    if (payload.new.role === 'bot') {
-                        const reply = document.createElement('div')
-                        reply.className = 'message bot'
-                        reply.textContent = payload.new.message
-                        chatMessages.appendChild(reply)
-                    }
-                })
-                .subscribe()
-
-        })
-
-        const hamburger = document.querySelector('.hamburger');
-        const nav = document.querySelector('nav');
-
-        hamburger.addEventListener('click', () => {
-            nav.classList.toggle('active');
-        });
-
-    </script>
 
 </body>
 
