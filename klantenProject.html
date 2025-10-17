@@ -467,6 +467,7 @@ function initChat() {
     }
 
     if (adminEmails.includes(user.email)) {
+      // Admin wordt doorgestuurd naar adminpagina
       window.location.href = 'admin.html'
       return
     }
@@ -486,10 +487,14 @@ function initChat() {
 // Laad oude berichten en toon ze
 async function loadChatHistory() {
   chatMessages.innerHTML = ''
-  const { data: messages, error } = await supabase
-    .from('messages')
-    .select('*')
-    .order('created_at', { ascending: true })
+  if (!user) return
+
+  const isAdmin = ['gallerstef@gmail.com', 'robinb@gmail.com'].includes(user.email)
+
+  let query = supabase.from('messages').select('*').order('created_at', { ascending: true })
+  if (!isAdmin) query = query.eq('user_id', user.id)
+
+  const { data: messages, error } = await query
 
   if (error) {
     console.error('Fout bij laden chatgeschiedenis:', error)
@@ -612,12 +617,17 @@ window.addEventListener('load', async () => {
   initLogout()
   loadProjects(session?.user?.id)
 
-  // Realtime chat updates voor alle nieuwe berichten
+  // Realtime chat updates voor alleen eigen berichten (of alle voor admin)
+  const isAdmin = ['gallerstef@gmail.com', 'robinb@gmail.com'].includes(session?.user?.email)
+
   supabase
     .channel('public:messages')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
       const msg = payload.new
-      // Toon berichten van iedereen, onderscheid bot/user
+
+      // 🔥 Alleen eigen berichten tonen, tenzij admin
+      if (!isAdmin && msg.user_id !== user?.id) return
+
       const role = msg.user_id === user?.id ? 'user' : msg.role || 'bot'
       appendMessage(role, `${msg.email}: ${msg.message}`)
       scrollChatToBottom()
@@ -627,9 +637,8 @@ window.addEventListener('load', async () => {
 
 // ------------------ HAMBURGER MENU ------------------ //
 hamburger.addEventListener('click', () => nav.classList.toggle('active'))
-
-
 </script>
+
 
 
 

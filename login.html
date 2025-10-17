@@ -7,6 +7,26 @@
   <title>NovaWeb - Login</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+
+  <script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  const supabase = createClient(
+    'https://fmrvruyofieuhxmmrbux.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+  )
+
+  // Google login knop
+  window.googleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: 'https://bigenbetsy.github.io/NovaWeb/klantenProject.html' } // pas URL aan naar jouw domein
+    })
+    if (error) console.error(error)
+  }
+</script>
+
+
   <link rel="stylesheet" href="login.css">
 </head>
 
@@ -117,7 +137,8 @@
           </div>
 
           <div class="social-login">
-            <div id="googleSignInDiv" class="social-btn google-btn"></div>
+            <button onclick="googleLogin()" class="social-btn google-btn">Log in met Google</button>
+
 
           </div>
 
