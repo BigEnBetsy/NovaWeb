@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NovaWeb - Login</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <link rel="stylesheet" href="login.css">
 </head>
 
@@ -115,7 +117,8 @@
           </div>
 
           <div class="social-login">
-            <button type="button" class="social-btn google-btn">Doorgaan met Google</button>
+            <div id="googleSignInDiv" class="social-btn google-btn"></div>
+
             <button type="button" class="social-btn github-btn">Doorgaan met GitHub</button>
           </div>
 
@@ -239,6 +242,41 @@
       // Optioneel: wissel het icoon tussen open en gesloten oog
       togglePassword.textContent = type === 'password' ? '🐵 ' : '🙈';
     });
+
+
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "605148728037-jc61t4rv1km9d1s40iqd2sdrltiqu4o6.apps.googleusercontent.com", // <-- vul hier jouw client ID in
+      callback: handleCredentialResponse
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("googleSignInDiv"),
+      {
+        theme: "outline",
+        size: "large",
+        width: "100%"
+      }
+    );
+
+    google.accounts.id.prompt(); // eventueel popup tonen
+  };
+
+  function handleCredentialResponse(response) {
+    // Google stuurt een JWT token
+    console.log("Google JWT:", response.credential);
+
+    // Hier kun je het token naar je backend sturen voor verificatie:
+    // fetch("/auth/google", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ credential: response.credential })
+    // })
+
+    alert("Succesvol ingelogd met Google! 🎉");
+  }
+
+
 
   </script>
 </body>

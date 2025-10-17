@@ -7,7 +7,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 // --- Lijst met toegestane admin emails ---
-const allowedAdmins = ['admin1@example.com', 'admin2@example.com']
+const allowedAdmins = ['gallerstef@gmail.com', 'robin.com']
 
 // --- Check toegang tot admin pagina ---
 async function checkAdminAccess() {
