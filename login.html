@@ -119,7 +119,6 @@
           <div class="social-login">
             <div id="googleSignInDiv" class="social-btn google-btn"></div>
 
-            <button type="button" class="social-btn github-btn">Doorgaan met GitHub</button>
           </div>
 
           <div class="register-link">
@@ -262,19 +261,45 @@
     google.accounts.id.prompt(); // eventueel popup tonen
   };
 
+
   function handleCredentialResponse(response) {
-    // Google stuurt een JWT token
-    console.log("Google JWT:", response.credential);
+    const data = parseJwt(response.credential);
+    console.log("Google data:", data);
 
-    // Hier kun je het token naar je backend sturen voor verificatie:
-    // fetch("/auth/google", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ credential: response.credential })
-    // })
+    // Toon gebruiker op de website (of sla op in localStorage)
+    localStorage.setItem("user", JSON.stringify(data));
 
-    alert("Succesvol ingelogd met Google! 🎉");
+    alert(`Welkom ${data.name}! 👋`);
+
+    // Redirect naar bv. de projectenpagina
+    window.location.href = "klantenProject.html";
   }
+
+  function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  }
+fetch("/auth/google", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ credential: response.credential })
+})
+  .then(res => res.json())
+  .then(data => {
+    // Server bevestigt login
+    localStorage.setItem("user", JSON.stringify(data.user));
+    window.location.href = "klantenProject.html";
+  })
+  .catch(err => console.error("Login fout:", err));
+
+
 
 
 
