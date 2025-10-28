@@ -63,6 +63,7 @@
 </header>
 
 <main>
+
   <section id="hero" class="hero">
     <div class="hero-content">
       <h1>NovaWeb <span class="highlight">Studenten</span> Webdesign</h1>
@@ -92,29 +93,27 @@
     </div>
   </section>
 </main>
-
-
+   
+ 
 
 
 <script type="module" src="home.js"></script>
 
 <script>
 const nav = document.getElementById('navMenu');
-const headerButtons = document.querySelector('.header-buttons');
+const hamburger = document.getElementById('hamburger');
 const chatBox = document.getElementById('chatBox');
 const chatToggle = document.getElementById('chatToggle');
 const closeChat = document.getElementById('closeChat');
+const headerButtons = document.querySelector('.header-buttons');
 
 function moveHeaderButtonsToNav() {
-  // Verwijder oude clone als die er is
   const oldClone = document.querySelector('.nav-header-buttons');
   if (oldClone) oldClone.remove();
 
   if (window.innerWidth <= 768) {
     const clone = headerButtons.cloneNode(true);
     clone.classList.add('nav-header-buttons');
-
-    // Stijl voor mobiel
     clone.style.display = 'flex';
     clone.style.flexDirection = 'column';
     clone.style.alignItems = 'center';
@@ -124,14 +123,14 @@ function moveHeaderButtonsToNav() {
       el.style.textAlign = 'center';
       el.style.margin = '5px 0';
     });
-
     nav.appendChild(clone);
 
-    // Voeg chat functionaliteit opnieuw toe voor gekloonde knop
     const clonedChat = clone.querySelector('.chat-container');
     if (clonedChat) {
       clonedChat.addEventListener('click', () => {
         chatBox.classList.toggle('active');
+        nav.classList.remove('active');
+        hamburger.classList.remove('active');
       });
     }
   }
@@ -142,8 +141,8 @@ window.addEventListener('DOMContentLoaded', moveHeaderButtonsToNav);
 window.addEventListener('resize', moveHeaderButtonsToNav);
 
 // Hamburger menu toggle
-const hamburger = document.querySelector('.hamburger');
 hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
   nav.classList.toggle('active');
 });
 
@@ -152,13 +151,22 @@ closeChat.addEventListener('click', () => {
   chatBox.classList.remove('active');
 });
 
+// Sluit menu bij klik op link
+nav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+  });
+});
+
 // Event listener voor originele chat knop (desktop)
 chatToggle.addEventListener('click', () => {
   chatBox.classList.toggle('active');
+  nav.classList.remove('active');
+  hamburger.classList.remove('active');
 });
-
-
 </script>
+
 
 </body>
 </html>

@@ -427,55 +427,38 @@
   </main>
 
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
-const supabase = createClient(supabaseUrl, supabaseKey);
-let user = null;
+  const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  let user = null;
 
-const nav = document.getElementById('navMenu');
-const hamburger = document.getElementById('hamburger');
-const chatBox = document.getElementById('chatBox');
-const chatToggle = document.getElementById('chatToggle');
-const closeChat = document.getElementById('closeChat');
-const headerButtons = document.querySelector('.header-buttons');
-const loginBtn = document.querySelector('.login-btn');
+  const nav = document.getElementById('navMenu');
+  const hamburger = document.getElementById('hamburger');
+  const chatBox = document.getElementById('chatBox');
+  const chatToggle = document.getElementById('chatToggle');
+  const closeChat = document.getElementById('closeChat');
+  const headerButtons = document.querySelector('.header-buttons');
+  const loginBtn = document.querySelector('.login-btn');
 
-// === Update zowel originele als gekloonde knoppen ===
-function updateLoginButtons() {
-  const loginButtons = document.querySelectorAll('.login-btn');
-  loginButtons.forEach(btn => {
-    if (user) {
-      btn.innerText = 'Account';
-      btn.href = 'account.html';
-    } else {
-      btn.innerText = 'Login';
-      btn.href = 'login.html';
-    }
-  });
-}
+  // === Verplaats knoppen naar mobiel menu (van LINKS) ===
+  function moveHeaderButtonsToNav() {
+    const old = document.querySelector('.nav-header-buttons');
+    if (old) old.remove();
+    if (window.innerWidth > 768) return;
 
-// === Verplaats knoppen naar mobiel menu ===
-function moveHeaderButtonsToNav() {
-  const old = document.querySelector('.nav-header-buttons');
-  if (old) old.remove();
-  if (window.innerWidth > 768) return;
+    const clone = headerButtons.cloneNode(true);
+    clone.classList.add('nav-header-buttons');
+    clone.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:20px;width:100%';
+    clone.querySelectorAll('a, .chat-container').forEach(el => {
+      el.style.cssText = 'width:80%;text-align:center;margin:5px 0';
+    });
+    nav.appendChild(clone);
 
-  const clone = headerButtons.cloneNode(true);
-  clone.classList.add('nav-header-buttons');
-  clone.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:20px;width:100%';
-  clone.querySelectorAll('a, .chat-container').forEach(el => {
-    el.style.cssText = 'width:80%;text-align:center;margin:5px 0';
-  });
-  nav.appendChild(clone);
-
-  // Voeg event listener toe aan de gekloonde chat-knop
-  const clonedChat = clone.querySelector('.chat-container');
-  if (clonedChat) {
-    const clonedChatIcon = clonedChat.querySelector('.chat-icon');
-    if (clonedChatIcon) {
-      clonedChatIcon.addEventListener('click', () => {
+    const clonedChat = clone.querySelector('.chat-container');
+    if (clonedChat) {
+      clonedChat.addEventListener('click', () => {
         chatBox.classList.toggle('active');
         nav.classList.remove('active');
         hamburger.classList.remove('active');
@@ -483,115 +466,113 @@ function moveHeaderButtonsToNav() {
     }
   }
 
-  // Update de gekloonde login-knop
-  updateLoginButtons();
-}
+  window.addEventListener('DOMContentLoaded', async () => {
+    moveHeaderButtonsToNav();
 
-window.addEventListener('DOMContentLoaded', async () => {
-  moveHeaderButtonsToNav();
+    const { data: { session } } = await supabase.auth.getSession();
+    user = session?.user ?? null;
+    if (user && loginBtn) { loginBtn.innerText = 'Account'; loginBtn.href = 'account.html'; }
 
-  const { data: { session } } = await supabase.auth.getSession();
-  user = session?.user ?? null;
-  updateLoginButtons(); // Update knoppen bij laden pagina
-
-  supabase.auth.onAuthStateChange((_e, sess) => {
-    user = sess?.user ?? null;
-    updateLoginButtons(); // Update knoppen bij inlogstatusverandering
+    supabase.auth.onAuthStateChange((_e, sess) => {
+      user = sess?.user ?? null;
+      if (!loginBtn) return;
+      loginBtn.innerText = user ? 'Account' : 'Login';
+      loginBtn.href = user ? 'account.html' : 'login.html';
+    });
   });
-});
+  window.addEventListener('resize', moveHeaderButtonsToNav);
 
-window.addEventListener('resize', moveHeaderButtonsToNav);
+  // Hamburger
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    nav.classList.toggle('active');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+  }));
 
-// Hamburger
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  nav.classList.toggle('active');
-});
+  // Chat
+  chatToggle.addEventListener('click', () => {
+    chatBox.classList.toggle('active');
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+  });
+  closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
 
-nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  nav.classList.remove('active');
-  hamburger.classList.remove('active');
-}));
+  // Admin
+  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
+  if (user && adminEmails.includes(user.email)) {
+    chatToggle.addEventListener('click', () => location.href = 'admin.html');
+  } else {
+    document.getElementById('sendChat').addEventListener('click', sendMessage);
+    document.getElementById('chatInput').addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
 
-// Chat
-chatToggle.addEventListener('click', () => {
-  chatBox.classList.toggle('active');
-  nav.classList.remove('active');
-  hamburger.classList.remove('active');
-});
-
-closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
-
-// Admin
-const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
-if (user && adminEmails.includes(user.email)) {
-  chatToggle.addEventListener('click', () => location.href = 'admin.html');
-} else {
-  document.getElementById('sendChat').addEventListener('click', sendMessage);
-  document.getElementById('chatInput').addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
-
-  async function loadMessages() {
-    if (!user) return;
-    const { data } = await supabase.from('messages').select('*').eq('email', user.email).order('created_at', { ascending: true });
-    const chat = document.getElementById('chatMessages');
-    chat.innerHTML = data.length === 0 ? '<div class="message bot">Nog geen berichten. Stuur een bericht om te starten!</div>' : '';
-    data.forEach(addMessage);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function addMessage(msg) {
-    const div = document.createElement('div');
-    div.className = `message ${msg.role === 'user' ? 'user' : 'bot'}`;
-    const txt = document.createElement('div');
-    txt.textContent = msg.message;
-
-    const time = document.createElement('div');
-    time.className = 'message-time';
-    time.style.fontSize = '0.75rem';
-    time.style.opacity = '0.7';
-    time.style.marginTop = '4px';
-
-    const date = new Date(msg.created_at);
-    time.textContent = !isNaN(date.getTime())
-      ? date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
-      : 'Nu';
-
-    div.append(txt, time);
-    document.getElementById('chatMessages').appendChild(div);
-    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-  }
-
-  async function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const txt = input.value.trim();
-    if (!txt) return;
-    if (!user) {
-      addMessage({ role: 'bot', message: 'Je moet inloggen om te chatten!' });
-      return;
+    async function loadMessages() {
+      if (!user) return;
+      const { data } = await supabase.from('messages').select('*').eq('email', user.email).order('created_at', { ascending: true });
+      const chat = document.getElementById('chatMessages');
+      chat.innerHTML = data.length === 0 ? '<div class="message bot">Nog geen berichten. Stuur een bericht om te starten!</div>' : '';
+      data.forEach(addMessage);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    const now = new Date().toISOString();
-    addMessage({ role: 'user', message: txt, created_at: now });
-    input.value = '';
+    function addMessage(msg) {
+  const div = document.createElement('div');
+  div.className = `message ${msg.role === 'user' ? 'user' : 'bot'}`;
+  const txt = document.createElement('div');
+  txt.textContent = msg.message;
 
-    await supabase.from('messages').insert({
-      user_id: user.id,
-      email: user.email,
-      message: txt,
-      role: 'user'
-    });
+  const time = document.createElement('div');
+  time.className = 'message-time';
+  time.style.fontSize = '0.75rem';
+  time.style.opacity = '0.7';
+  time.style.marginTop = '4px';
+
+  // DATUM CORRECT GEFORMATTEERD
+  const date = new Date(msg.created_at);
+  time.textContent = !isNaN(date.getTime())
+    ? date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+    : 'Nu';
+
+  div.append(txt, time);
+  document.getElementById('chatMessages').appendChild(div);
+  document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const txt = input.value.trim();
+  if (!txt) return;
+  if (!user) {
+    addMessage({ role: 'bot', message: 'Je moet inloggen om te chatten!' });
+    return;
   }
 
-  supabase.channel('public:messages')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-      if (user && payload.new.email === user.email) addMessage(payload.new);
-    })
-    .subscribe();
+  const now = new Date().toISOString(); // Zorgt voor geldige ISO-datum
+  addMessage({ role: 'user', message: txt, created_at: now });
+  input.value = '';
 
-  chatToggle.addEventListener('click', () => {
-    if (chatBox.classList.contains('active') && user) loadMessages();
+  await supabase.from('messages').insert({
+    user_id: user.id,
+    email: user.email,
+    message: txt,
+    role: 'user'
   });
+
+
 }
+
+    supabase.channel('public:messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+        if (user && payload.new.email === user.email) addMessage(payload.new);
+      })
+      .subscribe();
+
+    chatToggle.addEventListener('click', () => {
+      if (chatBox.classList.contains('active') && user) loadMessages();
+    });
+  }
 </script>
 </body>
 </html>

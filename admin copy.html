@@ -1,77 +1,616 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NovaWeb - Chat Beheer</title>
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Chat - NovaWeb</title>
+  <style>
+    :root {
+      --primary-bg: #0d1117;
+      --secondary-bg: #161b22;
+      --tertiary-bg: #21262d;
+      --border-color: #30363d;
+      --accent-color: #238636;
+      --accent-hover: #2ea043;
+      --text-primary: #ffffff;
+      --text-secondary: #8b949e;
+      --user-msg: #238636;
+      --admin-msg: #444c56;
+      --notification: #f85149;
+      --sidebar-width: 300px;
+      --header-height: 60px;
+      --input-height: 60px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--secondary-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .sidebar-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .sidebar-header p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .user-search {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .user-search input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    .user-search input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+    .user-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    .user-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+      border-left: 3px solid transparent;
+    }
+    .user-item:hover {
+      background: var(--tertiary-bg);
+    }
+    .user-item.active {
+      background: var(--tertiary-bg);
+      border-left-color: var(--accent-color);
+    }
+    .user-item.new-message {
+      border-left-color: var(--notification);
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .user-info {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+    .user-email {
+      font-weight: 500;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-status {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .user-notification {
+      background: var(--notification);
+      color: white;
+      font-size: 0.7rem;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .mark-read-btn {
+      margin-left: 8px;
+      background: var(--tertiary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .mark-read-btn:hover {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+    .chat-area {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      height: var(--header-height);
+      background: var(--secondary-bg);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .chat-user-info {
+      display: flex;
+      align-items: center;
+    }
+    .chat-user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 12px;
+    }
+    .chat-user-details h2 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .chat-user-details p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .chat-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .chat-actions button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .chat-actions button:hover {
+      color: var(--text-primary);
+      background: var(--tertiary-bg);
+    }
+    .chat-messages {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      max-width: 70%;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message.user {
+      background: var(--user-msg);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .message.admin {
+      background: var(--admin-msg);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .message-time {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-top: 5px;
+      text-align: right;
+    }
+    .chat-input-area {
+      height: var(--input-height);
+      padding: 10px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-input-area input {
+      flex-grow: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      outline: none;
+      background: var(--secondary-bg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    .chat-input-area input:focus {
+      border-color: var(--accent-color);
+    }
+    .chat-input-area button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent-color);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .chat-input-area button:hover {
+      background: var(--accent-hover);
+    }
+    .chat-input-area button:disabled {
+      background: var(--border-color);
+      cursor: not-allowed;
+    }
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 20px;
+    }
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        z-index: 10;
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--secondary-bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="logo">
-    <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-    <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
-  </div>
-
-  <!-- Hamburger menu knop -->
-  <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <nav id="navMenu">
-    <a href="index.html">Home</a>
-    <a href="over-ons.html">Over ons</a>
-    <a href="projecten.html">Portfolio</a>
-    <a href="diensten.html">Diensten</a>
-    <a href="klantenProject.html">Mijn projecten</a>
-  </nav>
-
-  <div class="header-buttons">
-    <a href="login.html" class="login-btn">Login</a>
-    <a href="diensten.html" class="contact-btn">Contact us</a>
-
-    <!-- Chat icoon geïntegreerd in de knopgroep -->
-    <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1>Admin Chat</h1>
+      <p>Beheer gebruikersgesprekken</p>
     </div>
+    <div class="user-search">
+      <input type="text" id="userSearch" placeholder="Zoek gebruiker...">
+    </div>
+    <div id="userList" class="user-list"></div>
   </div>
-
-
-  <!-- Chatvenster -->
-  <div class="chat-box" id="chatBox">
+  <div class="chat-area">
     <div class="chat-header">
-      <span>💬 Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">Menu</button>
+      <div class="chat-user-info">
+        <div class="chat-user-avatar" id="chatUserAvatar">?</div>
+        <div class="chat-user-details">
+          <h2 id="chatUserName">Selecteer een gebruiker</h2>
+          <p id="chatUserStatus">Klik op een gebruiker om te beginnen</p>
+        </div>
+      </div>
+      <div class="chat-actions">
+        <button title="Gesprek archiveren">Archief</button>
+        <button title="Gesprek verwijderen">Prullenbak</button>
+      </div>
     </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
+    <div id="chatMessages" class="chat-messages">
+      <div class="empty-state">
+        <div class="empty-state-icon">Chat</div>
+        <h3>Nog geen gesprek geselecteerd</h3>
+        <p>Selecteer een gebruiker uit de lijst om berichten te bekijken en te reageren.</p>
+      </div>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
+      <input id="chatInput" type="text" placeholder="Typ een antwoord..." disabled>
+      <button id="sendBtn" disabled>
+        <span>Versturen</span>
+        <span>Verstuur</span>
+      </button>
     </div>
   </div>
 
-</header>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  <main class="admin-layout">
-    <!-- Dynamische zijbalk met gebruikers -->
-    <aside id="userList">
-      <h2>Gebruikers</h2>
-      <ul id="userListItems"></ul>
-    </aside>
+    const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    <!-- Chatvenster -->
-    <section id="chatSection">
-      <div id="chatContainer">
-        <!-- Berichten komen hier -->
-      </div>
-    </section>
-  </main>
+    // DOM
+    const userList = document.getElementById('userList');
+    const chatUserName = document.getElementById('chatUserName');
+    const chatUserStatus = document.getElementById('chatUserStatus');
+    const chatUserAvatar = document.getElementById('chatUserAvatar');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const userSearch = document.getElementById('userSearch');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
-  <script type="module" src="admin.js"></script>
+    let currentEmail = null;
+    let usersState = {};
+
+    // Format tijd
+    const formatTime = d => new Date(d).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+    // Admin check
+    const { data: { session } } = await supabase.auth.getSession();
+    const user = session?.user ?? null;
+    if (!user || !['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'].includes(user.email)) {
+      alert('Toegang geweigerd. Je bent geen admin!');
+      window.location.href = 'login.html';
+    }
+
+    // === LAAD GEBRUIKERS + TEL ECHT ONGELEZEN ===
+    async function loadUsers() {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('email, read, role')
+        .not('email', 'is', null);
+
+      if (error) {
+        console.error('Fout bij laden gebruikers:', error);
+        return;
+      }
+
+      // Reset + tel ongelezen per e-mail
+      usersState = {};
+      data.forEach(msg => {
+        if (!msg.email) return;
+        if (!usersState[msg.email]) {
+          usersState[msg.email] = { unread: 0 };
+        }
+        if (msg.role === 'user' && msg.read === false) {
+          usersState[msg.email].unread++;
+        }
+      });
+
+      renderUserList();
+    }
+
+    // === RENDER LIJST ===
+    function renderUserList() {
+      userList.innerHTML = '';
+      const search = userSearch.value.toLowerCase();
+      const emails = Object.keys(usersState).filter(e => e.toLowerCase().includes(search));
+      const sorted = emails.sort((a, b) => usersState[b].unread - usersState[a].unread);
+
+      if (sorted.length === 0) {
+        userList.innerHTML = `<div class="empty-state"><div class="empty-state-icon">Zoeken</div><p>Geen gebruikers gevonden</p></div>`;
+        return;
+      }
+
+      sorted.forEach(email => {
+        const div = document.createElement('div');
+        div.className = 'user-item';
+        div.dataset.email = email;
+        if (email === currentEmail) div.classList.add('active');
+        if (usersState[email].unread > 0) div.classList.add('new-message');
+
+        div.innerHTML = `
+          <div class="user-avatar">${email[0].toUpperCase()}</div>
+          <div class="user-info">
+            <div class="user-email">${email}</div>
+            <div class="unread-count" style="color: ${usersState[email].unread > 0 ? 'var(--notification)' : '#888'}">
+              ${usersState[email].unread > 0 ? usersState[email].unread + ' ongelezen' : 'Geen ongelezen'}
+            </div>
+          </div>
+        `;
+
+        if (usersState[email].unread > 0) {
+          const badge = document.createElement('span');
+          badge.className = 'user-notification';
+          badge.textContent = usersState[email].unread;
+          div.appendChild(badge);
+        }
+
+        const markBtn = document.createElement('button');
+        markBtn.className = 'mark-read-btn';
+        markBtn.textContent = 'Gelezen';
+        markBtn.onclick = async e => {
+          e.stopPropagation();
+          await markAllAsRead(email);
+        };
+        div.appendChild(markBtn);
+
+        div.onclick = () => selectUser(email);
+        userList.appendChild(div);
+      });
+    }
+
+    // === MARK ALL AS READ ===
+    async function markAllAsRead(email) {
+      const { data } = await supabase
+        .from('messages')
+        .select('id')
+        .eq('email', email)
+        .eq('role', 'user')
+        .eq('read', false);
+
+      const ids = data?.map(m => m.id) || [];
+      if (ids.length > 0) {
+        const { error } = await supabase
+          .from('messages')
+          .update({ read: true })
+          .in('id', ids);
+
+        if (error) {
+          console.error('Fout bij updaten read:', error);
+        } else {
+          usersState[email].unread = 0;
+        }
+      }
+      renderUserList();
+    }
+
+    // === SELECTEER GEBRUIKER ===
+    async function selectUser(email) {
+      currentEmail = email;
+      renderUserList();
+
+      chatUserName.textContent = email;
+      chatUserStatus.textContent = usersState[email]?.unread > 0 
+        ? `${usersState[email].unread} ongelezen` 
+        : 'Alle berichten gelezen';
+      chatUserAvatar.textContent = email[0].toUpperCase();
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+
+      // Markeer als gelezen
+      await markAllAsRead(email);
+
+      // Laad berichten
+      const { data } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('email', email)
+        .order('created_at', { ascending: true });
+
+      chatMessages.innerHTML = data.length === 0
+        ? `<div class="empty-state"><div class="empty-state-icon">Chat</div><h3>Nog geen berichten</h3></div>`
+        : '';
+
+      data.forEach(addMessage);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      document.querySelector('.sidebar').classList.remove('active');
+    }
+
+    // === VOEG BERICHT TOE ===
+    function addMessage(msg) {
+      const empty = chatMessages.querySelector('.empty-state');
+      if (empty) empty.remove();
+
+      const div = document.createElement('div');
+      div.className = `message ${msg.role === 'user' ? 'user' : 'admin'}`;
+      div.innerHTML = `<div>${msg.message}</div><div class="message-time">${formatTime(msg.created_at)}</div>`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // === VERSTUUR BERICHT ===
+    sendBtn.addEventListener('click', async () => {
+      const tekst = chatInput.value.trim();
+      if (!tekst || !currentEmail) return;
+      chatInput.value = '';
+
+      const msg = {
+        email: currentEmail,
+        message: tekst,
+        role: 'admin',
+        read: true,
+        created_at: new Date().toISOString()
+      };
+      addMessage(msg);
+      await supabase.from('messages').insert([msg]);
+    });
+
+    chatInput.addEventListener('keypress', e => e.key === 'Enter' && sendBtn.click());
+    userSearch.addEventListener('input', renderUserList);
+    mobileMenuBtn.addEventListener('click', () => document.querySelector('.sidebar').classList.toggle('active'));
+
+    // === REALTIME ===
+    supabase
+      .channel('realtime-messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+        const msg = payload.new;
+        if (!msg.email) return;
+
+        if (!usersState[msg.email]) usersState[msg.email] = { unread: 0 };
+
+        if (msg.role === 'user' && msg.read === false) {
+          if (currentEmail === msg.email) {
+            supabase.from('messages').update({ read: true }).eq('id', msg.id);
+            addMessage(msg);
+          } else {
+            usersState[msg.email].unread++;
+          }
+        } else if (currentEmail === msg.email) {
+          addMessage(msg);
+        }
+        renderUserList();
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages' }, payload => {
+        const msg = payload.new;
+        if (msg.role === 'user' && msg.read === true && usersState[msg.email]) {
+          usersState[msg.email].unread = Math.max(0, usersState[msg.email].unread - 1);
+          renderUserList();
+        }
+      })
+      .subscribe();
+
+    // Start
+    loadUsers();
+  </script>
 </body>
 </html>

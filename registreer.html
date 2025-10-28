@@ -787,10 +787,11 @@
             </div>
           </button>
 
-          <div class="register-divider"><span>Of registreer met</span></div>
+          <!-- <div class="register-divider"><span>Of registreer met</span></div>
           <div class="social-register">
             <button type="button" class="social-btn google-btn"><span>Google</span></button>
-          </div>
+            <button onclick="googleLogin()" class="social-btn google-btn">Log in met Google</button>
+          </div> -->
 
           <div class="login-link">
             <p>Heb je al een account? <a href="login.html">Inloggen</a></p>
@@ -850,7 +851,86 @@
         }
       });
     });
+
+    
   </script>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://esm.sh/@supabase/supabase-js@2';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Google Sign-In knop renderen
+window.onload = function () {
+  google.accounts.id.initialize({
+    client_id: '605148728037-jc61t4rv1km9d1s40iqd2sdrltiqu4o6.apps.googleusercontent.com',
+    callback: handleGoogleCredential
+  });
+
+  // Vervang de button met jouw knop
+  const googleBtn = document.querySelector('.google-btn');
+  google.accounts.id.renderButton(
+    googleBtn,
+    { theme: 'outline', size: 'large', width: '100%' }
+  );
+
+  google.accounts.id.prompt(); // Optioneel: automatisch popup tonen
+};
+
+// JWT verwerken en gebruiker registreren/loginen
+async function handleGoogleCredential(response) {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/klantenProject.html' }
+    });
+
+    if (error) {
+      console.error('Supabase login fout:', error.message);
+      alert('Er is iets misgegaan bij Google login. Probeer opnieuw.');
+      return;
+    }
+
+    // Optioneel: alert of redirect
+    console.log('Succesvol ingelogd via Google:', data);
+    window.location.href = '/klantenProject.html';
+  } catch (err) {
+    console.error('Onverwachte fout:', err);
+  }
+}
+
+// Formulier registratie via email + wachtwoord
+const registerForm = document.querySelector('.register-form');
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-password').value;
+  const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+  if (password !== confirmPassword) {
+    document.getElementById('reg-status').textContent = 'Wachtwoorden komen niet overeen!';
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + '/klantenProject.html' } });
+
+  if (error) {
+    document.getElementById('reg-status').textContent = 'Fout bij registratie: ' + error.message;
+    return;
+  }
+
+  // Toon popup bij succesvolle registratie
+  document.getElementById('reg-popup').style.display = 'flex';
+});
+
+document.getElementById('popup-close').addEventListener('click', () => {
+  document.getElementById('reg-popup').style.display = 'none';
+});
+</script>
+
 </body>
 
 </html>

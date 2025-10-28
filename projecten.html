@@ -5,20 +5,177 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NovaWeb - Projecten</title>
   <link rel="stylesheet" href="projecten.css">
+  <style>
+    /* Header weg effect */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background: rgba(0,0,0,0.15);
+      backdrop-filter: blur(5px);
+      padding: 20px 50px;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    header.hide {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    header.scrolled {
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,214,10,0.3);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+
+    /* Logo */
+    .logo-img { height: 80px; filter: drop-shadow(0 0 15px rgba(255,214,10,0.5)); transition: all .3s; }
+    .logo-img:hover { filter: drop-shadow(0 0 25px rgba(255,214,10,0.8)); transform: scale(1.05); }
+    .logo-fallback { font-weight: 800; font-size: 1.5rem; color: #ffd60a; text-shadow: 0 0 10px rgba(255,214,10,0.5); }
+
+    /* Desktop nav */
+    nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 50px; }
+    nav a { font-weight: 600; color: #fff; text-decoration: none; font-size: 1.1rem; position: relative; padding: 10px 0; transition: all .3s; }
+    nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(45deg, #ffd60a, #ffed4e); transition: width .3s; }
+    nav a:hover::after { width: 100%; }
+    nav a:hover { color: #ffd60a; transform: translateY(-2px); }
+
+    /* Header buttons */
+    .header-buttons { display: flex; align-items: center; gap: 20px; }
+    .login-btn, .contact-btn { border-radius: 50px; padding: 12px 30px; font-weight: 700; text-decoration: none; position: relative; overflow: hidden; transition: all .3s; }
+    .login-btn { background: transparent; border: 2px solid rgba(255,214,10,0.7); color: #ffd60a; }
+    .login-btn:hover { background: rgba(255,214,10,0.1); border-color: #ffd60a; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,214,10,0.3); }
+    .contact-btn { background: linear-gradient(45deg, #ffd60a, #ffed4e); color: #0d3b66; }
+    .contact-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,214,10,0.4); }
+    .chat-icon { width: 34px; height: 34px; cursor: pointer; transition: transform .2s; }
+    .chat-icon:hover { transform: scale(1.1); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 6px; width: 30px; height: 25px; cursor: pointer; z-index: 1100; }
+    .hamburger span { height: 3px; background: #ffd60a; border-radius: 2px; transition: all .3s; }
+    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* Chat box */
+    .chat-box { position: fixed; top: 90px; right: 20px; width: 320px; height: 420px; background: #929292; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,.2); display: flex; flex-direction: column; overflow: hidden; transform: translateX(120%); opacity: 0; transition: all .4s; z-index: 9999; }
+    .chat-box.active { transform: translateX(0); opacity: 1; }
+    .chat-header { background: #0d3b66; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+    .chat-header button { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #a4a4a4; display: flex; flex-direction: column; gap: 8px; }
+    .message { padding: 10px 14px; border-radius: 12px; max-width: 80%; font-size: .95rem; }
+    .message.bot { background: #5794d2; align-self: flex-start; color: #000; }
+    .message.user { background: #ffd60a; color: #0d3b66; align-self: flex-end; }
+    .chat-input-area { display: flex; border-top: 1px solid #ddd; padding: 10px; background: #fff; }
+    .chat-input-area input { flex: 1; border: 1px solid #ccc; border-radius: 10px; padding: 8px 10px; background: #dbdbdb; color: #000; }
+    .chat-input-area button { background: #ffd60a; border: none; color: #0d3b66; font-weight: bold; border-radius: 10px; margin-left: 8px; padding: 8px 14px; cursor: pointer; }
+
+    /* Portfolio */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      padding: 10px;
+    }
+    .portfolio-item {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .portfolio-item.hidden {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      pointer-events: none;
+    }
+    .portfolio-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .filter-btn {
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .filter-btn.active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    /* Mobile nav - VAN LINKS */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; height: auto; }
+      .logo, .logo-img, .logo-fallback { display: none; }
+      .hamburger { display: flex; }
+      .header-buttons { display: none; }
+
+      nav {
+        position: fixed; top: 0; left: -100%; width: 70%; max-width: 300px; height: 100vh;
+        background: rgba(0,0,0,0.98); backdrop-filter: blur(25px);
+        flex-direction: column; align-items: flex-start; justify-content: flex-start;
+        padding: 80px 30px 30px; gap: 25px;
+        transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 1001;
+      }
+      nav.active { left: 0; }
+
+      nav a, nav .login-btn, nav .contact-btn {
+        width: 100%; text-align: center; padding: 15px; font-size: 1rem;
+        border-bottom: 1px solid rgba(255,214,10,0.2); text-decoration: none;
+      }
+      nav .chat-container {
+        width: 100%; display: flex; justify-content: center; padding: 15px;
+      }
+      nav .chat-icon { width: 30px; height: 30px; }
+
+      .nav-header-buttons {
+        display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px; width: 100%;
+      }
+      .nav-header-buttons a, .nav-header-buttons .chat-container {
+        width: 80%; text-align: center; margin: 5px 0;
+      }
+
+      /* Chat op mobiel onderaan */
+      .chat-box {
+        top: auto; bottom: 20px; right: 5%; width: 90%; max-width: 340px; height: 70vh; max-height: 450px;
+        transform: translateY(100%); border-radius: 12px;
+      }
+      .chat-box.active { transform: translateY(0); }
+
+      /* Portfolio */
+      .portfolio-grid {
+        grid-template-columns: 1fr; gap: 20px; padding: 15px;
+      }
+      .portfolio-item { max-width: 100%; }
+      .portfolio-filters {
+        display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+      }
+      .filter-btn { padding: 8px 16px; font-size: 0.9rem; }
+    }
+
+    @media (max-width: 480px) {
+      .portfolio-grid { gap: 15px; }
+      .filter-btn { padding: 6px 12px; font-size: 0.8rem; }
+      .chat-box { width: 95%; max-height: 400px; }
+    }
+  </style>
 </head>
 <body>
-
-<header>
+<header id="mainHeader">
   <div class="logo">
     <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+         onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
     <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
   </div>
 
   <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </div>
 
   <nav id="navMenu">
@@ -32,13 +189,11 @@
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
     <a href="contact.html" class="contact-btn">Contact us</a>
-
     <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
+      <img src="Fotos/chat.png" alt="Chat" class="chat-icon" id="chatToggle">
     </div>
   </div>
 
-  <!-- Chatvenster -->
   <div class="chat-box" id="chatBox">
     <div class="chat-header">
       <span>💬 Chat met NovaWeb</span>
@@ -54,301 +209,317 @@
   </div>
 </header>
 
-  <main>
-    <!-- Portfolio Sectie -->
-    <section id="portfolio" class="portfolio">
-      <div class="container">
-        <h2>Onze Creaties In De Spotlight</h2>
-        <p class="portfolio-subtitle">Ontdek onze meest recente projecten - van elegante one-pagers tot complexe webapplicaties die resultaten leveren</p>
-        
-        <div class="portfolio-stats">
-          <div class="stat-item">
-            <span class="stat-number">15+</span>
-            <span class="stat-label">Projecten Voltooid</span>
+<main>
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <h2>Onze Creaties In De Spotlight</h2>
+      <p class="portfolio-subtitle">Ontdek onze meest recente projecten</p>
+      
+      <div class="portfolio-stats">
+        <div class="stat-item"><span class="stat-number">15+</span><span class="stat-label">Projecten</span></div>
+        <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Tevredenheid</span></div>
+        <div class="stat-item"><span class="stat-number">2-4</span><span class="stat-label">Weken</span></div>
+      </div>
+
+      <div class="portfolio-filters">
+        <button class="filter-btn active" data-filter="all">Alle Projecten</button>
+        <button class="filter-btn" data-filter="website">Websites</button>
+        <button class="filter-btn" data-filter="student">Student Projecten</button>
+        <button class="filter-btn" data-filter="business">Zakelijke Projecten</button>
+        <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="portfolio-item visible" data-category="website business">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/AchtergrondWS1.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/LaptopAdviseur/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
+              </div>
+            </div>
+            <div class="project-badge">Full project</div>
           </div>
-          <div class="stat-item">
-            <span class="stat-number">100%</span>
-            <span class="stat-label">Klanttevredenheid</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">2-4</span>
-            <span class="stat-label">Weken Levertijd</span>
+          <div class="portfolio-content">
+            <h3>OnlineLaptopGids</h3>
+            <p>Uitgebreide laptop vergelijkingsplatform</p>
           </div>
         </div>
 
-        <div class="portfolio-filters">
-          <button class="filter-btn active" data-filter="all">Alle Projecten</button>
-          <button class="filter-btn" data-filter="website">Websites</button>
-          <button class="filter-btn" data-filter="student">Student Projecten</button>
-          <button class="filter-btn" data-filter="business">Zakelijke Projecten</button>
-          <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
+        <div class="portfolio-item visible" data-category="website business">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/muziek.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/muziek/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
+              </div>
+            </div>
+            <div class="project-badge">Bestseller</div>
+          </div>
+          <div class="portfolio-content">
+            <h3>Harmonie Muziek Academie</h3>
+            <p>Compleet inschrijvingssysteem</p>
+          </div>
         </div>
 
-        <div class="portfolio-grid">
-          <!-- OnlineLaptopGids -->
-          <div class="portfolio-item" data-category="website business">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/AchtergrondWS1.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/LaptopAdviseur/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Full project</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>OnlineLaptopGids</h3>
-              <p class="project-description">Een uitgebreide vergelijkingsplatform voor laptops met intelligente adviesfunctie. Gebruikers kunnen op basis van hun behoeften en budget de perfecte laptop vinden via een interactieve vragenlijst.</p>
-              <div class="project-features">
-                <span class="feature">📱 Responsive Design</span>
-                <span class="feature">🎯 Persoonlijk Advies</span>
-                <span class="feature">⚡ Snel Presterend</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">Multi-page</span>
-                <span class="project-tag">Vergelijkingssite</span>
-                <span class="project-tag">Interactief</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 3 weken</span>
-                <span class="meta-item">💼 Zakelijk</span>
+        <div class="portfolio-item visible" data-category="website business">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/FotoCollage.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/FotoCollage/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
               </div>
             </div>
+            <div class="project-badge">Design</div>
           </div>
-
-          <!-- MuziekAcademie -->
-          <div class="portfolio-item" data-category="website business">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/muziek.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/muziek/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Bestseller</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>Harmonie Muziek Academie</h3>
-              <p class="project-description">Compleet inschrijvingssysteem voor muziekschool met docentenprofielen, lesroosters en online betaling. Studenten kunnen zich inschrijven voor lessen en docenten kunnen hun agenda beheren.</p>
-              <div class="project-features">
-                <span class="feature">📝 Inschrijvingssysteem</span>
-                <span class="feature">👨‍🏫 Docenten Portal</span>
-                <span class="feature">💳 Online Betaling</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">Database</span>
-                <span class="project-tag">Forms</span>
-                <span class="project-tag">Multi-user</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 4 weken</span>
-                <span class="meta-item">💼 Zakelijk</span>
-              </div>
-            </div>
+          <div class="portfolio-content">
+            <h3>Lumina FotoStudio</h3>
+            <p>Elegant portfolio website</p>
           </div>
+        </div>
 
-          <!-- FotoStudio -->
-          <div class="portfolio-item" data-category="website business">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/FotoCollage.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/FotoCollage/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Design</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>Lumina FotoStudio</h3>
-              <p class="project-description">Elegant portfolio website voor een professionele fotograaf met geavanceerde gallery, klantportal en online afspraaksysteem. Perfect om werk te showcasen en nieuwe klanten aan te trekken.</p>
-              <div class="project-features">
-                <span class="feature">🖼️ Geavanceerde Gallery</span>
-                <span class="feature">📅 Afspraaksysteem</span>
-                <span class="feature">🎨 Modern Design</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">Portfolio</span>
-                <span class="project-tag">Gallery</span>
-                <span class="project-tag">Booking</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 2.5 weken</span>
-                <span class="meta-item">💼 Zakelijk</span>
+        <div class="portfolio-item visible" data-category="student website">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/studentenClub.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/College/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
               </div>
             </div>
+            <div class="project-badge">Student</div>
           </div>
-
-          <!-- StudentenClub -->
-          <div class="portfolio-item" data-category="student website">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/studentenClub.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/College/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Student Project</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>Campus Connect Studentenclub</h3>
-              <p class="project-description">Dynamische community website voor studentenvereniging met events kalender, lidmaatschapsysteem en forum. Helpt studenten verbinden en activiteiten organiseren.</p>
-              <div class="project-features">
-                <span class="feature">📅 Events Kalender</span>
-                <span class="feature">👥 Lidmaatschap</span>
-                <span class="feature">💬 Link to socials</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">socials</span>
-                <span class="project-tag">Events</span>
-                <span class="project-tag">Studenten</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 3 weken</span>
-                <span class="meta-item">🎓 Student</span>
-              </div>
-            </div>
+          <div class="portfolio-content">
+            <h3>Campus Connect</h3>
+            <p>Studenten community website</p>
           </div>
+        </div>
 
-          <!-- Bistro Modern -->
-          <div class="portfolio-item" data-category="business website ecommerce">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/cafewp.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/StamCafe/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Horeca</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>Bistro Modern</h3>
-              <p class="project-description">Uitgebreide Café website met online menu's, bestelsysteem en bezorgopties. Verhoogt de conversie en verbetert de klantenservice aanzienlijk.</p>
-              <div class="project-features">
-                <span class="feature">🖼️ Foto collage</span>
-                <span class="feature">🍽️ Menu Overzicht</span>
-                <span class="feature">📞 contact formulier</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">Restaurant</span>
-                <span class="project-tag">E-commerce</span>
-                <span class="project-tag">Reservations</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 4 weken</span>
-                <span class="meta-item">💼 Zakelijk</span>
+        <div class="portfolio-item visible" data-category="business website ecommerce">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/cafewp.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/StamCafe/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
               </div>
             </div>
+            <div class="project-badge">Horeca</div>
           </div>
+          <div class="portfolio-content">
+            <h3>Bistro Modern</h3>
+            <p>Café met online bestelsysteem</p>
+          </div>
+        </div>
 
-          <!-- Student Portfolio -->
-          <div class="portfolio-item" data-category="student website">
-            <div class="portfolio-image">
-              <div class="website-screenshot" style="background-image: url('Fotos/portfolioWP.png');"></div>
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="https://bigenbetsy.github.io/Portfolio/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                  <a href="#" class="project-details-btn">Meer Details</a>
-                </div>
-              </div>
-              <div class="project-badge">Portfolio</div>
-            </div>
-            <div class="portfolio-content">
-              <h3>Academisch Portfolio</h3>
-              <p class="project-description">Professioneel portfolio website voor student met project showcase, CV, skills matrix en contactformulier. Ideaal voor stage- en jobapplicaties.</p>
-              <div class="project-features">
-                <span class="feature">📊 Skills Matrix</span>
-                <span class="feature">📁 Project Showcase</span>
-                <span class="feature">📞 Contact Direct</span>
-              </div>
-              <div class="project-tags">
-                <span class="project-tag">Portfolio</span>
-                <span class="project-tag">CV</span>
-                <span class="project-tag">Student</span>
-              </div>
-              <div class="project-meta">
-                <span class="meta-item">⏱️ 2 weken</span>
-                <span class="meta-item">🎓 Student</span>
+        <div class="portfolio-item visible" data-category="student website">
+          <div class="portfolio-image">
+            <div class="website-screenshot" style="background-image: url('Fotos/portfolioWP.png');"></div>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href="https://bigenbetsy.github.io/Portfolio/" target="_blank" class="view-project-btn">Live Bekijken</a>
+                <a href="#" class="project-details-btn">Meer Details</a>
               </div>
             </div>
+            <div class="project-badge">Portfolio</div>
+          </div>
+          <div class="portfolio-content">
+            <h3>Academisch Portfolio</h3>
+            <p>Professioneel student portfolio</p>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Project Process Section -->
-    <section class="project-process">
-      <div class="container">
-        <h2>Hoe We Werken</h2>
-        <div class="process-steps">
-          <div class="process-step">
-            <div class="step-icon">🎯</div>
-            <h3>1. Consultatie</h3>
-            <p>Gratis intakegesprek om uw doelen en vereisten te begrijpen</p>
-          </div>
-          <div class="process-step">
-            <div class="step-icon">🎨</div>
-            <h3>2. Design</h3>
-            <p>Creatie van wireframes en design concepten voor goedkeuring</p>
-          </div>
-          <div class="process-step">
-            <div class="step-icon">⚡</div>
-            <h3>3. Development</h3>
-            <p>Agile ontwikkeling met regelmatige updates en feedback</p>
-          </div>
-          <div class="process-step">
-            <div class="step-icon">🚀</div>
-            <h3>4. Lancering</h3>
-            <p>Professionele lancering en doorlopende ondersteuning</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="cta-section">
-      <div class="container">
-        <h2>Klaar om Jouw Digitale Project te Lanceren?</h2>
-        <p class="cta-description">Laat ons je idee tot leven brengen met een professionele website die resultaten levert. Samen creëren we iets buitengewoons.</p>
-        <div class="cta-buttons">
-          <a href="diensten.html" class="btn-primary">Start Jouw Project</a>
-          <a href="over-ons.html" class="btn-secondary">Ons Team Ontmoeten</a>
-          <a href="diensten.html" class="btn-tertiary">Gratis Consultatie</a>
-        </div>
-        <div class="cta-guarantee">
-          <span class="guarantee-badge">✅ 100% Tevredenheidsgarantie</span>
-          <span class="guarantee-badge">💸 Geld-terug Garantie</span>
-          <span class="guarantee-badge">⚡ 2-4 Weken Levertijd</span>
-        </div>
-      </div>
-    </section>
+    </div>
+  </section>
 </main>
 
-<footer>
-  <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
-</footer>
+<footer><p>&copy; 2025 NovaWeb</p></footer>
 
-<!-- JS modules -->
-<script type="module" src="home.js"></script>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-<script>
-  // Hamburger menu
-  const hamburger = document.getElementById('hamburger');
-  const navMenu = document.getElementById('navMenu');
-  hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+  const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  let user = null;
+  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'];
 
-  // Chat functionaliteit
-  const chatToggle = document.getElementById('chatToggle');
   const chatBox = document.getElementById('chatBox');
+  const chatToggle = document.getElementById('chatToggle');
   const closeChat = document.getElementById('closeChat');
+  const chatInput = document.getElementById('chatInput');
+  const sendChat = document.getElementById('sendChat');
+  const chatMessages = document.getElementById('chatMessages');
+  const nav = document.getElementById('navMenu');
+  const hamburger = document.getElementById('hamburger');
+  const headerButtons = document.querySelector('.header-buttons');
 
-  chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
+  // === Update login knoppen (desktop en mobiel) ===
+  function updateLoginButtons() {
+    const allLoginButtons = document.querySelectorAll('.login-btn');
+    allLoginButtons.forEach(btn => {
+      btn.innerText = user ? 'Account' : 'Login';
+      btn.href = user ? 'account.html' : 'login.html';
+    });
+  }
+
+  // === Verplaats knoppen naar mobiel menu ===
+  function moveHeaderButtonsToNav() {
+    const old = document.querySelector('.nav-header-buttons');
+    if (old) old.remove();
+    if (window.innerWidth > 768) return;
+
+    const clone = headerButtons.cloneNode(true);
+    clone.classList.add('nav-header-buttons');
+    clone.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:30px;width:100%';
+    clone.querySelectorAll('a, .chat-container').forEach(el => {
+      el.style.cssText = 'width:80%;text-align:center;margin:5px 0';
+    });
+    nav.appendChild(clone);
+
+    // Event listener voor gekloonde chat-knop
+    const clonedChat = clone.querySelector('.chat-container');
+    if (clonedChat) {
+      clonedChat.addEventListener('click', async () => {
+        if (!user) {
+          alert('Je moet inloggen om te chatten!');
+          window.location.href = 'login.html';
+          return;
+        }
+        if (adminEmails.includes(user.email)) {
+          window.location.href = 'admin.html';
+          return;
+        }
+        chatBox.classList.toggle('active');
+        nav.classList.remove('active');
+        hamburger.classList.remove('active');
+        if (chatBox.classList.contains('active')) await loadMessages();
+      });
+    }
+
+    // Update gekloonde login-knop
+    updateLoginButtons();
+  }
+
+  // === Init ===
+  window.addEventListener('DOMContentLoaded', async () => {
+    moveHeaderButtonsToNav();
+    const { data: { session } } = await supabase.auth.getSession();
+    user = session?.user ?? null;
+    updateLoginButtons();
+
+    supabase.auth.onAuthStateChange((_e, sess) => {
+      user = sess?.user ?? null;
+      updateLoginButtons();
+    });
+  });
+  window.addEventListener('resize', moveHeaderButtonsToNav);
+
+  // === Hamburger & Menu ===
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    nav.classList.toggle('active');
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+  }));
+
+  // === Chat functies ===
+  async function loadMessages() {
+    if (!user) return;
+    const { data } = await supabase.from('messages').select('*').eq('email', user.email).order('created_at', { ascending: true });
+    chatMessages.innerHTML = data.length === 0 ? '<div class="message bot">Nog geen berichten. Stuur een bericht om te starten!</div>' : '';
+    data.forEach(addMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addMessage(msg) {
+    const div = document.createElement('div');
+    div.className = `message ${msg.role === 'user' ? 'user' : 'bot'}`;
+    const txt = document.createElement('div');
+    txt.textContent = msg.message;
+    const time = document.createElement('div');
+    time.className = 'message-time';
+    time.style.fontSize = '0.75rem';
+    time.style.opacity = '0.7';
+    time.style.marginTop = '4px';
+    const date = new Date(msg.created_at);
+    time.textContent = !isNaN(date.getTime())
+      ? date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+      : 'Nu';
+    div.append(txt, time);
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const txt = chatInput.value.trim();
+    if (!txt || !user) return;
+    const now = new Date().toISOString();
+    addMessage({ role: 'user', message: txt, created_at: now });
+    chatInput.value = '';
+    await supabase.from('messages').insert({
+      user_id: user.id, email: user.email, message: txt, role: 'user'
+    });
+  }
+
+  chatToggle.addEventListener('click', async () => {
+    if (!user) {
+      alert('Je moet inloggen om te chatten!');
+      window.location.href = 'login.html';
+      return;
+    }
+    if (adminEmails.includes(user.email)) {
+      window.location.href = 'admin.html';
+      return;
+    }
+    chatBox.classList.toggle('active');
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+    if (chatBox.classList.contains('active')) await loadMessages();
+  });
+
   closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
-</script>
+  sendChat.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
 
+  // Realtime berichten
+  supabase.channel('public:messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+      if (user && payload.new.email === user.email) addMessage(payload.new);
+    })
+    .subscribe();
+
+  // === Portfolio filter logica ===
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      const filter = button.getAttribute('data-filter');
+      portfolioItems.forEach(item => {
+        const categories = item.getAttribute('data-category').split(' ');
+        item.classList.remove('visible', 'hidden');
+        item.classList.add(filter === 'all' || categories.includes(filter) ? 'visible' : 'hidden');
+      });
+    });
+  });
+
+  // === Header verbergen bij scroll ===
+  let lastScrollTop = 0;
+  const header = document.getElementById('mainHeader');
+  window.addEventListener('scroll', () => {
+    if (chatBox.classList.contains('active')) return;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    header.classList.toggle('hide', scrollTop > lastScrollTop && scrollTop > 100);
+    lastScrollTop = scrollTop;
+  });
+</script>
 </body>
 </html>

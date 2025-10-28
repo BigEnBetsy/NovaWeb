@@ -102,106 +102,81 @@ async function loadMessages() {
 
   // --- Functie: bericht toevoegen aan chat ---
 function addMessage(msg) {
-  const chatMessages = document.getElementById('chatMessages')
-  const div = document.createElement('div')
-  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
+  const chatMessages = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `message ${msg.role === 'user' ? 'user' : 'bot'}`;
 
-  const messageText = document.createElement('div')
-  messageText.textContent = msg.message
+  const messageText = document.createElement('div');
+  messageText.textContent = msg.message;
 
-  const messageTime = document.createElement('div')
-  messageTime.className = 'message-time'
-  messageTime.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+  const messageTime = document.createElement('div');
+  messageTime.className = 'message-time';
+  messageTime.style.fontSize = '0.75rem';
+  messageTime.style.opacity = '0.7';
+  messageTime.style.marginTop = '4px';
 
-  div.appendChild(messageText)
-  div.appendChild(messageTime)
-  chatMessages.appendChild(div)
-  chatMessages.scrollTop = chatMessages.scrollHeight
+  const date = new Date(msg.created_at);
+  messageTime.textContent = !isNaN(date.getTime())
+    ? date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+    : 'Nu';
+
+  div.appendChild(messageText);
+  div.appendChild(messageTime);
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 
 
   // --- Functie: bericht versturen ---
 async function sendMessage() {
-  const chatInput = document.getElementById('chatInput')
-  const tekst = chatInput.value.trim()
+  const chatInput = document.getElementById('chatInput');
+  const tekst = chatInput.value.trim();
 
-  if (!tekst) return
+  if (!tekst) return;
 
   if (!user) {
-    const chatMessages = document.getElementById('chatMessages')
-    const msgDiv = document.createElement('div')
-    msgDiv.className = 'message bot'
-    msgDiv.textContent = 'Je moet inloggen om te kunnen chatten! 😊'
-    chatMessages.appendChild(msgDiv)
-    chatMessages.scrollTop = chatMessages.scrollHeight
-    return
+    addMessage({ role: 'bot', message: 'Je moet inloggen om te chatten!' });
+    return;
   }
 
-  // Toon bericht direct
-  const msgDiv = document.createElement('div')
-  msgDiv.className = 'message user'
-  msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`
-  document.getElementById('chatMessages').appendChild(msgDiv)
-  chatInput.value = ''
-  document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight
+  // === Toon gebruikersbericht direct (geen email!) ===
+  const now = new Date().toISOString();
+  addMessage({ role: 'user', message: tekst, created_at: now });
+  chatInput.value = '';
 
-  // Opslaan in Supabase
-  const { error } = await supabase.from('messages').insert([
-    {
-      user_id: user.id,
-      email: user.email,
-      message: tekst,
-      role: 'user',
-      created_at: new Date().toISOString()
-    },
-  ])
+  // === Opslaan in Supabase ===
+  const { error } = await supabase.from('messages').insert([{
+    user_id: user.id,
+    email: user.email,
+    message: tekst,
+    role: 'user',
+    created_at: now
+  }]);
+
   if (error) {
-    console.error('❌ Fout bij opslaan in Supabase:', error)
-    alert('Bericht kon niet worden opgeslagen.')
-    return
+    console.error('Fout bij opslaan:', error);
+    alert('Bericht kon niet worden verzonden.');
   }
 
-  // Bot reply
-  // const replyText = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊'
-  setTimeout(async () => {
-    const replyDiv = document.createElement('div')
-    replyDiv.className = 'message bot'
-    replyDiv.textContent = replyText
-    document.getElementById('chatMessages').appendChild(replyDiv)
-    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight
-
-    await supabase.from('messages').insert([
-      {
-        user_id: user.id,
-        email: user.email,
-        message: replyText,
-        role: 'bot',
-        created_at: new Date().toISOString()
-      },
-    ])
-  }, 800)
+  // GEEN BOT-REPLY
 }
 
 
   // --- Realtime listener ---
-  supabase
-    .channel('public:messages')
-    .on(
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'messages' },
-      (payload) => {
-        const msg = payload.new
-        if (user && msg.email === user.email) {
-          const div = document.createElement('div')
-          div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot')
-          div.textContent = msg.message
-          chatMessages.appendChild(div)
-          chatMessages.scrollTop = chatMessages.scrollHeight
-        }
+supabase
+  .channel('public:messages')
+  .on(
+    'postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'messages' },
+    (payload) => {
+      const msg = payload.new;
+      if (user && msg.email === user.email) {
+        addMessage(msg); // Gebruik dezelfde functie → perfecte stijl
       }
-    )
-    .subscribe()
+    }
+  )
+  .subscribe();
 })
 
 

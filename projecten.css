@@ -911,3 +911,316 @@ html body header.hide {
     display: flex; /* Nu zichtbaar op mobiel */
   }
 }
+@media (max-width: 768px) {
+  /* Header */
+  header {
+    padding: 10px 15px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(6px);
+    height: auto;
+    z-index: 1000;
+  }
+
+  /* Logo */
+  .logo-img {
+    height: 40px;
+  }
+
+  .logo-fallback {
+    font-size: 1.2rem;
+  }
+
+  /* Hamburger Menu */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 1100;
+    position: relative; /* Keep hamburger fixed in place */
+  }
+
+  .hamburger span {
+    height: 3px;
+    width: 100%;
+    background: #ffd60a;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Navigation */
+  nav {
+    display: none; /* Hide nav by default */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 60px 20px 20px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out, display 0s; /* Smooth slide-in */
+  }
+
+  nav.active {
+    display: flex; /* Show nav when active */
+    transform: translateX(0); /* Slide in from right */
+  }
+
+  nav a, nav .login-btn, nav .contact-btn {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+    text-decoration: none;
+  }
+
+  nav .chat-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+  }
+
+  nav .chat-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Handle dynamically added nav-header-buttons */
+  .nav-header-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .nav-header-buttons a, 
+  .nav-header-buttons .chat-container {
+    width: 80%;
+    text-align: center;
+    margin: 5px 0;
+  }
+
+  /* Hide desktop header buttons */
+  .header-buttons {
+    display: none;
+  }
+
+  /* Hero Section */
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 80px 15px 30px;
+    text-align: center;
+  }
+
+  .hero-content {
+    padding-right: 0;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    max-width: 90%;
+    margin: 0 auto 1.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+
+  /* Student Showcase */
+  .student-showcase {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 90%;
+    margin: 20px auto;
+  }
+
+  .student-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .student-photo {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #ffd60a;
+  }
+
+  .student-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .student-card p {
+    font-size: 0.85rem;
+  }
+
+  .student-badge {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+
+  /* Chat Widget */
+  .chat-box {
+    bottom: 20px;
+    right: 10px;
+    width: 90%;
+    max-width: 340px;
+    height: 70vh;
+    max-height: 450px;
+    border-radius: 12px;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+  }
+
+  .chat-box.active {
+    transform: translateY(0);
+  }
+
+  .chat-header {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .chat-messages {
+    padding: 10px;
+  }
+
+  .message {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .chat-input-area input {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .chat-input-area button {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Header */
+  .logo-img {
+    height: 35px;
+  }
+
+  .logo-fallback {
+    font-size: 1rem;
+  }
+
+  /* Hero */
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 8px 15px;
+    font-size: 0.8rem;
+  }
+
+  /* Student Showcase */
+  .student-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .student-card h3 {
+    font-size: 1rem;
+  }
+
+  .student-card p {
+    font-size: 0.8rem;
+  }
+
+  /* Chat Widget */
+  .chat-box {
+    width: 95%;
+    max-height: 400px;
+  }
+}
+
+/* Center login and contact buttons in mobile navigation */
+@media (max-width: 768px) {
+  .nav-header-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Center buttons horizontally */
+    justify-content: center !important; /* Center buttons vertically */
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+  }
+
+  .nav-header-buttons a, 
+  .nav-header-buttons .chat-container {
+    width: 90% !important; /* Make buttons wider */
+    text-align: center !important;
+    margin: 5px 0 !important;
+    display: flex !important;
+    justify-content: center !important; /* Center text horizontally */
+    align-items: center !important; /* Center text vertically */
+  }
+
+  .nav-header-buttons .login-btn,
+  .nav-header-buttons .contact-btn {
+    padding: 15px 20px !important;
+    text-align: center !important;
+    justify-content: center !important;
+    margin: 8px 0 !important;
+  }
+
+  /* Ensure text is centered in buttons */
+  .login-btn, .contact-btn {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
