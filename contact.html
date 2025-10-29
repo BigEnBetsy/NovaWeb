@@ -342,25 +342,26 @@
       </div>
 
       <!-- Werkend formulier via FormSubmit -->
-<form id="serviceContactForm" action="https://formsubmit.co/novaweb.devteam@gmail.com" method="POST">
-  <!-- Verborgen velden voor FormSubmit -->
-  <input type="hidden" name="_next" value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
-  <input type="hidden" name="_subject" value="Test: Nieuwe aanvraag via NovaWeb">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_autoresponse" value="Bedankt voor je test-aanvraag! We nemen binnen 24 uur contact op.">
+<form id="serviceContactForm" 
+      action="https://formsubmit.co/novaweb.devteam@gmail.com" 
+      method="POST">
+
+  <!-- ==== VERBORGEN FORM-SUBMIT VELDEN ==== -->
+  <input type="hidden" name="_next"      value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
+  <input type="hidden" name="_subject"   value="Nieuwe aanvraag via NovaWeb">
+  <input type="hidden" name="_captcha"   value="false">
+  <input type="hidden" name="_template"  value="table">
+  <input type="hidden" name="_autoresponse" value="Bedankt! We nemen binnen 24u contact op.">
 
   <!-- Jouw tracking ID -->
   <input type="hidden" name="tracking_id" value="0b2e74bcf7cd23934f4892a5de8d84724f583976068596aba7a6e4365f2377ad">
 
-  <!-- Debug-veld: Stuurt 'test=ja' mee om te checken of form werkt -->
-  <input type="hidden" name="debug" value="test-submit">
-
-  <!-- Honeypot (spam-val) -->
-  <div style="position: absolute; left: -9999px;">
+  <!-- Honeypot (onzichtbaar voor mensen) -->
+  <div style="position:absolute; left:-9999px;">
     <input type="text" name="_honey" tabindex="-1" autocomplete="off">
   </div>
 
+  <!-- ==== ZICHTBARE VELDEN ==== -->
   <div class="form-group">
     <input type="text" name="naam" placeholder="Volledige naam" required>
   </div>
@@ -371,7 +372,7 @@
     <input type="tel" name="telefoon" placeholder="Telefoonnummer (optioneel)">
   </div>
   <div class="form-group">
-    <select name="service" id="serviceSelect" required>
+    <select name="service" required>
       <option value="">Selecteer een service</option>
       <option value="Premium Website Package">Premium Website Package - €399</option>
       <option value="One-Page Website">One-Page Website - €199</option>
@@ -381,16 +382,17 @@
     </select>
   </div>
   <div class="form-group">
-    <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6" required></textarea>
+    <textarea name="bericht" placeholder="Vertel ons over je project..." rows="6" required></textarea>
   </div>
+
   <div class="form-footer">
-    <button type="submit" class="btn-primary" id="submitBtn">
-      <span class="btn-text">Verstuur Test-Aanvraag</span>
-      <span class="btn-icon">🚀</span>
+    <button type="submit" class="btn-primary">
+      <span class="btn-text">Verstuur Aanvraag</span>
+      <span class="btn-icon">Rocket</span>
     </button>
-    <p class="privacy-note">Je gegevens zijn veilig bij ons. We sturen geen spam.</p>
+    <p class="privacy-note">Je gegevens zijn veilig. Geen spam.</p>
   </div>
-</form>
+</form> 
 
 <!-- Optionele JS voor loading (geen AJAX, want dat kan lege mails veroorzaken) -->
 <script>
