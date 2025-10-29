@@ -342,45 +342,64 @@
       </div>
 
       <!-- Werkend formulier via FormSubmit -->
-      <form class="contact-form" id="serviceContactForm" method="POST"
-            action="https://formsubmit.co/NovaWeb.devteam@gmail.com">
+<form id="serviceContactForm" action="https://formsubmit.co/novaweb.devteam@gmail.com" method="POST">
+  <!-- Verborgen velden voor FormSubmit -->
+  <input type="hidden" name="_next" value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
+  <input type="hidden" name="_subject" value="Test: Nieuwe aanvraag via NovaWeb">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_autoresponse" value="Bedankt voor je test-aanvraag! We nemen binnen 24 uur contact op.">
 
-        <!-- Verborgen velden -->
-        <input type="hidden" name="_next" value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
-        <input type="hidden" name="_subject" value="Nieuwe aanvraag via NovaWeb">
-        <input type="hidden" name="_captcha" value="true">
-        <input type="hidden" name="_template" value="table">
+  <!-- Jouw tracking ID -->
+  <input type="hidden" name="tracking_id" value="0b2e74bcf7cd23934f4892a5de8d84724f583976068596aba7a6e4365f2377ad">
 
-        <div class="form-group">
-          <input type="text" name="naam" placeholder="Volledige naam" required>
-        </div>
-        <div class="form-group">
-          <input type="email" name="email" placeholder="Emailadres" required>
-        </div>
-        <div class="form-group">
-          <input type="tel" name="telefoon" placeholder="Telefoonnummer (optioneel)">
-        </div>
-        <div class="form-group">
-          <select name="service" id="serviceSelect" required>
-            <option value="">Selecteer een service</option>
-            <option value="Premium Website Package">Premium Website Package - €399</option>
-            <option value="One-Page Website">One-Page Website - €199</option>
-            <option value="Onderhoud & Support">Onderhoud & Support - €79/maand</option>
-            <option value="Studentenkorting">Studentenkorting Aanvragen</option>
-            <option value="Andere">Andere Vraag</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6" required></textarea>
-        </div>
-        <div class="form-footer">
-          <button type="submit" class="btn-primary" id="submitBtn">
-            <span class="btn-text">Verstuur Aanvraag</span>
-            <span class="btn-icon">🚀</span>
-          </button>
-          <p class="privacy-note">Je gegevens zijn veilig bij ons. We sturen geen spam.</p>
-        </div>
-      </form>
+  <!-- Debug-veld: Stuurt 'test=ja' mee om te checken of form werkt -->
+  <input type="hidden" name="debug" value="test-submit">
+
+  <!-- Honeypot (spam-val) -->
+  <div style="position: absolute; left: -9999px;">
+    <input type="text" name="_honey" tabindex="-1" autocomplete="off">
+  </div>
+
+  <div class="form-group">
+    <input type="text" name="naam" placeholder="Volledige naam" required>
+  </div>
+  <div class="form-group">
+    <input type="email" name="email" placeholder="Emailadres" required>
+  </div>
+  <div class="form-group">
+    <input type="tel" name="telefoon" placeholder="Telefoonnummer (optioneel)">
+  </div>
+  <div class="form-group">
+    <select name="service" id="serviceSelect" required>
+      <option value="">Selecteer een service</option>
+      <option value="Premium Website Package">Premium Website Package - €399</option>
+      <option value="One-Page Website">One-Page Website - €199</option>
+      <option value="Onderhoud & Support">Onderhoud & Support - €79/maand</option>
+      <option value="Studentenkorting">Studentenkorting Aanvragen</option>
+      <option value="Andere">Andere Vraag</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6" required></textarea>
+  </div>
+  <div class="form-footer">
+    <button type="submit" class="btn-primary" id="submitBtn">
+      <span class="btn-text">Verstuur Test-Aanvraag</span>
+      <span class="btn-icon">🚀</span>
+    </button>
+    <p class="privacy-note">Je gegevens zijn veilig bij ons. We sturen geen spam.</p>
+  </div>
+</form>
+
+<!-- Optionele JS voor loading (geen AJAX, want dat kan lege mails veroorzaken) -->
+<script>
+  document.getElementById('serviceContactForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="btn-text">Versturen...</span><span class="btn-icon">⏳</span>';
+  });
+</script>
     </div>
   </div>
 </section>
@@ -444,6 +463,7 @@ if (chatToggle && chatBox && closeChat) {
   });
 }
 </script>
+
 
 </body>
 </html>
