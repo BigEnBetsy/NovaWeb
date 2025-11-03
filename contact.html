@@ -139,7 +139,7 @@
       <!-- WERKEND FORMULIER MET FORMSUBMIT -->
       <form 
         id="serviceContactForm" 
-        action="https://formsubmit.co/novaweb.devteam@gmail.com" 
+        action="https://formsubmit.co/novaweb.contactus@gmail.com" 
         method="POST" 
         class="contact-form"
         novalidate
@@ -193,40 +193,44 @@
 
 <!-- JavaScript: Loading + Validatie + Chat -->
 <script>
-  const form = document.getElementById('serviceContactForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText = submitBtn.querySelector('.btn-text');
-  const btnIcon = submitBtn.querySelector('.btn-icon');
+// Selecteer form en submit-knop
+const form = document.getElementById('serviceContactForm');
+const submitBtn = document.getElementById('submitBtn');
+const btnText = submitBtn.querySelector('.btn-text');
+const btnIcon = submitBtn.querySelector('.btn-icon');
 
-  form.addEventListener('submit', function(e) {
-    // Laat normale submit toe → FormSubmit doet de rest
+// Bij submit: normale FormSubmit submit, maar visual feedback
+form.addEventListener('submit', function(e) {
+    // Laat normale submit doorgaan → FormSubmit handelt mail en redirect af
     submitBtn.disabled = true;
     btnText.textContent = 'Versturen...';
-    btnIcon.style.display = 'none';
+    if(btnIcon) btnIcon.style.display = 'none';
     submitBtn.classList.add('btn-loading');
-  });
+});
 
-  // Validatie feedback
-  const inputs = form.querySelectorAll('input, select, textarea');
-  inputs.forEach(input => {
+// Validatie: rood bij invalid, reset bij correct input
+const inputs = form.querySelectorAll('input, select, textarea');
+inputs.forEach(input => {
     input.addEventListener('invalid', () => {
-      input.style.borderColor = '#ff6b6b';
+        input.style.borderColor = '#ff6b6b';
     });
     input.addEventListener('input', () => {
-      if (input.validity.valid) {
-        input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-      }
+        if (input.validity.valid) {
+            input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }
     });
-  });
+});
 
-  // Chat toggle
-  const chatToggle = document.getElementById('chatToggle');
-  const chatBox = document.getElementById('chatBox');
-  const closeChat = document.getElementById('closeChat');
-  if (chatToggle && chatBox && closeChat) {
+// Chat toggle functionaliteit
+const chatToggle = document.getElementById('chatToggle');
+const chatBox = document.getElementById('chatBox');
+const closeChat = document.getElementById('closeChat');
+
+if(chatToggle && chatBox && closeChat){
     chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
     closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
-  }
+}
+
 </script>
 
 </body>
