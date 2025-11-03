@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" media="screen" href="home.css">
   <link rel="stylesheet" type="text/css" media="screen" href="diensten.css">
-  
+ 
   <style>
     /* === Jouw bestaande styling (ongewijzigd) === */
     .contact-form-section { padding: 100px 20px; background: rgba(13, 59, 102, 0.1); backdrop-filter: blur(10px); }
@@ -42,13 +42,12 @@
   </style>
 </head>
 <body>
-
 <header>
   <div class="logo" id="logo">
     <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
     <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
   </div>
-  <nav>
+  <nav id="navMenu">
     <a href="index.html">Home</a>
     <a href="over-ons.html">Over ons</a>
     <a href="projecten.html">Portfolio</a>
@@ -58,12 +57,12 @@
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
     <a href="#contact-form" class="contact-btn">Contact us</a>
-    <div class="chat-container">
+    <!-- <div class="chat-container">
       <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
-    </div>
+    </div> -->
   </div>
-
-  <div class="chat-box" id="chatBox">
+  <!-- Chatvenster (optioneel) -->
+  <!-- <div class="chat-box" id="chatBox">
     <div class="chat-header">
       <span>Chat met NovaWeb</span>
       <button id="closeChat">×</button>
@@ -75,6 +74,11 @@
       <input type="text" id="chatInput" placeholder="Typ een bericht..." />
       <button id="sendChat">Verstuur</button>
     </div>
+  </div> -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 </header>
 
@@ -83,12 +87,10 @@
   <div class="container">
     <h2>Start Jouw Digitale Reis</h2>
     <p class="contact-subtitle">Laat ons je helpen om je online doelen te bereiken — vrijblijvende consultatie binnen 24 uur.</p>
-
     <div class="contact-content">
       <div class="contact-info">
         <h3>Direct Contact Met Ons Team</h3>
         <p class="contact-description">Geen sales team, geen tussenpersonen — gewoon twee gepassioneerde developers die klaarstaan om je project tot leven te brengen.</p>
-
         <div class="contact-details">
           <div class="contact-item">
             <span class="contact-icon">📧</span>
@@ -119,7 +121,6 @@
             </div>
           </div>
         </div>
-
         <div class="success-stats">
           <div class="success-item">
             <span class="success-number">15+</span>
@@ -135,12 +136,11 @@
           </div>
         </div>
       </div>
-
       <!-- WERKEND FORMULIER MET FORMSUBMIT -->
-      <form 
-        id="serviceContactForm" 
-        action="https://formsubmit.co/novaweb.contactus@gmail.com" 
-        method="POST" 
+      <form
+        id="serviceContactForm"
+        action="https://formsubmit.co/novaweb.contactus@gmail.com"
+        method="POST"
         class="contact-form"
         novalidate
       >
@@ -151,10 +151,8 @@
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_autoresponse" value="Bedankt voor je aanvraag! We nemen binnen 24 uur contact op.">
         <input type="hidden" name="tracking_id" value="0b2e74bcf7cd23934f4892a5de8d84724f583976068596aba7a6e4365f2377ad">
-
         <!-- Honeypot tegen spam -->
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-
         <!-- Formuliervelden -->
         <div class="form-group">
           <input type="text" name="naam" placeholder="Volledige naam" required>
@@ -178,11 +176,9 @@
         <div class="form-group">
           <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6" required></textarea>
         </div>
-
         <div class="form-footer">
           <button type="submit" id="submitBtn" class="btn-primary">
             <span class="btn-text">Verstuur Aanvraag</span>
-            <span class="btn-icon">Rocket</span>
           </button>
           <p class="privacy-note">Je gegevens zijn veilig. Geen spam.</p>
         </div>
@@ -191,47 +187,114 @@
   </div>
 </section>
 
-<!-- JavaScript: Loading + Validatie + Chat -->
-<script>
-// Selecteer form en submit-knop
-const form = document.getElementById('serviceContactForm');
-const submitBtn = document.getElementById('submitBtn');
-const btnText = submitBtn.querySelector('.btn-text');
-const btnIcon = submitBtn.querySelector('.btn-icon');
+<footer>
+  <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
+</footer>
 
-// Bij submit: normale FormSubmit submit, maar visual feedback
-form.addEventListener('submit', function(e) {
-    // Laat normale submit doorgaan → FormSubmit handelt mail en redirect af
-    submitBtn.disabled = true;
-    btnText.textContent = 'Versturen...';
-    if(btnIcon) btnIcon.style.display = 'none';
-    submitBtn.classList.add('btn-loading');
-});
+<!-- VOLLEDIGE SUPABASE + LOGIN + HAMBURGER + FORM VALIDATIE -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
+  const supabase = createClient(supabaseUrl, supabaseKey)
+  let user = null
 
-// Validatie: rood bij invalid, reset bij correct input
-const inputs = form.querySelectorAll('input, select, textarea');
-inputs.forEach(input => {
+  // DOM Elements
+  const loginBtn = document.querySelector('.login-btn')
+  const nav = document.getElementById('navMenu')
+  const hamburger = document.getElementById('hamburger')
+  const headerButtons = document.querySelector('.header-buttons')
+  const form = document.getElementById('serviceContactForm')
+  const submitBtn = document.getElementById('submitBtn')
+  const btnText = submitBtn.querySelector('.btn-text')
+
+  // === HAMBURGER MENU ===
+  function initHamburgerMenu() {
+    function moveHeaderButtonsToNav() {
+      const oldClone = document.querySelector('.nav-header-buttons')
+      if (oldClone) oldClone.remove()
+      if (window.innerWidth <= 768) {
+        const clone = headerButtons.cloneNode(true)
+        clone.classList.add('nav-header-buttons')
+        clone.style.display = 'flex'
+        clone.style.flexDirection = 'column'
+        clone.style.alignItems = 'flex-start'
+        clone.style.gap = '10px'
+        clone.querySelectorAll('a, .chat-container').forEach(el => {
+          el.style.width = '100%'
+          el.style.textAlign = 'left'
+          el.style.margin = '5px 0'
+          el.style.padding = '15px 10px'
+        })
+        nav.appendChild(clone)
+      }
+    }
+    window.addEventListener('resize', moveHeaderButtonsToNav)
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active')
+      nav.classList.toggle('active')
+    })
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('active')
+        hamburger.classList.remove('active')
+      })
+    })
+    setTimeout(moveHeaderButtonsToNav, 100)
+  }
+
+  // === LOGIN FUNCTIONS ===
+  async function checkLogin() {
+    const { data: { session } } = await supabase.auth.getSession()
+    user = session?.user ?? null
+    return session
+  }
+
+  function updateHeader(session) {
+    if (!loginBtn) return
+    if (session) {
+      loginBtn.innerText = 'Account'
+      loginBtn.href = 'account.html'
+    } else {
+      loginBtn.innerText = 'Login'
+      loginBtn.href = 'login.html'
+    }
+  }
+
+  // === FORM VALIDATIE & SUBMIT FEEDBACK ===
+  const inputs = form.querySelectorAll('input, select, textarea')
+  inputs.forEach(input => {
     input.addEventListener('invalid', () => {
-        input.style.borderColor = '#ff6b6b';
-    });
+      input.style.borderColor = '#ff6b6b'
+    })
     input.addEventListener('input', () => {
-        if (input.validity.valid) {
-            input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-        }
-    });
-});
+      if (input.validity.valid) {
+        input.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+      }
+    })
+  })
 
-// Chat toggle functionaliteit
-const chatToggle = document.getElementById('chatToggle');
-const chatBox = document.getElementById('chatBox');
-const closeChat = document.getElementById('closeChat');
+  form.addEventListener('submit', function(e) {
+    submitBtn.disabled = true
+    btnText.textContent = 'Versturen...'
+    submitBtn.classList.add('btn-loading')
+  })
 
-if(chatToggle && chatBox && closeChat){
-    chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'));
-    closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
-}
+  // === INITIALIZE EVERYTHING ===
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize hamburger menu
+    initHamburgerMenu()
 
+    // Check login status
+    const session = await checkLogin()
+    updateHeader(session)
+
+    // Listen for auth changes (login/logout)
+    supabase.auth.onAuthStateChange((_event, session) => {
+      user = session?.user ?? null
+      updateHeader(session)
+    })
+  })
 </script>
-
 </body>
 </html>

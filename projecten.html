@@ -23,10 +23,6 @@
       align-items: center;
       border-bottom: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-      pointer-events: none; /* Voorkomt dat lege ruimte klikken blokkeert */
-    }
-    header > * {
-      pointer-events: auto; /* Alleen logo, hamburger, etc. klikbaar */
     }
     header.hide {
       transform: translateY(-100%);
@@ -69,29 +65,8 @@
     .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     /* Chat box */
-    .chat-box {
-      position: fixed;
-      top: 90px;
-      right: 20px;
-      width: 320px;
-      height: 420px;
-      background: #929292;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.2);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transform: translateX(120%);
-      opacity: 0;
-      transition: all .4s;
-      z-index: 9999;
-      pointer-events: none; /* Alleen klikbaar als actief */
-    }
-    .chat-box.active {
-      transform: translateX(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .chat-box { position: fixed; top: 90px; right: 20px; width: 320px; height: 420px; background: #929292; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,.2); display: flex; flex-direction: column; overflow: hidden; transform: translateX(120%); opacity: 0; transition: all .4s; z-index: 9999; }
+    .chat-box.active { transform: translateX(0); opacity: 1; }
     .chat-header { background: #0d3b66; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
     .chat-header button { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
     .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #a4a4a4; display: flex; flex-direction: column; gap: 8px; }
@@ -115,8 +90,6 @@
       transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
       position: relative;
       overflow: hidden;
-      pointer-events: auto !important; /* Altijd klikbaar */
-      z-index: 10;
     }
     .portfolio-item.hidden {
       opacity: 0;
@@ -126,7 +99,7 @@
     .portfolio-item.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
-      pointer-events: auto !important;
+      pointer-events: auto;
     }
     .filter-btn {
       transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -134,13 +107,6 @@
     .filter-btn.active {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-
-    /* Zorg dat project-links altijd klikbaar zijn */
-    .project-links a {
-      pointer-events: auto !important;
-      position: relative;
-      z-index: 20;
     }
 
     /* Mobile nav - VAN LINKS */
@@ -179,12 +145,8 @@
       .chat-box {
         top: auto; bottom: 20px; right: 5%; width: 90%; max-width: 340px; height: 70vh; max-height: 450px;
         transform: translateY(100%); border-radius: 12px;
-        pointer-events: none;
       }
-      .chat-box.active {
-        transform: translateY(0);
-        pointer-events: auto;
-      }
+      .chat-box.active { transform: translateY(0); }
 
       /* Portfolio */
       .portfolio-grid {
@@ -195,6 +157,15 @@
         display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
       }
       .filter-btn { padding: 8px 16px; font-size: 0.9rem; }
+
+      /* === FIX: Mobiel klikbaar maken === */
+      .project-overlay {
+        pointer-events: none !important;
+      }
+      .project-links,
+      .project-links a {
+        pointer-events: auto !important;
+      }
     }
 
     @media (max-width: 480px) {
@@ -227,15 +198,15 @@
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
     <a href="contact.html" class="contact-btn">Contact us</a>
-    <div class="chat-container">
+    <!-- <div class="chat-container">
       <img src="Fotos/chat.png" alt="Chat" class="chat-icon" id="chatToggle">
-    </div>
+    </div> -->
   </div>
 
-  <div class="chat-box" id="chatBox">
+  <!-- <div class="chat-box" id="chatBox">
     <div class="chat-header">
       <span>Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
+      <button id="closeChat">x</button>
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag?</div>
@@ -244,7 +215,7 @@
       <input type="text" id="chatInput" placeholder="Typ een bericht..." />
       <button id="sendChat">Verstuur</button>
     </div>
-  </div>
+  </div> -->
 </header>
 
 <main>
@@ -274,7 +245,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/LaptopAdviseur/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Full project</div>
@@ -291,7 +262,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/muziek/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Bestseller</div>
@@ -308,7 +279,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/FotoCollage/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Design</div>
@@ -325,7 +296,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/College/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Student</div>
@@ -342,7 +313,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/StamCafe/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Horeca</div>
@@ -359,7 +330,7 @@
             <div class="project-overlay">
               <div class="project-links">
                 <a href="https://bigenbetsy.github.io/Portfolio/" target="_blank" class="view-project-btn">Live Bekijken</a>
-                <a href="#" class="project-details-btn">Meer Details</a>
+                <a href="javascript:void(0)" class="project-details-btn">Meer Details</a>
               </div>
             </div>
             <div class="project-badge">Portfolio</div>
@@ -374,7 +345,7 @@
   </section>
 </main>
 
-<footer><p>&copy; 2025 NovaWeb</p></footer>
+<footer><p>© 2025 NovaWeb</p></footer>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
