@@ -1,428 +1,487 @@
-/* ===============================
-   ✅ CSS Reset en Basisstijlen
-   =============================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #0D3B66;
+  --accent: #FFD60A;
+  --danger: #DC2626;
+  --gray: rgba(255, 255, 255, 0.7);
+  --bg: #0a1a2e;
+  --card: rgba(15, 42, 77, 0.8);
+  --radius: 20px;
+  --shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-      background: linear-gradient(135deg, #e0f7ff 0%, #c0eaff 50%, #f0fcff 100%);
-  background-attachment: fixed; /* houdt de gradient vast bij scrollen */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0a1a2e 0%, #0f2a4d 50%, #1e3a8a 100%);
+  background-attachment: fixed;
+  color: #e2e8f0;
+  min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* ===============================
-   ✅ Account Sectie
-   =============================== */
-.account {
-    padding: 40px 0;
-    min-height: 100vh;
+/* Header */
+.dashboard-header {
+  text-align: center;
+  padding: 3rem 0 2rem;
 }
 
-.account h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e2e8f0;
+.dashboard-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #FFD60A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
 }
 
-/* ===============================
-   ✅ Account Layout
-   =============================== */
-.account-layout {
-    display: flex;
-    gap: 30px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+.dashboard-header p {
+  font-size: 1.1rem;
+  color: var(--gray);
 }
 
-/* ===============================
-   ✅ Sidebar Navigatie
-   =============================== */
-.account-sidebar {
-    width: 280px;
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    padding: 30px 0;
+/* Nav Dots */
+.nav-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 2rem 0;
 }
 
-.sidebar-nav {
-    list-style: none;
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: var(--transition);
 }
 
-.sidebar-nav li {
-    margin-bottom: 5px;
+.dot.active, .dot:hover {
+  background: var(--accent);
+  transform: scale(1.3);
 }
 
-.sidebar-nav a {
-    display: flex;
-    align-items: center;
-    padding: 15px 25px;
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
+/* Cards */
+.card {
+  background: var(--card);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.3s ease;
 }
 
-.sidebar-nav a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-left-color: rgba(255, 255, 255, 0.5);
+.card:hover {
+  transform: translateY(-8px);
 }
 
-.sidebar-nav a.active {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: white;
-    border-left-color: white;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.nav-icon {
-    margin-right: 12px;
-    font-size: 1.2rem;
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-/* ===============================
-   ✅ Hoofdinhoud
-   =============================== */
-.account-main {
-    flex: 1;
-    padding: 40px;
+.card-header i {
+  font-size: 1.4rem;
+  color: var(--accent);
 }
 
-.section-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
+.card-body {
+  padding: 2rem;
 }
 
-/* ===============================
-   ✅ Formulier Stijlen
-   =============================== */
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.form-group {
-    margin-bottom: 25px;
+/* Form */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #4a5568;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
 }
 
-.form-control {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #cbd5e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background-color: white;
+.input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.2);
 }
 
-.form-control:disabled {
-    background-color: #f7fafc;
-    color: #718096;
-    cursor: not-allowed;
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-/* ===============================
-   ✅ Knoppen
-   =============================== */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    margin-right: 10px;
-    margin-bottom: 10px;
+/* Checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  user-select: none;
 }
 
-.btn span {
-    margin-right: 8px;
-    font-size: 1.1rem;
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 }
 
-.btn-primary {
-    background-color: #4f46e5;
-    color: white;
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  margin-right: 0.75rem;
+  transition: var(--transition);
+  position: relative;
 }
 
-.btn-primary:hover {
-    background-color: #4338ca;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+.checkbox input:checked ~ .checkmark {
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
-.btn-secondary {
-    background-color: #f1f5f9;
-    color: #475569;
-    border: 1px solid #cbd5e0;
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
-.btn-secondary:hover {
-    background-color: #e2e8f0;
-    transform: translateY(-2px);
+.checkbox input:checked ~ .checkmark:after {
+  display: block;
 }
 
-.btn-danger {
-    background-color: #dc2626;
-    color: white;
+/* Upload */
+.upload-area {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.btn-danger:hover {
-    background-color: #b91c1c;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+.upload-area:hover {
+  border-color: var(--accent);
+  background: rgba(255, 214, 10, 0.08);
 }
 
-/* ===============================
-   ✅ Checkbox Groep
-   =============================== */
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+.upload-area i {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
 }
 
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 10px;
-    accent-color: #4f46e5;
-}
-
-.checkbox-group label {
-    margin-bottom: 0;
-    cursor: pointer;
-}
-
-/* ===============================
-   ✅ Bestand Upload
-   =============================== */
-.file-upload {
-    border: 2px dashed #cbd5e0;
-    border-radius: 12px;
-    padding: 40px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background-color: #f8fafc;
-}
-
-.file-upload:hover {
-    border-color: #4f46e5;
-    background-color: #f0f4ff;
-}
-
-.upload-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    opacity: 0.7;
-}
-
-/* ===============================
-   ✅ Statistieken
-   =============================== */
+/* Stats */
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
-.stat-card {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border-radius: 10px;
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
+.stat {
+  text-align: center;
 }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-}
-
-.stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #4f46e5;
-    margin-bottom: 5px;
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 
 .stat-label {
-    font-size: 0.9rem;
-    color: #64748b;
-    font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
 }
 
-/* ===============================
-   ✅ Actieknoppen
-   =============================== */
-.action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 1px solid #e2e8f0;
+/* Buttons */
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-/* ===============================
-   ✅ Modal
-   =============================== */
+.btn-group.full {
+  justify-content: stretch;
+}
+
+.btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
+}
+
+.btn-secondary, .btn-outline {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover, .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+  transform: translateY(-3px);
+}
+
+/* Modal */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .modal-content {
-    background: white;
-    border-radius: 12px;
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    animation: modalFadeIn 0.3s ease;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.modal h3 {
+  color: #fca5a5;
+  margin-bottom: 1rem;
 }
 
-.modal-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: center;
 }
 
-/* ===============================
-   ✅ Responsive Design
-   =============================== */
-@media (max-width: 992px) {
-    .account-layout {
-        flex-direction: column;
-    }
-    
-    .account-sidebar {
-        width: 100%;
-        padding: 20px 0;
-    }
-    
-    .sidebar-nav {
-        display: flex;
-        overflow-x: auto;
-        padding: 0 20px;
-    }
-    
-    .sidebar-nav li {
-        margin-bottom: 0;
-        flex-shrink: 0;
-    }
-    
-    .sidebar-nav a {
-        border-left: none;
-        border-bottom: 3px solid transparent;
-        padding: 10px 15px;
-    }
-    
-    .sidebar-nav a.active {
-        border-left: none;
-        border-bottom-color: white;
-    }
-    
-    .account-main {
-        padding: 30px;
-    }
-    
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-        margin-right: 0;
-    }
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-grid, .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .btn-group {
+    flex-direction: column;
+  }
+  .dashboard-header h1 {
+    font-size: 2.2rem;
+  }
 }
 
-@media (max-width: 576px) {
-    .account {
-        padding: 20px 0;
-    }
-    
-    .account-main {
-        padding: 20px;
-    }
-    
-    .modal-content {
-        padding: 20px;
-    }
-    
-    .modal-buttons {
-        flex-direction: column;
-    }
+/* === MEDIA GRID === */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.media-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.media-item:hover {
+  transform: translateY(-4px);
+}
+
+.media-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.file-icon {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #ffd60a;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: #cc0000;
+}
+
+#email-status {
+  display: block;
+  font-weight: 500;
+}
+
+#copy-id i {
+  margin-right: 6px;
+}
+
+.profile-grid {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Logo linksboven - groter maar subtiel */
+.logo-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  transition: transform 0.2s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+.logo {
+  width: 100px;   /* GROTER: was 40px */
+  height: auto;  /* GROTER: was 40px */
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  border-radius: 8px; /* Optioneel: subtiele ronde hoeken */
+}
+
+/* Meer ruimte in header */
+.dashboard-header {
+  position: relative;
+  padding-top: 80px; /* Meer ruimte voor groter logo */
+}
+
+.header-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Mobiel: iets kleiner maar nog steeds goed zichtbaar */
+@media (max-width: 768px) {
+  .logo {
+    width: 44px;
+    height: 44px;
+  }
+  .dashboard-header {
+    padding-top: 65px;
+  }
+  .logo-link {
+    top: 15px;
+    left: 15px;
+  }
 }

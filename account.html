@@ -1,104 +1,186 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accountbeheer</title>
-    <link rel="stylesheet" href="account.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account | NovaWeb</title>
+  <link rel="stylesheet" href="account.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <section class="account">
-        <div class="container">
-            <h2>Accountbeheer</h2>
-            
-            <div class="account-layout">
-                <!-- Sidebar Navigation -->
-                <nav class="account-sidebar">
-                    <ul class="sidebar-nav">
-                        <li><a href="#account-main" class="active"><span class="nav-icon">👤</span>Profiel</a></li>
-                        <li><a href="#top"><span class="nav-icon">🔒</span>Beveiliging</a></li>
-                        <li><a href="#noty"><span class="nav-icon">🔔</span>Notificaties</a></li>
-                        <li><a href="#file-upload"><span class="nav-icon">📁</span>Bestanden</a></li>
-                        <li><a href="#action-buttons"><span class="nav-icon">⚙️</span>Instellingen</a></li>
-                    </ul>
-                </nav>
 
-                <!-- Main Content -->
-                <main class="account-main">
-                    <h3 class="section-title" id="top">Profielgegevens</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="email">E-mailadres</label>
-                            <input type="email" id="email" class="form-control" disabled>
-                        </div>
-                        <div class="form-group" id="safe">
-                            <label for="user-type">Gebruikerstype</label>
-                            <select id="user-type" class="form-control">
-                                <option value="student">Student</option>
-                                <option value="professional">Professional</option>
-                                <option value="enterprise">Enterprise</option>
-                            </select>
-                        </div>
-                    </div>
+  <div class="dashboard">
 
-                    <div class="form-group">
-                        <button class="btn btn-secondary" id="change-email">✏️ E-mail wijzigen</button>
-                        <button class="btn btn-secondary" id="student-discount">🎓 Studentenkorting aanvragen</button>
-                    </div>
+    <!-- Header -->
+<!-- Header -->
+<!-- Header -->
+<!-- Header -->
+<header class="dashboard-header">
+  <div class="container">
+    <!-- LOGO LINKS BOVEN -->
+    <a href="index.html" class="logo-link">
+      <img src="Fotos/Logo.svg" alt="NovaWeb" class="logo">
+    </a>
 
-                    <h3 class="section-title" style="margin-top:40px;">Notificatie-instellingen</h3>
-                    <div class="form-group" id="noty">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="email-notifications" checked>
-                            <label for="email-notifications">E-mail notificaties ontvangen</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="project-updates">
-                            <label for="project-updates">Project updates</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="newsletter" checked>
-                            <label for="newsletter">Nieuwsbrief ontvangen</label>
-                        </div>
-                    </div>
+    <div class="header-content">
+      <h1>Account instellingen</h1>
+    </div>
+  </div>
+</header>
 
-                    <h3 class="section-title" style="margin-top:40px;">Bestandsbeheer</h3>
-                    <div class="file-upload">
-                        <div class="upload-icon">📁</div>
-                        <p>Sleep bestanden hier of klik om te uploaden</p>
-                        <p style="font-size:0.9rem;opacity:0.7;margin-top:10px;">Max. bestandsgrootte: 50MB</p>
-                        <input type="file" id="file-input" style="display:none;">
-                    </div>
-
-                    <h3 class="section-title">Account Statistieken</h3>
-                    <div class="stats-grid">
-                        <div class="stat-card"><span class="stat-number" id="projects-count">0</span><span class="stat-label">Projecten</span></div>
-                        <div class="stat-card"><span class="stat-number" id="uploads-count">0</span><span class="stat-label">Uploads</span></div>
-                        <div class="stat-card"><span class="stat-number" id="active-days">0</span><span class="stat-label">Actieve dagen</span></div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="save-settings">💾 Instellingen Opslaan</button>
-                        <button class="btn btn-secondary" id="logout">🚪 Uitloggen</button>
-                        <button class="btn btn-danger" id="delete-account">🗑️ Account Verwijderen</button>
-                    </div>
-                </main>
-            </div>
-        </div>
-    </section>
-
-    <!-- Delete Modal -->
-    <div class="modal" id="delete-modal">
-        <div class="modal-content">
-            <h3 style="color:#e74c3c;margin-bottom:20px;">Account Verwijderen</h3>
-            <p>Weet je zeker dat je je account wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt en alle gegevens zullen permanent verloren gaan.</p>
-            <div class="modal-buttons">
-                <button class="btn btn-danger" id="confirm-delete">Ja, account verwijderen</button>
-                <button class="btn btn-secondary" id="cancel-delete">Annuleren</button>
-            </div>
-        </div>
+    <!-- Navigatie Dots (Scroll Indicator) -->
+    <div class="nav-dots">
+      <a href="#profile" class="dot active" data-section="profile"></a>
+      <a href="#notifications" class="dot" data-section="notifications"></a>
+      <a href="#files" class="dot" data-section="files"></a>
+      <a href="#stats" class="dot" data-section="stats"></a>
+      <a href="#actions" class="dot" data-section="actions"></a>
+      
     </div>
 
-    <script type="module" src="account.js"></script>
+    <div class="container">
+
+<!-- Profiel -->
+<section id="profile" class="card">
+  <div class="card-header">
+    <h2>Profiel</h2>
+    <i class="fas fa-user"></i>
+  </div>
+  <div class="card-body">
+    <div class="profile-grid">
+      <!-- E-mail -->
+      <div class="form-group">
+        <label>E-mailadres</label>
+        <input type="email" id="email" class="input" disabled>
+        <small id="email-status" style="color: #4ade80; font-size: 0.8rem; margin-top: 4px;"></small>
+      </div>
+
+
+
+      <!-- Account ID -->
+      <div class="form-group">
+        <label>Account ID</label>
+        <input type="text" id="account-id" class="input" disabled style="font-family: monospace; font-size: 0.85rem;">
+      </div>
+
+      <!-- Aangemeld op -->
+      <div class="form-group">
+        <label>Aangemeld op</label>
+        <input type="text" id="created-at" class="input" disabled>
+      </div>
+
+      <!-- Laatst ingelogd -->
+      <div class="form-group">
+        <label>Laatst ingelogd</label>
+        <input type="text" id="last-sign-in" class="input" disabled>
+      </div>
+
+
+    </div>
+
+    <div class="btn-group">
+      <button id="change-email" class="btn btn-outline">E-mail wijzigen</button>
+      <button id="student-discount" class="btn btn-outline">Studentenkorting</button>
+      <button id="copy-id" class="btn btn-outline">
+        <i class="fas fa-copy"></i> ID Kopiëren
+      </button>
+    </div>
+  </div>
+</section>
+
+      <!-- Notificaties -->
+      <section id="notifications" class="card">
+        <div class="card-header">
+          <h2>Notificaties</h2>
+          <i class="fas fa-bell"></i>
+        </div>
+        <div class="card-body">
+          <label class="checkbox">
+            <input type="checkbox" id="email-notifications" checked>
+            <span class="checkmark"></span>
+            E-mail notificaties ontvangen
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="project-updates">
+            <span class="checkmark"></span>
+            Project updates
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="newsletter" checked>
+            <span class="checkmark"></span>
+            Nieuwsbrief ontvangen
+          </label>
+        </div>
+      </section>
+
+      <!-- Bestanden -->
+      <section id="files" class="card">
+        <div class="card-header">
+          <h2>Bestanden</h2>
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <div class="card-body">
+          <div class="upload-area" id="upload-area">
+            <i class="fas fa-upload"></i>
+            <p>Sleep bestanden hier of <strong>klik om te uploaden</strong></p>
+            <small>Max. 50MB per bestand</small>
+            <input type="file" id="file-input" hidden>
+          </div>
+        </div>
+      </section>
+
+      <!-- Statistieken -->
+      <section id="stats" class="card">
+        <div class="card-header">
+          <h2>Statistieken</h2>
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="card-body">
+          <div class="stats-grid">
+            <div class="stat">
+              <div class="stat-value" id="projects-count">0</div>
+              <div class="stat-label">Projecten</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="uploads-count">0</div>
+              <div class="stat-label">Uploads</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="active-days">0</div>
+              <div class="stat-label">Actieve dagen</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Acties -->
+      <section id="actions" class="card">
+
+        <div class="card-body">
+          <div class="btn-group full">
+            <button id="save-settings" class="btn btn-primary">Instellingen Opslaan</button>
+            <button id="logout" class="btn btn-secondary">Uitloggen</button>
+            <button id="delete-account" class="btn btn-danger">Account Verwijderen</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal" id="delete-modal">
+    <div class="modal-content">
+      <h3>Account Verwijderen</h3>
+      <p>Weet je zeker dat je je account wilt verwijderen? <strong>Deze actie kan niet ongedaan worden gemaakt.</strong></p>
+      <div class="modal-actions">
+        <button id="confirm-delete" class="btn btn-danger">Ja, verwijderen</button>
+        <button id="cancel-delete" class="btn btn-outline">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="account.js"></script>
 </body>
 </html>
