@@ -326,10 +326,11 @@ const accessToken = urlParams.get('access_token')
       btnLoader.style.display = 'flex'
 
       try {
-        const { error } = await supabase.auth.updateUser(
-          { password: newPassword },
-          { access_token: accessToken }
-        )
+const { error } = await supabase.auth.updateUser(
+  { password: newPassword },
+  { accessToken } // correct: camelCase
+)
+
 
         if (error) throw error
 
