@@ -1,10 +1,258 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovaWeb - Diensten</title>
-  <link rel="stylesheet" href="diensten.css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>NovaWeb Contact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="home.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="diensten.css">
+ 
+  <style>
+    /* === ALGEMENE HEADER STIJLEN === */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background: rgba(0,0,0,0.15);
+      backdrop-filter: blur(5px);
+      padding: 20px 50px;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    header.hide {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    header.scrolled {
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,214,10,0.3);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+
+    /* Logo */
+    .logo-img { height: 80px; filter: drop-shadow(0 0 15px rgba(255,214,10,0.5)); transition: all .3s; }
+    .logo-img:hover { filter: drop-shadow(0 0 25px rgba(255,214,10,0.8)); transform: scale(1.05); }
+    .logo-fallback { font-weight: 800; font-size: 1.5rem; color: #ffd60a; text-shadow: 0 0 10px rgba(255,214,10,0.5); }
+
+    /* Desktop nav */
+    nav { 
+      position: absolute; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      display: flex; 
+      gap: 50px; 
+    }
+    nav a { 
+      font-weight: 600; 
+      color: #fff; 
+      text-decoration: none; 
+      font-size: 1.1rem; 
+      position: relative; 
+      padding: 10px 0; 
+      transition: all .3s; 
+    }
+    nav a::after { 
+      content: ''; 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 0; 
+      height: 2px; 
+      background: linear-gradient(45deg, #ffd60a, #ffed4e); 
+      transition: width .3s; 
+    }
+    nav a:hover::after { width: 100%; }
+    nav a:hover { color: #ffd60a; transform: translateY(-2px); }
+
+    /* Header buttons */
+    .header-buttons { 
+      display: flex; 
+      align-items: center; 
+      gap: 20px; 
+    }
+    .login-btn, .contact-btn { 
+      border-radius: 50px; 
+      padding: 12px 30px; 
+      font-weight: 700; 
+      text-decoration: none; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all .3s; 
+    }
+    .login-btn { 
+      background: transparent; 
+      border: 2px solid rgba(255,214,10,0.7); 
+      color: #ffd60a; 
+    }
+    .login-btn:hover { 
+      background: rgba(255,214,10,0.1); 
+      border-color: #ffd60a; 
+      transform: translateY(-2px); 
+      box-shadow: 0 5px 15px rgba(255,214,10,0.3); 
+    }
+    .contact-btn { 
+      background: linear-gradient(45deg, #ffd60a, #ffed4e); 
+      color: #0d3b66; 
+    }
+    .contact-btn:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 10px 25px rgba(255,214,10,0.4); 
+    }
+
+    /* Hamburger */
+    .hamburger { 
+      display: none; 
+      flex-direction: column; 
+      gap: 6px; 
+      width: 30px; 
+      height: 25px; 
+      cursor: pointer; 
+      z-index: 1100; 
+    }
+    .hamburger span { 
+      height: 3px; 
+      background: #ffd60a; 
+      border-radius: 2px; 
+      transition: all .3s; 
+    }
+    .hamburger.active span:nth-child(1) { 
+      transform: translateY(8px) rotate(45deg); 
+    }
+    .hamburger.active span:nth-child(2) { 
+      opacity: 0; 
+    }
+    .hamburger.active span:nth-child(3) { 
+      transform: translateY(-8px) rotate(-45deg); 
+    }
+
+    /* === MOBIELE WEERGAVE (≤768px) === */
+    @media (max-width: 768px) {
+      header { 
+        padding: 10px 15px; 
+        height: auto; 
+        justify-content: flex-start; 
+      }
+
+      /* Logo verbergen op mobiel */
+      .logo, .logo-img, .logo-fallback { 
+        display: none; 
+      }
+
+      /* Hamburger links bovenaan */
+      .hamburger { 
+        display: flex; 
+        position: absolute; 
+        left: 15px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+      }
+
+      /* Header buttons verbergen (worden verplaatst naar menu) */
+      .header-buttons { 
+        display: none; 
+      }
+
+      /* Mobiel menu - van links */
+      nav {
+        position: fixed; 
+        top: 0; 
+        left: -100%; 
+        width: 70%; 
+        max-width: 300px; 
+        height: 100vh;
+        background: rgba(0,0,0,0.98); 
+        backdrop-filter: blur(25px);
+        flex-direction: column; 
+        align-items: flex-start; 
+        justify-content: flex-start;
+        padding: 80px 30px 30px; 
+        gap: 25px;
+        transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        z-index: 1001;
+      }
+      nav.active { 
+        left: 0; 
+      }
+
+      nav a, 
+      nav .login-btn, 
+      nav .contact-btn {
+        width: 100%; 
+        text-align: center; 
+        padding: 15px; 
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(255,214,10,0.2); 
+        text-decoration: none;
+      }
+
+      .nav-header-buttons {
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 12px; 
+        margin-top: 30px; 
+        width: 100%;
+      }
+      .nav-header-buttons a {
+        width: 80%; 
+        text-align: center; 
+        margin: 5px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav { width: 80%; }
+    }
+
+    /* === OVERIGE STIJLEN (contactformulier) === */
+    .contact-form-section { padding: 100px 20px; background: rgba(13, 59, 102, 0.1); backdrop-filter: blur(10px); }
+    .contact-form-section h2 { text-align: center; font-size: 3rem; margin-bottom: 20px; background: linear-gradient(135deg, #ffffff 0%, #ffd60a 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .contact-subtitle { text-align: center; font-size: 1.2rem; margin-bottom: 50px; opacity: 0.9; }
+    .contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1200px; margin: 0 auto; }
+    .contact-info h3 { color: #ffd60a; margin-bottom: 20px; font-size: 1.8rem; }
+    .contact-description { margin-bottom: 30px; line-height: 1.6; }
+    .contact-details { margin-bottom: 40px; }
+    .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+    .contact-icon { font-size: 1.5rem; }
+    .contact-text strong { display: block; color: #ffd60a; margin-bottom: 5px; }
+    .success-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .success-item { text-align: center; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+    .success-number { display: block; font-size: 1.8rem; font-weight: bold; color: #ffd60a; margin-bottom: 5px; }
+    .success-label { font-size: 0.9rem; opacity: 0.8; }
+    .contact-form { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .form-group { margin-bottom: 20px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; transition: all 0.3s ease; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #ffd60a; background: rgba(255, 255, 255, 0.15); }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255, 255, 255, 0.6); }
+    .form-group select option { background: #0d3b66; color: white; }
+    .btn-primary { background: linear-gradient(45deg, #ffd60a, #ffed4e); color: #0d3b66; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; justify-content: center; width: 100%; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 214, 10, 0.3); }
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .privacy-note { text-align: center; margin-top: 15px; font-size: 0.9rem; opacity: 0.7; }
+    .form-footer { margin-top: 30px; }
+    .btn-loading { position: relative; color: transparent; }
+    .btn-loading::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid transparent; border-left: 2px solid #0d3b66; border-radius: 50%; animation: spin 1s linear infinite; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+    @media (max-width: 768px) { 
+      .contact-content { grid-template-columns: 1fr; gap: 30px; } 
+      .contact-form-section { padding: 80px 15px; } 
+      .contact-form-section h2 { font-size: 2.5rem; } 
+      .success-stats { grid-template-columns: 1fr; } 
+    }
+
+    body {
+      margin-top: 80px;
+    }
+  </style>
 </head>
 <body>
 
@@ -12,11 +260,16 @@
 <div class="stars-deep" id="starsDeep"></div>
 <div class="stars-background" id="starsBackground"></div>
 
-<header>
-  <div class="logo" id="logo">
+<header id="mainHeader">
+  <div class="logo">
     <img src="Fotos/Logo.svg" alt="NovaWeb Logo" class="logo-img"
-      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+         onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
     <div id="logoFallback" class="logo-fallback" style="display: none;">NOVAWEB</div>
+  </div>
+
+  <!-- Hamburger icoon links bovenaan op mobiel -->
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
   </div>
 
   <nav id="navMenu">
@@ -29,692 +282,86 @@
 
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
-    <a href="contact.html" class="contact-btn">Contact us</a>
-
-    <!-- <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
-    </div>
-  </div> -->
-
-  <!-- Chatvenster -->
-  <!-- <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span>💬 Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag? 😊</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
-    </div>
-  </div> -->
-
-  <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
+    <a href="#contact-form" class="contact-btn">Contact us</a>
   </div>
 </header>
 
-<main>
-  <!-- Diensten Sectie -->
-  <section id="services" class="services">
-    <div class="container">
-      <h2>Onze Professionele Diensten</h2>
-      <p class="services-subtitle">Hoogwaardige webdevelopment oplossingen tegen studentvriendelijke tarieven - kwaliteit zonder compromis</p>
-
-      <div class="services-stats">
-        <div class="stat-item">
-          <span class="stat-number">100%</span>
-          <span class="stat-label">Tevredenheidsgarantie</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">2-4</span>
-          <span class="stat-label">Weken Levertijd</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">24/7</span>
-          <span class="stat-label">Support</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">-20%</span>
-          <span class="stat-label">Studentenkorting</span>
-        </div>
-      </div>
-
-      <div class="services-grid">
-        <!-- Premium Website Package -->
-        <div class="service-card featured">
-          <div class="service-badge">Meest Populair</div>
-          <div class="service-icon">🚀</div>
-          <h3>Premium Website Package</h3>
-          <p class="service-description">All-in-one oplossing voor een professionele online aanwezigheid met maximale impact</p>
-          <div class="service-features">
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Volledig responsive design voor alle apparaten</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Geoptimaliseerd voor snelle laadtijden</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">SEO-vriendelijke structuur voor betere vindbaarheid</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Contactformulier en sociale media integraties</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Mobile-first approach voor optimale gebruikerservaring</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">1 maand gratis onderhoud en updates</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Multiple-page website</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Niet tevreden? Geld terug!</span>
-            </div>
-          </div>
-          <div class="service-price">
-            <span class="price-amount">€399</span>
-            <span class="price-original">€599</span>
-            <span class="price-note">Eenmalig - 2 - 4 weken levering</span>
-          </div>
-          <div class="service-cta">
-            <button class="service-btn primary" data-service="premium">Start Jouw Project</button>
-            <a href="contact.html" class="service-link">Gratis Consultatie →</a>
-          </div>
-        </div>
-
-        <!-- One-Page Website -->
-        <div class="service-card">
-          <div class="service-badge">One-Page</div>
-          <div class="service-icon">✨</div>
-          <h3>One-Page Website</h3>
-          <p class="service-description">Een moderne, snelle en stijlvolle one-page website die jouw bedrijf professioneel presenteert.</p>
-          <div class="service-features">
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Strak en modern design met vloeiende animaties</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Volledig responsive voor mobiel, tablet en desktop</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Snelle laadtijden en geoptimaliseerd voor SEO</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Contactformulier of call-to-action geïntegreerd</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Contactformulier en sociale media integraties</span>
-            </div>
-          </div>
-          <div class="service-price">
-            <span class="price-amount">€199</span>
-            <span class="price-note">Eenmalig – 1 à 2 weken levering</span>
-          </div>
-          <div class="service-cta">
-            <button class="service-btn" data-service="onepage">Start Website</button>
-            <a href="contact.html" class="service-link">Meer Info →</a>
-          </div>
-        </div>
-
-        <!-- Onderhoud & Support -->
-        <div class="service-card">
-          <div class="service-badge">Onderhoud</div>
-          <div class="service-icon">🛠️</div>
-          <h3>Onderhoud & Support</h3>
-          <p class="service-description">Compleet onderhoudspakket voor zorgeloze website performance</p>
-          <div class="service-features">
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Maandelijkse updates</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">24/7 monitoring en technische support</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Performance optimalisatie en speed tests</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Content updates (max 3 uur/maand)</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✅</span>
-              <span class="feature-text">Hosting beheer en domeinnaam renewals</span>
-            </div>
-          </div>
-          <div class="service-price">
-            <span class="price-amount">€79/maand</span>
-            <span class="price-note">Maandelijks opzegbaar</span>
-          </div>
-          <div class="service-cta">
-            <button class="service-btn" data-service="onderhoud">Start Onderhoud</button>
-            <a href="contact.html" class="service-link">Gratis Audit →</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Student Special -->
-      <div class="student-special">
-        <div class="special-content">
-          <div class="special-icon">🎓</div>
-          <div class="special-text">
-            <h3>Speciale Studentenvoordelen</h3>
-            <p>Als medestudenten begrijpen we je budget. Geniet van exclusieve voordelen:</p>
-            <ul class="special-features">
-              <li>✅ <strong>20% studentenkorting</strong> op alle diensten</li>
-              <li>✅ <strong>Flexibele betalingsplannen</strong> - betaal in termijnen</li>
-              <li>✅ <strong>Gratis portfolio review</strong> en carrière advies</li>
-              <li>✅ <strong>Extra begeleiding</strong> en technische uitleg</li>
-              <li>✅ <strong>Gratis domeinnaam</strong> voor 1 jaar</li>
-              <li>✅ <strong>Hosting korting</strong> van 25%</li>
-            </ul>
-          </div>
-          <div class="special-cta">
-            <a href="contact.html" class="btn-secondary">Studentenkorting Aanvragen</a>
-            <span class="cta-note">Geldig op vertoon studentenkaart</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Proces Sectie -->
-  <section class="process">
-    <div class="container">
-      <h2>Onze Gestroomlijnde Werkwijze</h2>
-      <p class="process-subtitle">Van idee tot lancering in 4 eenvoudige stappen</p>
-
-      <div class="process-steps">
-        <div class="process-step">
-          <div class="step-icon">🎯</div>
-          <div class="step-content">
-            <div class="step-number">01</div>
-            <h3>Gratis Consultatie & Analyse</h3>
-            <p>We starten met een uitgebreid gesprek om jouw doelen, target audience en specifieke wensen te begrijpen. Samen bepalen we de scope en het budget.</p>
-            <ul class="step-features">
-              <li>Vrijblijvende intake</li>
-              <li>Doelstellingen bepalen</li>
-              <li>Project planning</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="process-step">
-          <div class="step-icon">🎨</div>
-          <div class="step-content">
-            <div class="step-number">02</div>
-            <h3>Design & Prototyping</h3>
-            <p>We creëren wireframes en design concepten die perfect aansluiten bij jouw visie. Je krijgt volledige inzage en kunt feedback geven in elke fase.</p>
-            <ul class="step-features">
-              <li>Wireframe creatie</li>
-              <li>Design concepten</li>
-              <li>Feedback loops</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="process-step">
-          <div class="step-icon">⚡</div>
-          <div class="step-content">
-            <div class="step-number">03</div>
-            <h3>Development & Testing</h3>
-            <p>Ons team bouwt je website met de nieuwste technologieën. We testen uitgebreid op verschillende apparaten en browsers voor een perfecte gebruikerservaring.</p>
-            <ul class="step-features">
-              <li>Agile ontwikkeling</li>
-              <li>Cross-browser testing</li>
-              <li>Performance optimalisatie</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="process-step">
-          <div class="step-icon">🚀</div>
-          <div class="step-content">
-            <div class="step-number">04</div>
-            <h3>Lancering & Nazorg</h3>
-            <p>Je website gaat live en we zorgen voor een vlotte overgang. Daarna blijven we beschikbaar voor ondersteuning, updates en verdere optimalisaties.</p>
-            <ul class="step-features">
-              <li>Professionele lancering</li>
-              <li>Training en documentatie</li>
-              <li>Doorlopende support</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Garantie Sectie -->
-  <section class="guarantee">
-    <div class="container">
-      <h2>Onze Rock-Solid Garanties</h2>
-      <div class="guarantee-grid">
-        <div class="guarantee-item">
-          <div class="guarantee-icon">💸</div>
-          <h3>14-Dagen Geld-Terug</h3>
-          <p>Niet tevreden? Binnen 14 dagen krijg je 100% van je geld terug - geen vragen gesteld.</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="guarantee-icon">🛡️</div>
-          <h3>Beveiligingsgarantie</h3>
-          <p>Je website wordt geleverd met de hoogste security standaarden en regelmatige updates.</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="guarantee-icon">⚡</div>
-          <h3>Performance Garantie</h3>
-          <p>We garanderen een Google Pagespeed score van 90+ voor optimale gebruikerservaring.</p>
-        </div>
-        <div class="guarantee-item">
-          <div class="guarantee-icon">📱</div>
-          <h3>Mobile-First Garantie</h3>
-          <p>Perfecte werking op alle apparaten - van smartphone tot desktop.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Sectie -->
-  <section class="faq">
-    <div class="container">
-      <h2>Veelgestelde Vragen</h2>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h3>📅 Hoe lang duurt een gemiddeld project?</h3>
-          <p>Een standaard website duurt 2-3 weken, complexere projecten zoals webshops 3- errors4 weken. We houden je op de hoogte met wekelijkse updates.</p>
-        </div>
-        <div class="faq-item">
-          <h3>🌐 Regelen jullie ook hosting en domeinnamen?</h3>
-          <p>Ja, we kunnen alles regelen! We bieden hosting aan tegen studentvriendelijke tarieven en helpen bij het kiezen van de perfecte domeinnaam.</p>
-        </div>
-        <div class="faq-item">
-          <h3>💸 Wat als ik niet tevreden ben met het resultaat?</h3>
-          <p>We bieden een 14-dagen niet-tevreden-geld-terug garantie. Daarnaast werken we met feedback loops zodat je het proces altijd kunt bijsturen.</p>
-        </div>
-        <div class="faq-item">
-          <h3>🔧 Kunnen jullie bestaande websites verbeteren?</h3>
-          <p>Absoluut! We specialiseren ons in het optimaliseren van bestaande websites voor betere performance, SEO en gebruikerservaring.</p>
-        </div>
-        <div class="faq-item">
-          <h3>🎓 Hoe werkt de studentenkorting precies?</h3>
-          <p>Toon je studentenkaart en ontvang 20% korting op alle diensten. Ook bieden we flexibele betalingsopties aan voor studenten.</p>
-        </div>
-        <div class="faq-item">
-          <h3>🚀 Wat maakt jullie anders dan andere agencies?</h3>
-          <p>Geen tussenpersonen, direct contact met de developers, scherpe studententarief en persoonlijke betrokkenheid bij elk project.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
+<main> <!-- Diensten Sectie --> <section id="services" class="services"> <div class="container"> <h2>Onze Professionele Diensten</h2> <p class="services-subtitle">Hoogwaardige webdevelopment oplossingen tegen studentvriendelijke tarieven - kwaliteit zonder compromis</p> <div class="services-stats"> <div class="stat-item"> <span class="stat-number">100%</span> <span class="stat-label">Tevredenheidsgarantie</span> </div> <div class="stat-item"> <span class="stat-number">2-4</span> <span class="stat-label">Weken Levertijd</span> </div> <div class="stat-item"> <span class="stat-number">24/7</span> <span class="stat-label">Support</span> </div> <div class="stat-item"> <span class="stat-number">-20%</span> <span class="stat-label">Studentenkorting</span> </div> </div> <div class="services-grid"> <!-- Premium Website Package --> <div class="service-card featured"> <div class="service-badge">Meest Populair</div> <div class="service-icon">🚀</div> <h3>Premium Website Package</h3> <p class="service-description">All-in-one oplossing voor een professionele online aanwezigheid met maximale impact</p> <div class="service-features"> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Volledig responsive design voor alle apparaten</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Geoptimaliseerd voor snelle laadtijden</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">SEO-vriendelijke structuur voor betere vindbaarheid</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Contactformulier en sociale media integraties</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Mobile-first approach voor optimale gebruikerservaring</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">1 maand gratis onderhoud en updates</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Multiple-page website</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Niet tevreden? Geld terug!</span> </div> </div> <div class="service-price"> <span class="price-amount">€399</span> <span class="price-original">€599</span> <span class="price-note">Eenmalig - 2 - 4 weken levering</span> </div> <div class="service-cta"> <button class="service-btn primary" data-service="premium">Start Jouw Project</button> <a href="contact.html" class="service-link">Gratis Consultatie →</a> </div> </div> <!-- One-Page Website --> <div class="service-card"> <div class="service-badge">One-Page</div> <div class="service-icon">✨</div> <h3>One-Page Website</h3> <p class="service-description">Een moderne, snelle en stijlvolle one-page website die jouw bedrijf professioneel presenteert.</p> <div class="service-features"> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Strak en modern design met vloeiende animaties</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Volledig responsive voor mobiel, tablet en desktop</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Snelle laadtijden en geoptimaliseerd voor SEO</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Contactformulier of call-to-action geïntegreerd</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Contactformulier en sociale media integraties</span> </div> </div> <div class="service-price"> <span class="price-amount">€199</span> <span class="price-note">Eenmalig – 1 à 2 weken levering</span> </div> <div class="service-cta"> <button class="service-btn" data-service="onepage">Start Website</button> <a href="contact.html" class="service-link">Meer Info →</a> </div> </div> <!-- Onderhoud & Support --> <div class="service-card"> <div class="service-badge">Onderhoud</div> <div class="service-icon">🛠️</div> <h3>Onderhoud & Support</h3> <p class="service-description">Compleet onderhoudspakket voor zorgeloze website performance</p> <div class="service-features"> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Maandelijkse updates</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">24/7 monitoring en technische support</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Performance optimalisatie en speed tests</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Content updates (max 3 uur/maand)</span> </div> <div class="feature-item"> <span class="feature-icon">✅</span> <span class="feature-text">Hosting beheer en domeinnaam renewals</span> </div> </div> <div class="service-price"> <span class="price-amount">€79/maand</span> <span class="price-note">Maandelijks opzegbaar</span> </div> <div class="service-cta"> <button class="service-btn" data-service="onderhoud">Start Onderhoud</button> <a href="contact.html" class="service-link">Gratis Audit →</a> </div> </div> </div> <!-- Student Special --> <div class="student-special"> <div class="special-content"> <div class="special-icon">🎓</div> <div class="special-text"> <h3>Speciale Studentenvoordelen</h3> <p>Als medestudenten begrijpen we je budget. Geniet van exclusieve voordelen:</p> <ul class="special-features"> <li>✅ <strong>20% studentenkorting</strong> op alle diensten</li> <li>✅ <strong>Flexibele betalingsplannen</strong> - betaal in termijnen</li> <li>✅ <strong>Gratis portfolio review</strong> en carrière advies</li> <li>✅ <strong>Extra begeleiding</strong> en technische uitleg</li> <li>✅ <strong>Gratis domeinnaam</strong> voor 1 jaar</li> <li>✅ <strong>Hosting korting</strong> van 25%</li> </ul> </div> <div class="special-cta"> <a href="contact.html" class="btn-secondary">Studentenkorting Aanvragen</a> <span class="cta-note">Geldig op vertoon studentenkaart</span> </div> </div> </div> </div> </section> <!-- Proces Sectie --> <section class="process"> <div class="container"> <h2>Onze Gestroomlijnde Werkwijze</h2> <p class="process-subtitle">Van idee tot lancering in 4 eenvoudige stappen</p> <div class="process-steps"> <div class="process-step"> <div class="step-icon">🎯</div> <div class="step-content"> <div class="step-number">01</div> <h3>Gratis Consultatie & Analyse</h3> <p>We starten met een uitgebreid gesprek om jouw doelen, target audience en specifieke wensen te begrijpen. Samen bepalen we de scope en het budget.</p> <ul class="step-features"> <li>Vrijblijvende intake</li> <li>Doelstellingen bepalen</li> <li>Project planning</li> </ul> </div> </div> <div class="process-step"> <div class="step-icon">🎨</div> <div class="step-content"> <div class="step-number">02</div> <h3>Design & Prototyping</h3> <p>We creëren wireframes en design concepten die perfect aansluiten bij jouw visie. Je krijgt volledige inzage en kunt feedback geven in elke fase.</p> <ul class="step-features"> <li>Wireframe creatie</li> <li>Design concepten</li> <li>Feedback loops</li> </ul> </div> </div> <div class="process-step"> <div class="step-icon">⚡</div> <div class="step-content"> <div class="step-number">03</div> <h3>Development & Testing</h3> <p>Ons team bouwt je website met de nieuwste technologieën. We testen uitgebreid op verschillende apparaten en browsers voor een perfecte gebruikerservaring.</p> <ul class="step-features"> <li>Agile ontwikkeling</li> <li>Cross-browser testing</li> <li>Performance optimalisatie</li> </ul> </div> </div> <div class="process-step"> <div class="step-icon">🚀</div> <div class="step-content"> <div class="step-number">04</div> <h3>Lancering & Nazorg</h3> <p>Je website gaat live en we zorgen voor een vlotte overgang. Daarna blijven we beschikbaar voor ondersteuning, updates en verdere optimalisaties.</p> <ul class="step-features"> <li>Professionele lancering</li> <li>Training en documentatie</li> <li>Doorlopende support</li> </ul> </div> </div> </div> </div> </section> <!-- Garantie Sectie --> <section class="guarantee"> <div class="container"> <h2>Onze Rock-Solid Garanties</h2> <div class="guarantee-grid"> <div class="guarantee-item"> <div class="guarantee-icon">💸</div> <h3>14-Dagen Geld-Terug</h3> <p>Niet tevreden? Binnen 14 dagen krijg je 100% van je geld terug - geen vragen gesteld.</p> </div> <div class="guarantee-item"> <div class="guarantee-icon">🛡️</div> <h3>Beveiligingsgarantie</h3> <p>Je website wordt geleverd met de hoogste security standaarden en regelmatige updates.</p> </div> <div class="guarantee-item"> <div class="guarantee-icon">⚡</div> <h3>Performance Garantie</h3> <p>We garanderen een Google Pagespeed score van 90+ voor optimale gebruikerservaring.</p> </div> <div class="guarantee-item"> <div class="guarantee-icon">📱</div> <h3>Mobile-First Garantie</h3> <p>Perfecte werking op alle apparaten - van smartphone tot desktop.</p> </div> </div> </div> </section> <!-- FAQ Sectie --> <section class="faq"> <div class="container"> <h2>Veelgestelde Vragen</h2> <div class="faq-grid"> <div class="faq-item"> <h3>📅 Hoe lang duurt een gemiddeld project?</h3> <p>Een standaard website duurt 2-3 weken, complexere projecten zoals webshops 3- errors4 weken. We houden je op de hoogte met wekelijkse updates.</p> </div> <div class="faq-item"> <h3>🌐 Regelen jullie ook hosting en domeinnamen?</h3> <p>Ja, we kunnen alles regelen! We bieden hosting aan tegen studentvriendelijke tarieven en helpen bij het kiezen van de perfecte domeinnaam.</p> </div> <div class="faq-item"> <h3>💸 Wat als ik niet tevreden ben met het resultaat?</h3> <p>We bieden een 14-dagen niet-tevreden-geld-terug garantie. Daarnaast werken we met feedback loops zodat je het proces altijd kunt bijsturen.</p> </div> <div class="faq-item"> <h3>🔧 Kunnen jullie bestaande websites verbeteren?</h3> <p>Absoluut! We specialiseren ons in het optimaliseren van bestaande websites voor betere performance, SEO en gebruikerservaring.</p> </div> <div class="faq-item"> <h3>🎓 Hoe werkt de studentenkorting precies?</h3> <p>Toon je studentenkaart en ontvang 20% korting op alle diensten. Ook bieden we flexibele betalingsopties aan voor studenten.</p> </div> <div class="faq-item"> <h3>🚀 Wat maakt jullie anders dan andere agencies?</h3> <p>Geen tussenpersonen, direct contact met de developers, scherpe studententarief en persoonlijke betrokkenheid bij elk project.</p> </div> </div> </div> </section> </main>
 
 <footer>
-  <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
+  <p>© 2025 NovaWeb. Alle rechten voorbehouden.</p>
 </footer>
 
-<!-- VOLLEDIGE CHAT & MENU FUNCTIONALITEIT -->
 <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  let user = null;
 
-  const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
-  const supabase = createClient(supabaseUrl, supabaseKey)
+  const nav = document.getElementById('navMenu');
+  const hamburger = document.getElementById('hamburger');
+  const headerButtons = document.querySelector('.header-buttons');
+  const loginBtn = document.querySelector('.login-btn');
 
-  let user = null
-  const adminEmails = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com']
+  // === Verplaats knoppen naar mobiel menu ===
+  function moveHeaderButtonsToNav() {
+    const old = document.querySelector('.nav-header-buttons');
+    if (old) old.remove();
+    if (window.innerWidth > 768) return;
 
-  // DOM Elements
-  const chatToggle = document.getElementById('chatToggle')
-  const chatBox = document.getElementById('chatBox')
-  const closeChat = document.getElementById('closeChat')
-  const chatInput = document.getElementById('chatInput')
-  const sendChat = document.getElementById('sendChat')
-  const chatMessages = document.getElementById('chatMessages')
-  const loginBtn = document.querySelector('.login-btn')
-  const nav = document.getElementById('navMenu')
-  const hamburger = document.getElementById('hamburger')
-  const headerButtons = document.querySelector('.header-buttons')
-  const serviceBtns = document.querySelectorAll('.service-btn')
+    const clone = headerButtons.cloneNode(true);
+    clone.classList.add('nav-header-buttons');
+    clone.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:30px;width:100%';
+    clone.querySelectorAll('a').forEach(el => {
+      el.style.cssText = 'width:80%;text-align:center;margin:5px 0';
+    });
+    nav.appendChild(clone);
+  }
 
-  // === HAMBURGER MENU ===
-  function initHamburgerMenu() {
-    function moveHeaderButtonsToNav() {
-      const oldClone = document.querySelector('.nav-header-buttons')
-      if (oldClone) oldClone.remove()
+  // === Init ===
+  window.addEventListener('DOMContentLoaded', async () => {
+    moveHeaderButtonsToNav();
+    const { data: { session } } = await supabase.auth.getSession();
+    user = session?.user ?? null;
+    if (loginBtn) {
+      loginBtn.innerText = user ? 'Account' : 'Login';
+      loginBtn.href = user ? 'account.html' : 'login.html';
+    }
 
-      if (window.innerWidth <= 768) {
-        const clone = headerButtons.cloneNode(true)
-        clone.classList.add('nav-header-buttons')
-        clone.style.display = 'flex'
-        clone.style.flexDirection = 'column'
-        clone.style.alignItems = 'flex-start'
-        clone.style.gap = '10px'
-        clone.querySelectorAll('a, .chat-container').forEach(el => {
-          el.style.width = '100%'
-          el.style.textAlign = 'left'
-          el.style.margin = '5px 0'
-          el.style.padding = '15px 10px'
-        })
-        nav.appendChild(clone)
-
-        // Cloned chat functionality
-        const clonedChat = clone.querySelector('.chat-container')
-        if (clonedChat) {
-          clonedChat.addEventListener('click', handleChatToggle)
-        }
+    supabase.auth.onAuthStateChange((_e, sess) => {
+      user = sess?.user ?? null;
+      if (loginBtn) {
+        loginBtn.innerText = user ? 'Account' : 'Login';
+        loginBtn.href = user ? 'account.html' : 'login.html';
       }
-    }
+    });
+  });
+  window.addEventListener('resize', moveHeaderButtonsToNav);
 
-    window.addEventListener('resize', moveHeaderButtonsToNav)
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active')
-      nav.classList.toggle('active')
-      chatBox.classList.remove('active')
-    })
+  // === Hamburger menu ===
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    nav.classList.toggle('active');
+  });
 
-    nav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('active')
-        hamburger.classList.remove('active')
-      })
-    })
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('active');
+    hamburger.classList.remove('active');
+  }));
 
-    // Initial setup
-    setTimeout(moveHeaderButtonsToNav, 100)
-  }
-
-  // === HEADER SCROLL EFFECT ===
-  const header = document.querySelector("header")
-  let lastScroll = 0
-  let isHidden = false
-  const scrollThreshold = 100
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset
-    if (currentScroll > 50) header.classList.add("scrolled")
-    else header.classList.remove("scrolled")
-
-    if (currentScroll > lastScroll && currentScroll > scrollThreshold && !isHidden) {
-      header.classList.add("hide")
-      isHidden = true
-    } else if (currentScroll < lastScroll && isHidden) {
-      header.classList.remove("hide")
-      isHidden = false
-    }
-
-    if (currentScroll <= scrollThreshold) {
-      header.classList.remove("hide")
-      isHidden = false
-    }
-    lastScroll = currentScroll
-  })
-
-  // === SERVICE BUTTONS ===
-  serviceBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const service = btn.getAttribute('data-service')
-      showNotification(`Geselecteerd: ${service.charAt(0).toUpperCase() + service.slice(1)}`, 'success')
-    })
-  })
-
-  // === CHAT FUNCTIONS ===
-  async function handleChatToggle() {
-    if (!user) {
-      alert('Je moet inloggen om te chatten!')
-      window.location.href = 'login.html'
-      return
-    }
-
-    if (adminEmails.includes(user.email)) {
-      window.location.href = 'admin.html'
-      return
-    }
-
-    chatBox.classList.toggle('active')
-    nav.classList.remove('active')
-    hamburger.classList.remove('active')
-
-    if (chatBox.classList.contains('active')) {
-      await loadMessages()
-    }
-  }
-
-  async function loadMessages() {
-    if (!user) return
-    chatMessages.innerHTML = '<div class="message bot">Berichten laden...</div>'
-
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('email', user.email)
-      .order('created_at', { ascending: true })
-
-    if (error) {
-      console.error('Fout bij laden berichten:', error)
-      chatMessages.innerHTML = '<div class="message bot">Fout bij laden van berichten.</div>'
-      return
-    }
-
-    chatMessages.innerHTML = ''
-    if (data.length === 0) {
-      const emptyDiv = document.createElement('div')
-      emptyDiv.className = 'message bot'
-      emptyDiv.textContent = 'Nog geen berichten. Stuur een bericht om te starten! 😊'
-      chatMessages.appendChild(emptyDiv)
+  // === Header scroll weg (alleen desktop) ===
+  let lastScrollTop = 0;
+  const header = document.getElementById('mainHeader');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (window.innerWidth > 768) {
+      header.classList.toggle('hide', scrollTop > lastScrollTop && scrollTop > 100);
     } else {
-      data.forEach(addMessage)
+      header.classList.remove('hide');
     }
-    chatMessages.scrollTop = chatMessages.scrollHeight
-  }
-
-  function addMessage(msg) {
-    const div = document.createElement('div')
-    div.className = `message ${msg.role === 'user' ? 'user' : 'bot'}`
-
-    const messageText = document.createElement('div')
-    messageText.textContent = msg.message
-
-    const messageTime = document.createElement('div')
-    messageTime.className = 'message-time'
-    messageTime.textContent = new Date(msg.created_at).toLocaleTimeString('nl-NL', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    })
-
-    div.appendChild(messageText)
-    div.appendChild(messageTime)
-    chatMessages.appendChild(div)
-    chatMessages.scrollTop = chatMessages.scrollHeight
-  }
-
-  async function sendMessage() {
-  const tekst = chatInput.value.trim();
-  if (!tekst) return;
-
-  if (!user) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message bot';
-    msgDiv.textContent = 'Je moet inloggen om te kunnen chatten!';
-    chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return;
-  }
-
-  // === GEBRUIKER BERICHT TONEN ===
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message user';
-  msgDiv.innerHTML = `<div>${tekst}</div>`;
-  const userTime = document.createElement('div');
-  userTime.className = 'message-time';
-  userTime.textContent = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
-  msgDiv.appendChild(userTime);
-  
-  chatMessages.appendChild(msgDiv);
-  chatInput.value = '';
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  // === OPSLAAN IN DATABASE (alleen gebruiker) ===
-  const { error } = await supabase.from('messages').insert([{
-    user_id: user.id,
-    email: user.email,
-    message: tekst,
-    role: 'user',
-    created_at: new Date().toISOString()
-  }]);
-
-  if (error) {
-    console.error('Fout bij opslaan:', error);
-  }
-
-  // GEEN BOT-REPLY MEER
-}
-  // === LOGIN FUNCTIONS ===
-  async function checkLogin() {
-    const { data: { session } } = await supabase.auth.getSession()
-    user = session?.user ?? null
-    return session
-  }
-
-  function updateHeader(session) {
-    if (!loginBtn) return
-    if (session) {
-      loginBtn.innerText = 'Account'
-      loginBtn.href = 'account.html'
-    } else {
-      loginBtn.innerText = 'Login'
-      loginBtn.href = 'login.html'
-    }
-  }
-
-  // === REALTIME MESSAGES ===
-  function initRealtimeMessages() {
-    supabase
-      .channel('public:messages')
-      .on('postgres_changes', { 
-        event: 'INSERT', 
-        schema: 'public', 
-        table: 'messages' 
-      }, payload => {
-        const msg = payload.new
-        if (user && msg.email === user.email) {
-          addMessage(msg)
-        }
-      })
-      .subscribe()
-  }
-
-  // === ANIMATIONS ===
-  function initAnimations() {
-    // Service cards
-    const serviceCards = document.querySelectorAll('.service-card')
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1'
-          entry.target.style.transform = 'translateY(0)'
-        }
-      })
-    }, { threshold: 0.1 })
-    serviceCards.forEach(card => {
-      card.style.opacity = '0'
-      card.style.transform = 'translateY(30px)'
-      card.style.transition = 'all 0.6s ease'
-      observer.observe(card)
-    })
-
-    // Process steps
-    const processSteps = document.querySelectorAll('.process-step')
-    const processObserver = new IntersectionObserver(entries => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.style.opacity = '1'
-            entry.target.style.transform = 'translateY(0)'
-          }, index * 200)
-        }
-      })
-    }, { threshold: 0.2 })
-    processSteps.forEach(step => {
-      step.style.opacity = '0'
-      step.style.transform = 'translateY(30px)'
-      step.style.transition = 'all 0.6s ease'
-      processObserver.observe(step)
-    })
-  }
-
-  // === NOTIFICATION ===
-  function showNotification(message, type) {
-    const notification = document.createElement('div')
-    notification.className = `notification ${type}`
-    notification.textContent = message
-    notification.style.cssText = `
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      background: ${type === 'success' ? '#4CAF50' : '#f44336'};
-      color: white;
-      padding: 15px 20px;
-      border-radius: 5px;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    `
-    document.body.appendChild(notification)
-    setTimeout(() => { notification.style.transform = 'translateX(0)' }, 100)
-    setTimeout(() => {
-      notification.style.transform = 'translateX(100%)'
-      setTimeout(() => document.body.removeChild(notification), 300)
-    }, 4000)
-  }
-
-  // === INITIALIZE EVERYTHING ===
-  document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize hamburger menu
-    initHamburgerMenu()
-    
-    // Initialize animations
-    initAnimations()
-    
-    // Check login
-    const session = await checkLogin()
-    updateHeader(session)
-
-    // Auth state changes
-    supabase.auth.onAuthStateChange((_event, session) => {
-      user = session?.user ?? null
-      updateHeader(session)
-    })
-
-    // Chat event listeners
-    chatToggle.addEventListener('click', handleChatToggle)
-    closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
-    sendChat.addEventListener('click', sendMessage)
-    chatInput.addEventListener('keypress', e => {
-      if (e.key === 'Enter') sendMessage()
-    })
-
-    // Realtime messages
-    initRealtimeMessages()
-  })
+    lastScrollTop = scrollTop;
+  });
 </script>
 
 </body>

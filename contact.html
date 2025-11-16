@@ -41,6 +41,7 @@
     @media (max-width: 768px) { .contact-content { grid-template-columns: 1fr; gap: 30px; } .contact-form-section { padding: 80px 15px; } .contact-form-section h2 { font-size: 2.5rem; } .success-stats { grid-template-columns: 1fr; } }
   </style>
 </head>
+
 <body>
 <header>
   <div class="logo" id="logo">
@@ -57,112 +58,65 @@
   <div class="header-buttons">
     <a href="login.html" class="login-btn">Login</a>
     <a href="#contact-form" class="contact-btn">Contact us</a>
-    <!-- <div class="chat-container">
-      <img src="Fotos/chat.png" alt="Chat met ons" class="chat-icon" id="chatToggle">
-    </div> -->
   </div>
-  <!-- Chatvenster (optioneel) -->
-  <!-- <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span>Chat met NovaWeb</span>
-      <button id="closeChat">×</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hoi! Hoe kunnen we je helpen vandaag?</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Typ een bericht..." />
-      <button id="sendChat">Verstuur</button>
-    </div>
-  </div> -->
   <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </div>
 </header>
 
-<!-- Contact Form Sectie -->
 <section id="contact-form" class="contact-form-section">
   <div class="container">
     <h2>Start Jouw Digitale Reis</h2>
     <p class="contact-subtitle">Laat ons je helpen om je online doelen te bereiken — vrijblijvende consultatie binnen 24 uur.</p>
+
     <div class="contact-content">
       <div class="contact-info">
         <h3>Direct Contact Met Ons Team</h3>
         <p class="contact-description">Geen sales team, geen tussenpersonen — gewoon twee gepassioneerde developers die klaarstaan om je project tot leven te brengen.</p>
+
         <div class="contact-details">
-          <div class="contact-item">
-            <span class="contact-icon">📧</span>
-            <div class="contact-text">
-              <strong>Email Ons</strong>
-              <span>NovaWeb.devteam@gmail.com</span>
-            </div>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">📱</span>
-            <div class="contact-text">
-              <strong>Bel Ons</strong>
-              <span>+32 123 45 67 89</span>
-            </div>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">⚡</span>
-            <div class="contact-text">
-              <strong>Snelle Reactie</strong>
-              <span>Binnen 24 uur antwoord</span>
-            </div>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">🎓</span>
-            <div class="contact-text">
-              <strong>Studentenvoordeel</strong>
-              <span>20% korting beschikbaar</span>
-            </div>
-          </div>
+          <div class="contact-item"><span class="contact-icon">📧</span><div class="contact-text"><strong>Email Ons</strong><span>NovaWeb.devteam@gmail.com</span></div></div>
+          <div class="contact-item"><span class="contact-icon">📱</span><div class="contact-text"><strong>Bel Ons</strong><span>+32 123 45 67 89</span></div></div>
+          <div class="contact-item"><span class="contact-icon">⚡</span><div class="contact-text"><strong>Snelle Reactie</strong><span>Binnen 24 uur antwoord</span></div></div>
+          <div class="contact-item"><span class="contact-icon">🎓</span><div class="contact-text"><strong>Studentenvoordeel</strong><span>20% korting beschikbaar</span></div></div>
         </div>
+
         <div class="success-stats">
-          <div class="success-item">
-            <span class="success-number">15+</span>
-            <span class="success-label">Projecten Voltooid</span>
-          </div>
-          <div class="success-item">
-            <span class="success-number">100%</span>
-            <span class="success-label">Tevreden Klanten</span>
-          </div>
-          <div class="success-item">
-            <span class="success-number">24/7</span>
-            <span class="success-label">Support</span>
-          </div>
+          <div class="success-item"><span class="success-number">15+</span><span class="success-label">Projecten Voltooid</span></div>
+          <div class="success-item"><span class="success-number">100%</span><span class="success-label">Tevreden Klanten</span></div>
+          <div class="success-item"><span class="success-number">24/7</span><span class="success-label">Support</span></div>
         </div>
       </div>
-      <!-- WERKEND FORMULIER MET FORMSUBMIT -->
+
+      <!-- ⭐ COMPLEET WERKEND WEB3FORMS FORMULIER ⭐ -->
       <form
         id="serviceContactForm"
-        action="https://formsubmit.co/novaweb.contactus@gmail.com"
+        action="https://api.web3forms.com/submit"
         method="POST"
         class="contact-form"
         novalidate
       >
-        <!-- Verborgen velden (FormSubmit) -->
-        <input type="hidden" name="_next" value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
-        <input type="hidden" name="_subject" value="Nieuwe aanvraag via NovaWeb">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Bedankt voor je aanvraag! We nemen binnen 24 uur contact op.">
-        <input type="hidden" name="tracking_id" value="0b2e74bcf7cd23934f4892a5de8d84724f583976068596aba7a6e4365f2377ad">
-        <!-- Honeypot tegen spam -->
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-        <!-- Formuliervelden -->
+        <!-- Web3Forms key -->
+        <input type="hidden" name="access_key" value="17a1e48b-29a7-44ee-b4b5-5795e3246ce2">
+
+        <!-- Redirect -->
+        <input type="hidden" name="redirect" value="https://bigenbetsy.github.io/NovaWeb/bedankt.html">
+
+        <!-- Spam honeypot -->
+        <input type="text" name="botcheck" style="display:none">
+
         <div class="form-group">
           <input type="text" name="naam" placeholder="Volledige naam" required>
         </div>
+
         <div class="form-group">
           <input type="email" name="email" placeholder="Emailadres" required>
         </div>
+
         <div class="form-group">
           <input type="tel" name="telefoon" placeholder="Telefoonnummer (optioneel)">
         </div>
+
         <div class="form-group">
           <select name="service" required>
             <option value="">Selecteer een service</option>
@@ -173,9 +127,11 @@
             <option value="Andere">Andere Vraag</option>
           </select>
         </div>
+
         <div class="form-group">
           <textarea name="bericht" placeholder="Vertel ons over je project, doelen, timeline en budget..." rows="6" required></textarea>
         </div>
+
         <div class="form-footer">
           <button type="submit" id="submitBtn" class="btn-primary">
             <span class="btn-text">Verstuur Aanvraag</span>
@@ -183,6 +139,7 @@
           <p class="privacy-note">Je gegevens zijn veilig. Geen spam.</p>
         </div>
       </form>
+
     </div>
   </div>
 </section>
@@ -191,7 +148,6 @@
   <p>&copy; 2025 NovaWeb. Alle rechten voorbehouden.</p>
 </footer>
 
-<!-- VOLLEDIGE SUPABASE + LOGIN + HAMBURGER + FORM VALIDATIE -->
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
@@ -199,7 +155,6 @@
   const supabase = createClient(supabaseUrl, supabaseKey)
   let user = null
 
-  // DOM Elements
   const loginBtn = document.querySelector('.login-btn')
   const nav = document.getElementById('navMenu')
   const hamburger = document.getElementById('hamburger')
@@ -208,7 +163,6 @@
   const submitBtn = document.getElementById('submitBtn')
   const btnText = submitBtn.querySelector('.btn-text')
 
-  // === HAMBURGER MENU ===
   function initHamburgerMenu() {
     function moveHeaderButtonsToNav() {
       const oldClone = document.querySelector('.nav-header-buttons')
@@ -220,7 +174,7 @@
         clone.style.flexDirection = 'column'
         clone.style.alignItems = 'flex-start'
         clone.style.gap = '10px'
-        clone.querySelectorAll('a, .chat-container').forEach(el => {
+        clone.querySelectorAll('a').forEach(el => {
           el.style.width = '100%'
           el.style.textAlign = 'left'
           el.style.margin = '5px 0'
@@ -243,7 +197,6 @@
     setTimeout(moveHeaderButtonsToNav, 100)
   }
 
-  // === LOGIN FUNCTIONS ===
   async function checkLogin() {
     const { data: { session } } = await supabase.auth.getSession()
     user = session?.user ?? null
@@ -261,35 +214,16 @@
     }
   }
 
-  // === FORM VALIDATIE & SUBMIT FEEDBACK ===
-  const inputs = form.querySelectorAll('input, select, textarea')
-  inputs.forEach(input => {
-    input.addEventListener('invalid', () => {
-      input.style.borderColor = '#ff6b6b'
-    })
-    input.addEventListener('input', () => {
-      if (input.validity.valid) {
-        input.style.borderColor = 'rgba(255, 255, 255, 0.2)'
-      }
-    })
-  })
-
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', function() {
     submitBtn.disabled = true
     btnText.textContent = 'Versturen...'
     submitBtn.classList.add('btn-loading')
   })
 
-  // === INITIALIZE EVERYTHING ===
   document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize hamburger menu
     initHamburgerMenu()
-
-    // Check login status
     const session = await checkLogin()
     updateHeader(session)
-
-    // Listen for auth changes (login/logout)
     supabase.auth.onAuthStateChange((_event, session) => {
       user = session?.user ?? null
       updateHeader(session)
