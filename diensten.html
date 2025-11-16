@@ -243,6 +243,10 @@
     .btn-loading::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid transparent; border-left: 2px solid #0d3b66; border-radius: 50%; animation: spin 1s linear infinite; left: 50%; top: 50%; transform: translate(-50%, -50%); }
     @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
     @media (max-width: 768px) { 
+            body {
+    background: url('Fotos/gsm.avif') no-repeat center center fixed !important;
+    background-size: cover !important;
+  }
       .contact-content { grid-template-columns: 1fr; gap: 30px; } 
       .contact-form-section { padding: 80px 15px; } 
       .contact-form-section h2 { font-size: 2.5rem; } 

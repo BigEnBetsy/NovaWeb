@@ -1,266 +1,238 @@
-// Voeg dit bovenaan login.js of bovenaan admin.html script toe
-
+// === SUPABASE CLIENT ===
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-// --- Lijst met toegestane admin emails ---
-const allowedAdmins = ['gallerstef@gmail.com', 'robin.com']
+// === ADMIN TOEGANG ===
+const allowedAdmins = ['gallerstef@gmail.com', 'robin.baeyens27@gmail.com'] // CORRIGEER: robin.com → robin.baeyens27@gmail.com
 
-// --- Check toegang tot admin pagina ---
 async function checkAdminAccess() {
   const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user ?? null
-
+  const user = session?.user
   if (!user || !allowedAdmins.includes(user.email)) {
-    alert('Je hebt geen toegang tot deze pagina!')
-    window.location.href = 'login.html' // terug naar login
+    alert('Toegang geweigerd. Alleen admins mogen hier.')
+    window.location.href = 'login.html'
   }
 }
 
-// Alleen uitvoeren als we op admin.html zijn
+// Controleer alleen op admin.html
 if (window.location.pathname.endsWith('admin.html')) {
   checkAdminAccess()
 }
 
+// === GLOBALE VARIABELEN ===
+let user = null
 
-document.addEventListener('DOMContentLoaded', function() {
+// === DOM GELADEN ===
+document.addEventListener('DOMContentLoaded', async () => {
   const loginForm = document.querySelector('.login-form')
   const loginBtn = document.querySelector('.login-submit-btn')
-  const btnText = loginBtn.querySelector('.btn-text')
-  const btnLoader = loginBtn.querySelector('.btn-loader')
+  const btnText = loginBtn?.querySelector('.btn-text')
+  const btnLoader = loginBtn?.querySelector('.btn-loader')
   const statusDiv = document.getElementById('status')
+  const headerLoginBtn = document.querySelector('.login-btn')
 
+  // --- UPDATE HEADER LOGIN KNOP ---
+  const updateLoginButton = () => {
+    if (!headerLoginBtn) return
+    if (user) {
+      headerLoginBtn.innerText = 'Account'
+      headerLoginBtn.href = 'account.html'
+    } else {
+      headerLoginBtn.innerText = 'Login'
+      headerLoginBtn.href = 'login.html'
+    }
+  }
+
+  // --- CHECK HUIDIGE SESSIE ---
+  const { data: { session } } = await supabase.auth.getSession()
+  user = session?.user ?? null
+  updateLoginButton()
+
+  // --- REALTIME AUTH UPDATE ---
+  supabase.auth.onAuthStateChange((_, sess) => {
+    user = sess?.user ?? null
+    updateLoginButton()
+  })
+
+  // === INLOGGEN MET FORMULIER ===
   if (loginForm) {
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const email = document.getElementById('email').value
+      const email = document.getElementById('email').value.trim()
       const password = document.getElementById('password').value
 
-      // Toon loader
+      if (!email || !password) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Vul alle velden in.'
+        return
+      }
+
+      // Loader
       btnText.style.opacity = '0'
       btnLoader.style.display = 'block'
       loginBtn.disabled = true
       statusDiv.innerText = ''
 
-      // Supabase login
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+        if (error) throw error
 
-      // Stop loader
-      btnText.style.opacity = '1'
-      btnLoader.style.display = 'none'
-      loginBtn.disabled = false
-
-      if (error) {
-        statusDiv.style.color = 'red'
-        statusDiv.innerText = `Login mislukt: ${error.message}`
-      } else {
         statusDiv.style.color = 'green'
-        statusDiv.innerText = `Ingelogd! Welkom ${data.user.email}`
-       
-         window.location.href = 'klantenProject.html'
+        statusDiv.innerText = `Welkom ${data.user.email}!`
+        setTimeout(() => {
+          window.location.href = 'klantenProject.html'
+        }, 800)
+      } catch (error) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = error.message || 'Inloggen mislukt.'
+      } finally {
+        btnText.style.opacity = '1'
+        btnLoader.style.display = 'none'
+        loginBtn.disabled = false
       }
     })
   }
 
-  // Input animaties (blijft zoals jij had)
-  const inputs = document.querySelectorAll('.input-container input')
-  inputs.forEach(input => {
-    input.addEventListener('focus', function() { this.parentElement.classList.add('focused') })
-    input.addEventListener('blur', function() { if (!this.value) this.parentElement.classList.remove('focused') })
+  // === INPUT FOCUS ANIMATIE ===
+  document.querySelectorAll('.input-container input').forEach(input => {
+    input.addEventListener('focus', () => input.parentElement.classList.add('focused'))
+    input.addEventListener('blur', () => {
+      if (!input.value) input.parentElement.classList.remove('focused')
+    })
   })
-})
 
-const forgotPasswordLink = document.querySelector('.forgot-password');
+  // === WACHTWOORD VERGETEN ===
+  const forgotLink = document.querySelector('.forgot-password')
+  if (forgotLink) {
+    forgotLink.addEventListener('click', async (e) => {
+      e.preventDefault()
+      const email = document.getElementById('email').value.trim()
+      if (!email) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Voer je e-mail in.'
+        return
+      }
 
-if (forgotPasswordLink) {
-  forgotPasswordLink.addEventListener('click', async function(e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    if (!email) {
-      statusDiv.style.color = 'red';
-      statusDiv.innerText = 'Vul eerst je e-mailadres in.';
-      return;
-    }
+      statusDiv.innerText = 'Bezig met versturen...'
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://bigenbetsy.github.io/NovaWeb/resetww.html'
+      })
 
-    // Stuur reset email via Supabase
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://bigenbetsy.github.io/NovaWeb/resetww.html' // Pas aan naar je eigen reset-pagina
-    });
-
-    if (error) {
-      statusDiv.style.color = 'red';
-      statusDiv.innerText = `Fout: ${error.message}`;
-    } else {
-      statusDiv.style.color = 'green';
-      statusDiv.innerText = 'Check je e-mail om je wachtwoord te resetten.';
-    }
-  });
-}
-
-
-  const chatToggle = document.getElementById('chatToggle');
-  const chatBox = document.getElementById('chatBox');
-  const closeChat = document.getElementById('closeChat');
-  const chatInput = document.getElementById('chatInput');
-  const sendChat = document.getElementById('sendChat');
-  const chatMessages = document.getElementById('chatMessages');
-
-  // Open/sluit chat
-  chatToggle.addEventListener('click', () => {
-    chatBox.classList.toggle('active');
-  });
-
-  closeChat.addEventListener('click', () => {
-    chatBox.classList.remove('active');
-  });
-
-  // Verstuur bericht
-  sendChat.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') sendMessage();
-  });
-
-  function sendMessage() {
-    const tekst = chatInput.value.trim();
-    if (!tekst) return;
-    const msg = document.createElement('div');
-    msg.className = 'message user';
-    msg.textContent = tekst;
-    chatMessages.appendChild(msg);
-    chatInput.value = '';
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Simpele automatische reactie
-    setTimeout(() => {
-      const reply = document.createElement('div');
-      reply.className = 'message bot';
-      // reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
-      chatMessages.appendChild(reply);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 800);
+      if (error) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = error.message
+      } else {
+        statusDiv.style.color = 'green'
+        statusDiv.innerText = 'Check je inbox voor de resetlink!'
+      }
+    })
   }
 
-window.addEventListener('DOMContentLoaded', async () => {
-  // --- Shooting stars ---
-  const shootingStars = new ShootingStars()
-
-  // --- DOM elementen ---
+  // === CHAT FUNCTIE ===
   const chatToggle = document.getElementById('chatToggle')
-  const chatBox = document.getElementById('chatBox')
+  const chatBox = document.getBot('chatBox')
   const closeChat = document.getElementById('closeChat')
   const chatInput = document.getElementById('chatInput')
   const sendChat = document.getElementById('sendChat')
   const chatMessages = document.getElementById('chatMessages')
-  const loginBtn = document.querySelector('.login-btn')
 
-  // --- Check login status ---
-  const { data: { session } } = await supabase.auth.getSession()
-  user = session?.user ?? null
-  if (user && loginBtn) {
-    loginBtn.innerText = 'Account'
-    loginBtn.href = 'account.html'
-  }
+  if (chatToggle && chatBox) {
+    chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'))
+    closeChat?.addEventListener('click', () => chatBox.classList.remove('active'))
 
-  // --- Realtime login/logout ---
-  supabase.auth.onAuthStateChange((event, session) => {
-    user = session?.user ?? null
-    if (!loginBtn) return
-    if (user) {
-      loginBtn.innerText = 'Account'
-      loginBtn.href = 'account.html'
-    } else {
-      loginBtn.innerText = 'Login'
-      loginBtn.href = 'login.html'
-    }
-  })
+    const sendMessage = async () => {
+      const text = chatInput.value.trim()
+      if (!text) return
 
-  // --- Chat open/sluit ---
-  chatToggle.addEventListener('click', () => chatBox.classList.toggle('active'))
-  closeChat.addEventListener('click', () => chatBox.classList.remove('active'))
-
-  // --- Verstuur bericht ---
-  sendChat.addEventListener('click', sendMessage)
-  chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage() })
-
-async function sendMessage() {
-  const tekst = chatInput.value.trim();
-  if (!tekst) return;
-
-  // Haal ingelogde gebruiker op
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    console.error('Fout bij ophalen gebruiker:', userError);
-    alert('Er ging iets mis bij het ophalen van je account.');
-    return;
-  }
-
-  const user = userData?.user;
-  if (!user) {
-    alert('Je moet inloggen om te chatten!');
-    return;
-  }
-
-  // DOM update (toon bericht direct)
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message user';
-  msgDiv.innerHTML = `<strong>${user.email}</strong>: ${tekst}`;
-  chatMessages.appendChild(msgDiv);
-  chatInput.value = '';
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  // --- Verstuur bericht naar Supabase ---
-  const { data: insertData, error: insertError } = await supabase
-    .from('messages')
-    .insert([
-      {
-        user_id: user.id,
-        email: user.email,
-        message: tekst,
-        role: 'user'
+      // Gebruiker ophalen
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (!currentUser) {
+        alert('Log in om te chatten!')
+        return
       }
-    ])
-    .select(); // -> handig om terug te krijgen wat is opgeslagen
 
-  // Log result voor debugging
-  console.log('Supabase insert result:', { insertData, insertError });
+      // Toon eigen bericht
+      const msg = document.createElement('div')
+      msg.className = 'message user'
+      msg.innerHTML = `<strong>${currentUser.email}</strong>: ${text}`
+      chatMessages.appendChild(msg)
+      chatInput.value = ''
+      chatMessages.scrollTop = chatMessages.scrollHeight
 
-  if (insertError) {
-    console.error('❌ Fout bij opslaan in Supabase:', insertError);
-    alert('Bericht kon niet worden opgeslagen. Zie console voor details.');
-    return;
+      // Verstuur naar Supabase
+      const { error } = await supabase.from('messages').insert({
+        user_id: currentUser.id,
+        email: currentUser.email,
+        message: text,
+        role: 'user'
+      })
+
+      if (error) {
+        console.error('Chat error:', error)
+        alert('Bericht niet verzonden.')
+      } else {
+        // Bot reply
+        setTimeout(() => {
+          const botMsg = document.createElement('div')
+          botMsg.className = 'message bot'
+          botMsg.textContent = 'Bedankt! We antwoorden zo snel mogelijk.'
+          chatMessages.appendChild(botMsg)
+          chatMessages.scrollTop = chatMessages.scrollHeight
+        }, 1000)
+      }
+    }
+
+    sendChat?.addEventListener('click', sendMessage)
+    chatInput?.addEventListener('keypress', e => e.key === 'Enter' && sendMessage())
   }
 
-  // Automatische bot reply
-  setTimeout(() => {
-    const reply = document.createElement('div');
-    reply.className = 'message bot';
-    // reply.textContent = 'Bedankt voor je bericht! We nemen zo snel mogelijk contact op. 😊';
-    chatMessages.appendChild(reply);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }, 800);
-}
-
-
-
-  // --- Realtime berichten (optioneel) ---
-  supabase
-    .channel('public:messages')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-      console.log('Nieuw bericht:', payload.new)
-      // hier kan je DOM bijwerken als je realtime wil tonen
+  // === HAMBURGER MENU (mobiel) ===
+  const hamburger = document.querySelector('.hamburger')
+  const nav = document.querySelector('nav')
+  if (hamburger && nav) {
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('active')
+      hamburger.classList.toggle('active')
     })
-    .subscribe()
+
+    // Sluit menu bij klik op link
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('active')
+        hamburger.classList.remove('active')
+      })
+    })
+  }
+
+  // === MOBIELE HEADER KNOPPEN KLOON ===
+  function cloneHeaderButtons() {
+    const old = document.querySelector('.nav-header-buttons')
+    if (old) old.remove()
+    if (window.innerWidth > 768) return
+
+    const headerButtons = document.querySelector('.header-buttons')
+    const clone = headerButtons.cloneNode(true)
+    clone.classList.add('nav-header-buttons')
+    clone.style.cssText = 'display:flex;flex-direction:column;gap:12px;margin-top:25px;width:100%;align-items:center;'
+    clone.querySelectorAll('a').forEach(a => {
+      a.style.cssText = 'width:80%;text-align:center;padding:12px;border-radius:50px;'
+    })
+    nav.appendChild(clone)
+
+    // Herstel login knop link
+    const mobileLogin = clone.querySelector('.login-btn')
+    if (mobileLogin) {
+      mobileLogin.addEventListener('click', (e) => {
+        e.preventDefault()
+        window.location.href = user ? 'account.html' : 'login.html'
+      })
+    }
+  }
+
+  cloneHeaderButtons()
+  window.addEventListener('resize', cloneHeaderButtons)
 })
-
-
-  const hamburger = document.querySelector('.hamburger');
-const nav = document.querySelector('nav');
-
-hamburger.addEventListener('click', () => {
-  nav.classList.toggle('active');
-});

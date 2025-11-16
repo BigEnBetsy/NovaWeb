@@ -109,11 +109,11 @@
               </div>
             </div>
 
-            <div class="input-container password-container">
-              <input type="password" id="password" required>
-              <label for="password">Wachtwoord</label>
-              <button type="button" class="toggle-password" aria-label="Toon wachtwoord">🐵</button>
-            </div>
+<div class="input-container password-container">
+  <input type="password" id="password" required>
+  <label for="password">Wachtwoord</label>
+  <button type="button" class="toggle-password" aria-label="Toon wachtwoord">🐵</button>
+</div>
 
 
             <button type="submit" class="login-submit-btn">
@@ -254,15 +254,19 @@
       chatBox.classList.toggle('active');
     });
 
-    const togglePassword = document.querySelector('.toggle-password');
-    const passwordInput = document.getElementById('password');
+  // Wachtwoordveld en toggle button ophalen
+  const togglePasswordBtn = document.querySelector('.toggle-password');
+  const passwordInput = document.getElementById('password');
 
-    togglePassword.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
+  // Klik event voor het toggle-icoon
+  togglePasswordBtn.addEventListener('click', () => {
+    // Wissel tussen 'password' en 'text'
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
 
-      // Optioneel: wissel het icoon tussen open en gesloten oog
-      togglePassword.textContent = type === 'password' ? '🐵 ' : '🙈';
+    // Wissel het icoon: 🐵 = verborgen, 🙈 = zichtbaar
+    togglePasswordBtn.textContent = type === 'password' ? '🐵' : '🙈';
+  
     });
 
 
