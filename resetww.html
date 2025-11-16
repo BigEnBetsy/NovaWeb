@@ -3,175 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovaWeb - Wachtwoord resetten</title>
-
+  <title>Wachtwoord resetten</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    body {
+      font-family: sans-serif;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-
-    .login-container {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      max-width: 500px;
-      width: 90%;
+    .container {
+      background: white;
       padding: 40px;
-    }
-
-    h1 {
-      color: #1e3c72;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .input-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .input-container input {
+      border-radius: 12px;
       width: 100%;
-      padding: 15px 20px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
-      transition: border-color 0.3s;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-
-    .input-container input:focus {
-      outline: none;
-      border-color: #ffd60a;
-      box-shadow: 0 0 0 3px rgba(255,214,10,0.2);
-    }
-
-    .input-container label {
-      position: absolute;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%);
-      background: #fff;
-      padding: 0 4px;
-      color: #999;
-      font-size: 1rem;
-      pointer-events: none;
-      transition: all 0.2s ease;
-    }
-
-    .input-container input:focus + label,
-    .input-container input:not(:placeholder-shown) + label {
-      top: -10px;
-      left: 12px;
-      font-size: 0.8rem;
-      color: #1e3c72;
-      font-weight: 500;
-    }
-
-    .login-submit-btn {
+    h1 { color: #1e3c72; }
+    label { display: block; margin: 15px 0 5px; }
+    input {
       width: 100%;
-      padding: 16px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #1e3c72;
-      background: #ffd60a;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      transition: all 0.3s ease;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
-
-    .login-submit-btn:hover {
-      background: #ffed4e;
-      transform: translateY(-2px);
-    }
-
-    .btn-loader {
-      display: none;
-    }
-
-    .btn-loader .loader {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #1e3c72;
-      border-top: 2px solid transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    #status {
-      margin-top: 12px;
-      min-height: 24px;
-      font-size: 0.95rem;
-    }
-
-    .register-link {
+    button {
       margin-top: 20px;
-      text-align: center;
+      padding: 12px;
+      width: 100%;
+      background: #ffd60a;
+      color: #1e3c72;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
     }
-
-    .register-link a {
-      color: #ffd60a;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .register-link a:hover {
-      color: #ffed4e;
-      text-decoration: underline;
-    }
+    #status { margin-top: 15px; min-height: 24px; }
   </style>
 </head>
 <body>
 
-  <div class="login-container">
+  <div class="container">
     <h1>Wachtwoord resetten</h1>
-    <p>Voer een nieuw wachtwoord in.</p>
 
-    <form class="reset-password-form">
-      <div class="input-container">
-        <input type="password" id="newPassword" placeholder=" " required>
-        <label for="newPassword">Nieuw wachtwoord</label>
-      </div>
+    <form id="resetForm">
+      <label for="newPassword">Nieuw wachtwoord</label>
+      <input type="password" id="newPassword" required>
 
-      <div class="input-container">
-        <input type="password" id="confirmPassword" placeholder=" " required>
-        <label for="confirmPassword">Bevestig wachtwoord</label>
-      </div>
+      <label for="confirmPassword">Bevestig wachtwoord</label>
+      <input type="password" id="confirmPassword" required>
 
-      <button type="submit" class="login-submit-btn">
-        <span class="btn-text">Wachtwoord resetten</span>
-        <div class="btn-loader">
-          <div class="loader"></div>
-        </div>
-      </button>
+      <button type="submit">Wachtwoord resetten</button>
 
       <div id="status"></div>
     </form>
-
-    <div class="register-link">
-      <p>Terug naar <a href="login.html">Login</a></p>
-    </div>
   </div>
 
   <script type="module">
@@ -181,46 +70,38 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const form = document.querySelector('.reset-password-form')
-    const statusDiv = document.getElementById('status')
-    const btnText = form.querySelector('.btn-text')
-    const btnLoader = form.querySelector('.btn-loader')
+    const form = document.getElementById('resetForm')
+    const status = document.getElementById('status')
 
-    // Haal access_token uit query string (?access_token=...)
+    // Haal access_token uit de query string
     const urlParams = new URLSearchParams(window.location.search)
     const accessToken = urlParams.get('access_token')
 
     if (!accessToken) {
-      statusDiv.style.color = 'red'
-      statusDiv.innerText = 'Ongeldige of verlopen resetlink.'
+      status.style.color = 'red'
+      status.innerText = 'Ongeldige of verlopen resetlink.'
       form.style.display = 'none'
-      throw new Error('Geen access_token gevonden')
     }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
-
       const newPassword = document.getElementById('newPassword').value
       const confirmPassword = document.getElementById('confirmPassword').value
 
-      // Controle wachtwoorden
       if (newPassword !== confirmPassword) {
-        statusDiv.style.color = 'red'
-        statusDiv.innerText = 'Wachtwoorden komen niet overeen.'
+        status.style.color = 'red'
+        status.innerText = 'Wachtwoorden komen niet overeen.'
         return
       }
 
       if (newPassword.length < 6) {
-        statusDiv.style.color = 'red'
-        statusDiv.innerText = 'Wachtwoord moet minimaal 6 tekens bevatten.'
+        status.style.color = 'red'
+        status.innerText = 'Wachtwoord moet minimaal 6 tekens bevatten.'
         return
       }
 
-      btnText.style.opacity = '0'
-      btnLoader.style.display = 'flex'
-
       try {
-        // Zet tijdelijke sessie met access_token
+        // Tijdelijke sessie instellen met access_token
         const { error: sessionError } = await supabase.auth.setSession({ access_token: accessToken })
         if (sessionError) throw sessionError
 
@@ -228,16 +109,12 @@
         const { error: updateError } = await supabase.auth.updateUser({ password: newPassword })
         if (updateError) throw updateError
 
-        statusDiv.style.color = 'green'
-        statusDiv.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
+        status.style.color = 'green'
+        status.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
         setTimeout(() => window.location.href = 'login.html', 2000)
-
       } catch (err) {
-        statusDiv.style.color = 'red'
-        statusDiv.innerText = `Fout: ${err.message}`
-      } finally {
-        btnText.style.opacity = '1'
-        btnLoader.style.display = 'none'
+        status.style.color = 'red'
+        status.innerText = 'Fout: ' + err.message
       }
     })
   </script>
