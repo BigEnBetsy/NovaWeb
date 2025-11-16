@@ -3,34 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NovaWeb - Wachtwoord vergeten</title>
-  <link rel="stylesheet" href="resetww.css">
+  <title>NovaWeb - Wachtwoord resetten</title>
+
+  <style>
+    /* ============================
+       Basis layout en fullscreen
+    ============================ */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #333;
+    }
+
+/* Achtergrond voor hele login-sectie */
+.login-section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  background-image: url('/Fotos/wp3.jpg'); /* Achtergrondafbeelding */
+  background-size: cover;           /* vult hele sectie */
+  background-position: center;      /* gecentreerd */
+  background-repeat: no-repeat;     /* niet herhalen */
+}
+
+
+    /* ============================
+       Container grid: card + afbeelding
+    ============================ */
+    .login-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1000px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    /* ============================
+       Login card
+    ============================ */
+    .login-card {
+      padding: 40px;
+      max-width: 500px;
+    }
+
+    .login-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #1e3c72;
+    }
+
+    .login-header p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    /* ============================
+       Inputvelden (floating label)
+    ============================ */
+    .input-container {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #333;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-container input:focus {
+      outline: none;
+      border-color: #ffd60a;
+      box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+    }
+
+    .input-container label {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background: #fff;
+      padding: 0 4px;
+    }
+
+    .input-container input:focus + label,
+    .input-container input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 12px;
+      font-size: 0.8rem;
+      color: #1e3c72;
+      font-weight: 500;
+    }
+
+    /* ============================
+       Submit knop
+    ============================ */
+    .login-submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e3c72;
+      background: #ffd60a;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .login-submit-btn:hover {
+      background: #ffed4e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
+    }
+
+    .login-submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-loader {
+      display: none;
+    }
+
+    .btn-loader .loader {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #1e3c72;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================
+       Status & link
+    ============================ */
+    #status {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      min-height: 24px;
+    }
+
+    .register-link {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .register-link a {
+      color: #ffd60a;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .register-link a:hover {
+      color: #ffed4e;
+      text-decoration: underline;
+    }
+
+    /* ============================
+       Afbeelding rechts
+    ============================ */
+    .login-side-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+
+    .side-image {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      padding: 20px;
+    }
+
+    /* ============================
+       Responsive
+    ============================ */
+    @media (max-width: 1024px) {
+      .login-container {
+        grid-template-columns: 1fr;
+      }
+      .login-side-panel {
+        order: -1;
+      }
+      .login-card {
+        padding: 30px 25px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .login-card {
+        padding: 25px 20px;
+      }
+      .login-header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <section class="login-section">
     <div class="login-container">
+
+      <!-- Login Card -->
       <div class="login-card">
         <div class="login-header">
-          <h1>Wachtwoord vergeten</h1>
-          <p class="login-subtitle">Voer je e-mailadres in om een resetlink te ontvangen</p>
+          <h1>Wachtwoord resetten</h1>
+          <p>Voer een nieuw wachtwoord in.</p>
         </div>
 
-        <form class="login-form reset-password-form">
-          <div class="form-group">
-            <div class="input-container">
-              <input type="email" id="resetEmail" required>
-              <label for="resetEmail">E-mailadres</label>
-            </div>
+        <form class="reset-password-form">
+          <div class="input-container">
+            <input type="password" id="newPassword" placeholder=" " required>
+            <label for="newPassword">Nieuw wachtwoord</label>
+          </div>
+
+          <div class="input-container">
+            <input type="password" id="confirmPassword" placeholder=" " required>
+            <label for="confirmPassword">Bevestig wachtwoord</label>
           </div>
 
           <button type="submit" class="login-submit-btn">
-            <span class="btn-text">Verstuur resetlink</span>
+            <span class="btn-text">Wachtwoord resetten</span>
             <div class="btn-loader">
               <div class="loader"></div>
             </div>
           </button>
 
-          <div id="status" style="margin-top:10px; color:red;"></div>
+          <div id="status"></div>
         </form>
 
         <div class="register-link">
@@ -38,6 +272,7 @@
         </div>
       </div>
 
+      <!-- Afbeelding rechts -->
       <div class="login-side-panel">
         <img src="Fotos/wachtwoord.png" alt="Wachtwoord afbeelding" class="side-image">
       </div>
@@ -51,97 +286,62 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
+    const hash = window.location.hash.substring(1)
+    const urlParams = new URLSearchParams(hash)
+    const accessToken = urlParams.get('access_token')
+
     const form = document.querySelector('.reset-password-form')
     const statusDiv = document.getElementById('status')
     const btnText = form.querySelector('.btn-text')
     const btnLoader = form.querySelector('.btn-loader')
 
+    if (!accessToken) {
+      statusDiv.style.color = 'red'
+      statusDiv.innerText = 'Ongeldige of verlopen resetlink.'
+      form.style.display = 'none'
+      return
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
-      const email = document.getElementById('resetEmail').value
 
-      // Toon loader
+      const newPassword = document.getElementById('newPassword').value
+      const confirmPassword = document.getElementById('confirmPassword').value
+
+      if (newPassword !== confirmPassword) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Wachtwoorden komen niet overeen.'
+        return
+      }
+
+      if (newPassword.length < 6) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Wachtwoord moet minimaal 6 tekens bevatten.'
+        return
+      }
+
       btnText.style.opacity = '0'
-      btnLoader.style.display = 'block'
+      btnLoader.style.display = 'flex'
 
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://bigenbetsy.github.io/NovaWeb/resetww.html' // of je eigen reset pagina
-      })
+      try {
+        const { error } = await supabase.auth.updateUser(
+          { password: newPassword },
+          { access_token: accessToken }
+        )
 
-      btnText.style.opacity = '1'
-      btnLoader.style.display = 'none'
+        if (error) throw error
 
-      if (error) {
+        statusDiv.style.color = 'green'
+        statusDiv.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
+        setTimeout(() => window.location.href = 'login.html', 2000)
+      } catch (error) {
         statusDiv.style.color = 'red'
         statusDiv.innerText = `Fout: ${error.message}`
-      } else {
-        statusDiv.style.color = 'green'
-        statusDiv.innerText = `Resetlink verzonden naar ${email}`
+      } finally {
+        btnText.style.opacity = '1'
+        btnLoader.style.display = 'none'
       }
     })
   </script>
-  <script type="module" src="home.js"></script>
-
-<script>
-const nav = document.getElementById('navMenu');
-const headerButtons = document.querySelector('.header-buttons');
-const chatBox = document.getElementById('chatBox');
-const chatToggle = document.getElementById('chatToggle');
-const closeChat = document.getElementById('closeChat');
-
-function moveHeaderButtonsToNav() {
-  // Verwijder oude clone als die er is
-  const oldClone = document.querySelector('.nav-header-buttons');
-  if (oldClone) oldClone.remove();
-
-  if (window.innerWidth <= 768) {
-    const clone = headerButtons.cloneNode(true);
-    clone.classList.add('nav-header-buttons');
-
-    // Stijl voor mobiel
-    clone.style.display = 'flex';
-    clone.style.flexDirection = 'column';
-    clone.style.alignItems = 'center';
-    clone.style.gap = '10px';
-    clone.querySelectorAll('a, .chat-container').forEach(el => {
-      el.style.width = '80%';
-      el.style.textAlign = 'center';
-      el.style.margin = '5px 0';
-    });
-
-    nav.appendChild(clone);
-
-    // Voeg chat functionaliteit opnieuw toe voor gekloonde knop
-    const clonedChat = clone.querySelector('.chat-container');
-    if (clonedChat) {
-      clonedChat.addEventListener('click', () => {
-        chatBox.classList.toggle('active');
-      });
-    }
-  }
-}
-
-// Bij laden en resize
-window.addEventListener('DOMContentLoaded', moveHeaderButtonsToNav);
-window.addEventListener('resize', moveHeaderButtonsToNav);
-
-// Hamburger menu toggle
-const hamburger = document.querySelector('.hamburger');
-hamburger.addEventListener('click', () => {
-  nav.classList.toggle('active');
-});
-
-// Sluit chat knop
-closeChat.addEventListener('click', () => {
-  chatBox.classList.remove('active');
-});
-
-// Event listener voor originele chat knop (desktop)
-chatToggle.addEventListener('click', () => {
-  chatBox.classList.toggle('active');
-});
-
-
-</script>
 </body>
 </html>

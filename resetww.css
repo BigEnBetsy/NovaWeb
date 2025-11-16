@@ -1,6 +1,8 @@
 @import url('login.css');
 
-/* Fullscreen zonder scroll */
+/* ============================
+   Basis layout en fullscreen
+============================ */
 html, body {
   height: 100%;
   margin: 0;
@@ -15,6 +17,9 @@ html, body {
   padding: 0;
 }
 
+/* ============================
+   Container grid: login card + afbeelding
+============================ */
 .login-container {
   display: grid;
   grid-template-columns: 1fr 1fr; /* card links, afbeelding rechts */
@@ -25,6 +30,9 @@ html, body {
   padding: 0 20px;
 }
 
+/* ============================
+   Login card styling
+============================ */
 .login-card {
   padding: 30px 35px;
   max-width: 500px;
@@ -33,6 +41,7 @@ html, body {
   box-sizing: border-box;
 }
 
+/* Header binnen login card */
 .login-header h1 {
   font-size: 2.4rem;
   margin-bottom: 10px;
@@ -43,17 +52,58 @@ html, body {
   margin-bottom: 15px;
 }
 
-.input-container input {
-  padding: 15px 50px 15px 20px;
-  font-size: 1rem;
+/* ============================
+   Inputvelden styling
+============================ */
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
 }
 
+.input-container input {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.input-container label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: 0.2s all;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 12px;
+  font-size: 0.8rem;
+  color: #333;
+  background-color: #fff;
+  padding: 0 4px;
+}
+
+/* ============================
+   Buttons
+============================ */
 .login-submit-btn {
   padding: 16px;
   font-size: 1.05rem;
   margin-top: 10px;
 }
 
+/* ============================
+   Reset password feedback
+============================ */
 .reset-password-form #status {
   margin-top: 8px;
   font-size: 0.95rem;
@@ -66,6 +116,7 @@ html, body {
 
 .reset-password-form .register-link a {
   color: #ffd60a;
+  transition: 0.2s color;
 }
 
 .reset-password-form .register-link a:hover {
@@ -73,7 +124,9 @@ html, body {
   text-decoration: underline;
 }
 
-/* Afbeelding rechts */
+/* ============================
+   Afbeelding rechts
+============================ */
 .login-side-panel {
   display: flex;
   justify-content: center;
@@ -86,10 +139,12 @@ html, body {
   object-fit: contain;
 }
 
-/* Responsive voor kleinere schermen */
+/* ============================
+   Responsive: tablets & mobiel
+============================ */
 @media (max-width: 1024px) {
   .login-container {
-    grid-template-columns: 1fr; /* afbeelding onder card op tablets/mobiel */
+    grid-template-columns: 1fr; /* afbeelding onder card */
     gap: 20px;
   }
 
