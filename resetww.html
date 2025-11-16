@@ -287,14 +287,14 @@ const supabaseUrl = 'https://fmrvruyofieuhxmmrbux.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-// Haal de access token uit de query string
-const urlParams = new URLSearchParams(window.location.search)
-const accessToken = urlParams.get('access_token')
-
 const form = document.querySelector('.reset-password-form')
 const statusDiv = document.getElementById('status')
 const btnText = form.querySelector('.btn-text')
 const btnLoader = form.querySelector('.btn-loader')
+
+// Haal access_token uit query string
+const urlParams = new URLSearchParams(window.location.search)
+const accessToken = urlParams.get('access_token')
 
 if (!accessToken) {
   statusDiv.style.color = 'red'
@@ -309,7 +309,7 @@ form.addEventListener('submit', async (e) => {
   const newPassword = document.getElementById('newPassword').value
   const confirmPassword = document.getElementById('confirmPassword').value
 
-  // Validatie wachtwoorden
+  // Controle wachtwoorden
   if (newPassword !== confirmPassword) {
     statusDiv.style.color = 'red'
     statusDiv.innerText = 'Wachtwoorden komen niet overeen.'
@@ -322,20 +322,18 @@ form.addEventListener('submit', async (e) => {
     return
   }
 
-  // Loader tonen
   btnText.style.opacity = '0'
   btnLoader.style.display = 'flex'
 
   try {
-    // Zet tijdelijke sessie met access_token
+    // Maak tijdelijke sessie met access_token
     const { error: sessionError } = await supabase.auth.setSession({ access_token: accessToken })
     if (sessionError) throw sessionError
 
-    // Update wachtwoord
+    // Update het wachtwoord
     const { error: updateError } = await supabase.auth.updateUser({ password: newPassword })
     if (updateError) throw updateError
 
-    // Succesbericht en redirect
     statusDiv.style.color = 'green'
     statusDiv.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
     setTimeout(() => window.location.href = 'login.html', 2000)
@@ -348,6 +346,7 @@ form.addEventListener('submit', async (e) => {
     btnLoader.style.display = 'none'
   }
 })
+
 
   </script>
 </body>
