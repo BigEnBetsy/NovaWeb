@@ -5,59 +5,126 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wachtwoord resetten</title>
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
     }
     .container {
       background: white;
       padding: 40px;
-      border-radius: 12px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 420px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      text-align: center;
     }
-    h1 { color: #1e3c72; }
-    label { display: block; margin: 15px 0 5px; }
+    h1 {
+      color: #1e3c72;
+      margin: 0 0 8px 0;
+      font-size: 1.9rem;
+    }
+    p {
+      color: #666;
+      margin: 0 0 28px 0;
+      font-size: 0.95rem;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin: 18px 0 6px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+    }
     input {
       width: 100%;
-      padding: 10px;
+      padding: 13px 14px;
       font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: #ffd60a;
+      box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+    }
+    input.error {
+      border-color: #e74c3c !important;
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
     }
     button {
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 24px;
+      padding: 14px;
       width: 100%;
       background: #ffd60a;
       color: #1e3c72;
       border: none;
       font-weight: bold;
-      border-radius: 6px;
+      font-size: 1.05rem;
+      border-radius: 8px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
     }
-    #status { margin-top: 15px; min-height: 24px; }
+    button:hover:not(:disabled) {
+      background: #ffed4e;
+      transform: translateY(-1px);
+    }
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .loader {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #1e3c72;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #status {
+      margin-top: 16px;
+      min-height: 24px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h1>Wachtwoord resetten</h1>
+    <p>Voer een nieuw wachtwoord in voor je account.</p>
 
     <form id="resetForm">
       <label for="newPassword">Nieuw wachtwoord</label>
-      <input type="password" id="newPassword" required>
+      <input type="password" id="newPassword" required minlength="6">
 
       <label for="confirmPassword">Bevestig wachtwoord</label>
-      <input type="password" id="confirmPassword" required>
+      <input type="password" id="confirmPassword" required minlength="6">
 
-      <button type="submit">Wachtwoord resetten</button>
+      <button type="submit" id="submitBtn">
+        <span class="btn-text">Wachtwoord resetten</span>
+        <span class="loader hidden"></span>
+      </button>
 
       <div id="status"></div>
     </form>
@@ -72,51 +139,109 @@
 
     const form = document.getElementById('resetForm')
     const status = document.getElementById('status')
+    const submitBtn = document.getElementById('submitBtn')
+    const btnText = submitBtn.querySelector('.btn-text')
+    const loader = submitBtn.querySelector('.loader')
+    const newPassword = document.getElementById('newPassword')
+    const confirmPassword = document.getElementById('confirmPassword')
 
-    // Haal access_token uit de query string
-    const urlParams = new URLSearchParams(window.location.search)
+    // HAAL TOKEN UIT #HASH
+    const hash = window.location.hash.substring(1)
+    const urlParams = new URLSearchParams(hash)
     const accessToken = urlParams.get('access_token')
+    const type = urlParams.get('type')
 
-    if (!accessToken) {
-      status.style.color = 'red'
-      status.innerText = 'Ongeldige of verlopen resetlink.'
+    if (!accessToken || type !== 'recovery') {
+      showError('Ongeldige of verlopen resetlink.')
       form.style.display = 'none'
+      return
     }
 
+    // === BELANGRIJK: VALIDATIE BIJ KLIKKEN ===
+    submitBtn.addEventListener('click', (e) => {
+      // Reset foutstijlen
+      newPassword.classList.remove('error')
+      confirmPassword.classList.remove('error')
+      status.innerText = ''
+
+      const pw1 = newPassword.value.trim()
+      const pw2 = confirmPassword.value.trim()
+
+      // 1. Leeg?
+      if (!pw1 || !pw2) {
+        showError('Beide velden zijn verplicht.')
+        if (!pw1) newPassword.classList.add('error')
+        if (!pw2) confirmPassword.classList.add('error')
+        e.preventDefault()
+        return
+      }
+
+      // 2. Te kort?
+      if (pw1.length < 6) {
+        showError('Wachtwoord moet minimaal 6 tekens bevatten.')
+        newPassword.classList.add('error')
+        e.preventDefault()
+        return
+      }
+
+      // 3. MATCHEN ZE NIET? → STOP ALLES
+      if (pw1 !== pw2) {
+        showError('De wachtwoorden moeten overeenkomen.')
+        confirmPassword.classList.add('error')
+        newPassword.classList.add('error')
+        e.preventDefault()  // ← DIT STOPT DE SUBMIT
+        return
+      }
+
+      // ALLES OK → laat form submit doorgaan
+    })
+
+    // === FORM SUBMIT (alleen als validatie OK is) ===
     form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const newPassword = document.getElementById('newPassword').value
-      const confirmPassword = document.getElementById('confirmPassword').value
+      e.preventDefault()  // altijd prevent, want we valideren al hierboven
 
-      if (newPassword !== confirmPassword) {
-        status.style.color = 'red'
-        status.innerText = 'Wachtwoorden komen niet overeen.'
-        return
+      // Dubbele check (veiligheid)
+      const pw1 = newPassword.value.trim()
+      const pw2 = confirmPassword.value.trim()
+      if (pw1 !== pw2 || pw1.length < 6) {
+        return // al afgehandeld in click
       }
 
-      if (newPassword.length < 6) {
-        status.style.color = 'red'
-        status.innerText = 'Wachtwoord moet minimaal 6 tekens bevatten.'
-        return
-      }
+      // UI: laadstatus
+      submitBtn.disabled = true
+      btnText.style.opacity = '0'
+      loader.classList.remove('hidden')
 
       try {
-        // Tijdelijke sessie instellen met access_token
-        const { error: sessionError } = await supabase.auth.setSession({ access_token: accessToken })
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: ''
+        })
         if (sessionError) throw sessionError
 
-        // Update wachtwoord
-        const { error: updateError } = await supabase.auth.updateUser({ password: newPassword })
+        const { error: updateError } = await supabase.auth.updateUser({
+          password: pw1
+        })
         if (updateError) throw updateError
 
         status.style.color = 'green'
         status.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
         setTimeout(() => window.location.href = 'login.html', 2000)
+
       } catch (err) {
-        status.style.color = 'red'
-        status.innerText = 'Fout: ' + err.message
+        console.error(err)
+        showError('Fout: ' + (err.message || 'Probeer opnieuw.'))
+      } finally {
+        submitBtn.disabled = false
+        btnText.style.opacity = '1'
+        loader.classList.add('hidden')
       }
     })
+
+    function showError(msg) {
+      status.style.color = '#e74c3c'
+      status.innerText = msg
+    }
   </script>
 </body>
 </html>
