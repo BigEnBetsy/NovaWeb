@@ -3,132 +3,281 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wachtwoord resetten</title>
+  <title>NovaWeb - Wachtwoord resetten</title>
+
   <style>
-    * { box-sizing: border-box; }
-    body {
+    /* ============================
+       Basis layout en fullscreen
+    ============================ */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    h1 {
-      color: #1e3c72;
-      margin: 0 0 8px 0;
-      font-size: 1.9rem;
-    }
-    p {
-      color: #666;
-      margin: 0 0 28px 0;
-      font-size: 0.95rem;
-    }
-    label {
-      display: block;
-      text-align: left;
-      margin: 18px 0 6px;
-      font-weight: 600;
       color: #333;
-      font-size: 0.95rem;
     }
-    input {
+
+/* Achtergrond voor hele login-sectie */
+.login-section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  background-image: url('Fotos/wp3.jpg'); /* Achtergrondafbeelding */
+  background-size: cover;           /* vult hele sectie */
+  background-position: center;      /* gecentreerd */
+  background-repeat: no-repeat;     /* niet herhalen */
+}
+
+
+    /* ============================
+       Container grid: card + afbeelding
+    ============================ */
+    .login-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1000px;
       width: 100%;
-      padding: 13px 14px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 2px solid #e0e0e0;
-      transition: all 0.3s ease;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
-    input:focus {
+
+    /* ============================
+       Login card
+    ============================ */
+    .login-card {
+      padding: 40px;
+      max-width: 500px;
+    }
+
+    .login-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #1e3c72;
+    }
+
+    .login-header p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    /* ============================
+       Inputvelden (floating label)
+    ============================ */
+    .input-container {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #333;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-container input:focus {
       outline: none;
       border-color: #ffd60a;
       box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
     }
-    input.error {
-      border-color: #e74c3c !important;
-      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+
+    .input-container label {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background: #fff;
+      padding: 0 4px;
     }
-    button {
-      margin-top: 24px;
-      padding: 14px;
-      width: 100%;
-      background: #ffd60a;
+
+    .input-container input:focus + label,
+    .input-container input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 12px;
+      font-size: 0.8rem;
       color: #1e3c72;
+      font-weight: 500;
+    }
+
+    /* ============================
+       Submit knop
+    ============================ */
+    .login-submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e3c72;
+      background: #ffd60a;
       border: none;
-      font-weight: bold;
-      font-size: 1.05rem;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
+      margin-top: 10px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 10px;
     }
-    button:hover:not(:disabled) {
+
+    .login-submit-btn:hover {
       background: #ffed4e;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
     }
-    button:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
+
+    .login-submit-btn:active {
+      transform: translateY(0);
     }
-    .loader {
-      width: 18px;
-      height: 18px;
+
+    .btn-loader {
+      display: none;
+    }
+
+    .btn-loader .loader {
+      width: 20px;
+      height: 20px;
       border: 2px solid #1e3c72;
       border-top: 2px solid transparent;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* ============================
+       Status & link
+    ============================ */
     #status {
-      margin-top: 16px;
-      min-height: 24px;
+      margin-top: 12px;
       font-size: 0.95rem;
-      font-weight: 500;
-      line-height: 1.4;
+      min-height: 24px;
     }
-    .hidden { display: none; }
+
+    .register-link {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .register-link a {
+      color: #ffd60a;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .register-link a:hover {
+      color: #ffed4e;
+      text-decoration: underline;
+    }
+
+    /* ============================
+       Afbeelding rechts
+    ============================ */
+    .login-side-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+
+    .side-image {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      padding: 20px;
+    }
+
+    /* ============================
+       Responsive
+    ============================ */
+    @media (max-width: 1024px) {
+      .login-container {
+        grid-template-columns: 1fr;
+      }
+      .login-side-panel {
+        order: -1;
+      }
+      .login-card {
+        padding: 30px 25px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .login-card {
+        padding: 25px 20px;
+      }
+      .login-header h1 {
+        font-size: 1.8rem;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Wachtwoord resetten</h1>
-    <p>Voer een nieuw wachtwoord in voor je account.</p>
+  <section class="login-section">
+    <div class="login-container">
 
-    <form id="resetForm">
-      <label for="newPassword">Nieuw wachtwoord</label>
-      <input type="password" id="newPassword" required minlength="6">
+      <!-- Login Card -->
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Wachtwoord resetten</h1>
+          <p>Voer een nieuw wachtwoord in.</p>
+        </div>
 
-      <label for="confirmPassword">Bevestig wachtwoord</label>
-      <input type="password" id="confirmPassword" required minlength="6">
+        <form class="reset-password-form">
+          <div class="input-container">
+            <input type="password" id="newPassword" placeholder=" " required>
+            <label for="newPassword">Nieuw wachtwoord</label>
+          </div>
 
-      <button type="submit" id="submitBtn">
-        <span class="btn-text">Wachtwoord resetten</span>
-        <span class="loader hidden"></span>
-      </button>
+          <div class="input-container">
+            <input type="password" id="confirmPassword" placeholder=" " required>
+            <label for="confirmPassword">Bevestig wachtwoord</label>
+          </div>
 
-      <div id="status"></div>
-    </form>
-  </div>
+          <button type="submit" class="login-submit-btn">
+            <span class="btn-text">Wachtwoord resetten</span>
+            <div class="btn-loader">
+              <div class="loader"></div>
+            </div>
+          </button>
+
+          <div id="status"></div>
+        </form>
+
+        <div class="register-link">
+          <p>Terug naar <a href="login.html">Login</a></p>
+        </div>
+      </div>
+
+      <!-- Afbeelding rechts -->
+      <div class="login-side-panel">
+        <img src="Fotos/wachtwoord.png" alt="Wachtwoord afbeelding" class="side-image">
+      </div>
+    </div>
+  </section>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
@@ -137,111 +286,64 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtcnZydXlvZmlldWh4bW1yYnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA0NTIsImV4cCI6MjA3NTQ3NjQ1Mn0.KooHvMATpbJqXmIkquvJcHVIqDo1G5ALWTiYVI7rlvg'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const form = document.getElementById('resetForm')
-    const status = document.getElementById('status')
-    const submitBtn = document.getElementById('submitBtn')
-    const btnText = submitBtn.querySelector('.btn-text')
-    const loader = submitBtn.querySelector('.loader')
-    const newPassword = document.getElementById('newPassword')
-    const confirmPassword = document.getElementById('confirmPassword')
+// Pak de access token uit query parameters (nieuwe Supabase manier)
+const queryString = window.location.search // ?access_token=XYZ
+const urlParams = new URLSearchParams(queryString)
+const accessToken = urlParams.get('access_token')
 
-    // HAAL TOKEN UIT #HASH
-    const hash = window.location.hash.substring(1)
-    const urlParams = new URLSearchParams(hash)
-    const accessToken = urlParams.get('access_token')
-    const type = urlParams.get('type')
 
-    if (!accessToken || type !== 'recovery') {
-      showError('Ongeldige of verlopen resetlink.')
+    const form = document.querySelector('.reset-password-form')
+    const statusDiv = document.getElementById('status')
+    const btnText = form.querySelector('.btn-text')
+    const btnLoader = form.querySelector('.btn-loader')
+
+    if (!accessToken) {
+      statusDiv.style.color = 'red'
+      statusDiv.innerText = 'Ongeldige of verlopen resetlink.'
       form.style.display = 'none'
       return
     }
 
-    // === BELANGRIJK: VALIDATIE BIJ KLIKKEN ===
-    submitBtn.addEventListener('click', (e) => {
-      // Reset foutstijlen
-      newPassword.classList.remove('error')
-      confirmPassword.classList.remove('error')
-      status.innerText = ''
-
-      const pw1 = newPassword.value.trim()
-      const pw2 = confirmPassword.value.trim()
-
-      // 1. Leeg?
-      if (!pw1 || !pw2) {
-        showError('Beide velden zijn verplicht.')
-        if (!pw1) newPassword.classList.add('error')
-        if (!pw2) confirmPassword.classList.add('error')
-        e.preventDefault()
-        return
-      }
-
-      // 2. Te kort?
-      if (pw1.length < 6) {
-        showError('Wachtwoord moet minimaal 6 tekens bevatten.')
-        newPassword.classList.add('error')
-        e.preventDefault()
-        return
-      }
-
-      // 3. MATCHEN ZE NIET? → STOP ALLES
-      if (pw1 !== pw2) {
-        showError('De wachtwoorden moeten overeenkomen.')
-        confirmPassword.classList.add('error')
-        newPassword.classList.add('error')
-        e.preventDefault()  // ← DIT STOPT DE SUBMIT
-        return
-      }
-
-      // ALLES OK → laat form submit doorgaan
-    })
-
-    // === FORM SUBMIT (alleen als validatie OK is) ===
     form.addEventListener('submit', async (e) => {
-      e.preventDefault()  // altijd prevent, want we valideren al hierboven
+      e.preventDefault()
 
-      // Dubbele check (veiligheid)
-      const pw1 = newPassword.value.trim()
-      const pw2 = confirmPassword.value.trim()
-      if (pw1 !== pw2 || pw1.length < 6) {
-        return // al afgehandeld in click
+      const newPassword = document.getElementById('newPassword').value
+      const confirmPassword = document.getElementById('confirmPassword').value
+
+      if (newPassword !== confirmPassword) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Wachtwoorden komen niet overeen.'
+        return
       }
 
-      // UI: laadstatus
-      submitBtn.disabled = true
+      if (newPassword.length < 6) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = 'Wachtwoord moet minimaal 6 tekens bevatten.'
+        return
+      }
+
       btnText.style.opacity = '0'
-      loader.classList.remove('hidden')
+      btnLoader.style.display = 'flex'
 
       try {
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: ''
-        })
-        if (sessionError) throw sessionError
+        const { error } = await supabase.auth.updateUser(
+          { password: newPassword },
+          { access_token: accessToken }
+        )
 
-        const { error: updateError } = await supabase.auth.updateUser({
-          password: pw1
-        })
-        if (updateError) throw updateError
+        if (error) throw error
 
-        status.style.color = 'green'
-        status.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
+        statusDiv.style.color = 'green'
+        statusDiv.innerText = 'Wachtwoord succesvol gereset! Doorsturen...'
         setTimeout(() => window.location.href = 'login.html', 2000)
-
-      } catch (err) {
-        console.error(err)
-        showError('Fout: ' + (err.message || 'Probeer opnieuw.'))
+      } catch (error) {
+        statusDiv.style.color = 'red'
+        statusDiv.innerText = `Fout: ${error.message}`
       } finally {
-        submitBtn.disabled = false
         btnText.style.opacity = '1'
-        loader.classList.add('hidden')
+        btnLoader.style.display = 'none'
       }
     })
-
-    function showError(msg) {
-      status.style.color = '#e74c3c'
-      status.innerText = msg
-    }
   </script>
 </body>
 </html>
